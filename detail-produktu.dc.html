@@ -25,13 +25,23 @@
        vešly názvy, ale panel (.SimpleSearchView > dc-con.pivot) je přilepený na šířku
        pole hledání (left/right: 0) a má overflow: hidden — obsah se vpravo ořeže.
        Panel proto smí přerůst pole doprava; minimum obsahu z DS zůstává platit. */
+    /* Panel je ukotvený k obsahu hlavičky, ne k poli hledání: musí být širší než pole
+       (DS zapíná dvousloupcové rozvržení container query na 620 px), a ukotvení k poli
+       ho při 760 px vytlačí z okna — vlevo nebo vpravo podle hrany. */
+    .HeaderView > dc-con.dcContent { position: relative; }
+    /* DS dává .SimpleSearchView position: relative — to je bližší containing block
+       a panel by se zas ukotvil k poli. Pro našeptávač ji proto vypínáme. */
+    .HeaderView .SimpleSearchView:has(.SearchWhispererView) { position: static; }
     .SimpleSearchView > dc-con.pivot:has(.SearchWhispererView) {
-      right: auto;
-      /* DS zapíná dvousloupcové rozvržení (produkty + kategorie/výrobci vpravo)
-         container query na 620 px — panel proto musí být širší než pole hledání. */
-      min-width: min(760px, calc(100vw - 2 * var(--spacer-16)));
-      max-width: calc(100vw - 2 * var(--spacer-16));
+      /* Levá hrana sedí na poli hledání (offset měří logika do --tp-search-left),
+         pravá na hraně obsahu hlavičky — panel je tak zarovnaný s polem, může být
+         širší než ono a nikdy nevyleze z okna. */
+      position: absolute; left: var(--tp-search-left, 0px); right: 0;
+      width: auto; max-width: 760px; min-width: 0;
     }
+    /* DS dává obsahu min-width 560 px, aby se vešly názvy; panel ho ale nesmí přerůst,
+       jinak ho overflow: hidden ořeže. Šířku drží panel, obsah se do něj vejde. */
+    .SimpleSearchView > dc-con.pivot .SearchWhispererView { min-width: 0; }
     ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
     /* CHYBÍ V DS: přihlášení nemá v hlavičce vlastní spouštěč — overlay otevírá
        „Rychlý nákup“ a odkaz v horním pruhu. .LoginUserView tu tedy slouží jen jako
@@ -599,7 +609,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { usp: 0, gallery: 0, qty: 1, tab: 0, fav: false, cart: [], qtys: {}, atStart: true, atEnd: false, mega: false, fixed: false };
+  state = { usp: 0, gallery: 0, qty: 1, tab: 0, fav: false, cart: [], qtys: {}, atStart: true, atEnd: false, mega: false, fixed: false, loginOpen: false, q: '', searchOpen: false };
 
   photos = [
     { src: 'assets/at13c/1.jpg', alt: 'Skartovačka AT-13C zepředu' },
@@ -819,6 +829,13 @@ class Component extends DCLogic {
     const measure = () => {
       if (!this.state.fixed) this.headerTop = header.offsetTop;
       document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
+      /* Offset pole hledání v obsahu hlavičky — panel našeptávače se na něj zarovná. */
+      const row = header.querySelector('dc-con.dcContent');
+      const field = header.querySelector('.SimpleSearchView');
+      if (row && field) {
+        const left = Math.max(0, Math.round(field.getBoundingClientRect().left - row.getBoundingClientRect().left));
+        document.documentElement.style.setProperty('--tp-search-left', left + 'px');
+      }
     };
     measure();
     this.onScroll = () => {
