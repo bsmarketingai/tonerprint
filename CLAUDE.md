@@ -25,7 +25,15 @@ Vizuál se nedomýšlí. Když DS pravidlo nemá, nesmí se doplnit „jak by to
 bez toho, že se to nahlásí — jinak se stránka a DS rozejdou. Zásah do vzhledu na stránce
 je vždy jen dočasná náplast s komentářem a záznamem v seznamu „Chybí v DS“.
 
+## Přihlášení: „Rychlý nákup“ JE login
+`._quickBuy` v hlavičce se jmenuje **Rychlý nákup**, ale je to **spouštěč přihlášení**.
+Klik na něj — a stejně tak na odkaz **Přihlášení** v tmavém horním pruhu — otevře
+`LoginPopupView` (`._headerPopup` v nositeli `.LoginUserView`). V hlavičce **není
+žádné další tlačítko „Přihlásit“** a nikdy se tam nepřidává.
+
 ## Kde co je
 - `index.dc.html` — homepage eshopu (Design Component).
+- `vypis-kategorie.dc.html` — výpis kategorie, `detail-produktu.dc.html` — detail produktu.
+- `zadani-doplneni-DS.md` — otevřené body pro design systém (chybí / chyba v DS).
 - `ds/` — lokální kopie design systému. Ručně se needituje; opravy patří do DS
   projektu, na stránce se drží jako override s komentářem.

@@ -21,7 +21,56 @@
     /* CHYBÍ V DS: přilepená má zůstat hlavička i lišta kategorií — zákazník musí mít
        menu na dosah i uprostřed dlouhé stránky. DS zná jen .HeaderView…fixed.
        Výšku hlavičky měří logika do --tp-header-h (na mobilu má dva řádky). */
+    /* CHYBA V DS: .SearchWhispererView má min-width: min(560px, 100vw − 32), aby se
+       vešly názvy, ale panel (.SimpleSearchView > dc-con.pivot) je přilepený na šířku
+       pole hledání (left/right: 0) a má overflow: hidden — obsah se vpravo ořeže.
+       Panel proto smí přerůst pole doprava; minimum obsahu z DS zůstává platit. */
+    .SimpleSearchView > dc-con.pivot:has(.SearchWhispererView) {
+      right: auto;
+      /* DS zapíná dvousloupcové rozvržení (produkty + kategorie/výrobci vpravo)
+         container query na 620 px — panel proto musí být širší než pole hledání. */
+      min-width: min(760px, calc(100vw - 2 * var(--spacer-16)));
+      max-width: calc(100vw - 2 * var(--spacer-16));
+    }
     ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+    /* CHYBÍ V DS: přihlášení nemá v hlavičce vlastní spouštěč — overlay otevírá
+       „Rychlý nákup“ a odkaz v horním pruhu. .LoginUserView tu tedy slouží jen jako
+       nositel panelu (DS ji navíc pod 820 px skrývá, což by panel na mobilu vypnulo). */
+    /* align-self: stretch dá nositeli výšku řádku hlavičky, aby panel spadl pod
+       tlačítka jako košík — nulová výška by ho posadila přes ně. */
+    /* Nositel nemá vlastní spouštěč, takže by měl nulovou výšku a DS pravidlo
+       ._headerPopup { top: calc(100% + 8px) } by panel posadilo přes tlačítka.
+       display: contents nositele vyřadí z layoutu a panel se ukotví k liště nástrojů. */
+    .HeaderView dc-con.dcHeader { position: relative; }
+    .HeaderView .LoginUserView { display: contents; }
+    /* CHYBÍ V DS: na displeji pod 550 px má být přihlášení přes celou obrazovku,
+       stejně jako .BasketProductsPopupView (css/global.css @media max-width 549). */
+    @media (max-width: 549px) {
+      .LoginPopupView {
+        position: fixed; inset: 0; top: 0; width: 100%;
+        border-radius: 0; box-shadow: none;
+        display: none; flex-direction: column;
+        z-index: var(--z-overlay);
+      }
+      .active > .LoginPopupView, .LoginPopupView.active { display: flex; }
+      .LoginPopupView > dc-con.dcContent { flex: 1 1 auto; max-height: none; }
+      /* Nadpis na samostatném řádku pod lištou tlačítek — na mobilu je vedle
+         „Zpět do obchodu“ a křížku moc těsno. */
+      .LoginPopupView > dc-con.dcHeader { flex-wrap: wrap; }
+      .LoginPopupView > dc-con.dcHeader .caption { order: 2; flex: 1 1 100%; margin-top: var(--spacer-8); }
+      .LoginPopupView .button.back {
+        display: inline-flex; order: -1; margin-right: auto;
+        --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100);
+        --btn-text-color: var(--color-main-600); --btn-text-color-hover: var(--color-main-700);
+        padding: 0 var(--spacer-8);
+      }
+    }
+    /* CHYBÍ V DS: hero se roztahuje bez stropu. Fotka je 2172 × 724 a sází se `auto 100 %`
+       na výšku pásu (max 420 px), takže nad ~1900 px zbyde vedle textu prázdná bílá
+       plocha. DS guide říká, že plocha okolo obsahu jde do 1920 px. `width: 100 %` je
+       povinné — v .HomeView (flex column) by vodorovný margin: auto zrušil stretch
+       a blok by se scvrkl na fit-content (poznámka v ds/css/home.css). */
+    .HomeView > .HeroBannerView { width: 100%; max-width: var(--eshop-width-outer); margin-inline: auto; }
     /* CHYBA V DS: .fixed dává hlavičce --z-header (100) a zakládá stacking kontext,
        takže panel našeptávače (250 uvnitř) skončí pod lištou kategorií. Přilepená
        hlavička musí být nad ní. */
@@ -43,7 +92,7 @@
       <a href="#o-nas">O nás</a>
       <a href="#poradna">Poradna</a>
       <a href="#kontakt">Kontakt</a>
-      <a href="#prihlaseni">Přihlášení</a>
+      <a href="#prihlaseni" onClick="{{ toggleLogin }}">Přihlášení</a>
     </div>
   </dc-con>
 </div>
@@ -70,7 +119,7 @@
                 <ul class="items">
                   <sc-for list="{{ whisper }}" as="p" hint-placeholder-count="3">
                     <li>
-                      <a class="item" href="#produkt">
+                      <a class="item" href="detail-produktu.dc.html">
                         <span class="image"><img src="{{ p.image }}" alt="" loading="lazy"></span>
                         <span class="text">
                           <span class="code">{{ p.code }}</span>
@@ -97,17 +146,17 @@
               <div class="group categories">
                 <span class="caption">Kategorie</span>
                 <ul class="items">
-                  <li><a href="#tonery">Tonery<span class="value">1 284</span></a></li>
-                  <li><a href="#tonery">Inkoustové náplně<span class="value">642</span></a></li>
-                  <li><a href="#papirnictvi">Papír do tiskáren<span class="value">208</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">Tonery<span class="value">1 284</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">Inkoustové náplně<span class="value">642</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">Papír do tiskáren<span class="value">208</span></a></li>
                 </ul>
               </div>
               <div class="group manufacturers">
                 <span class="caption">Výrobci</span>
                 <ul class="items">
-                  <li><a href="#znacky">HP<span class="value">412</span></a></li>
-                  <li><a href="#znacky">Canon<span class="value">318</span></a></li>
-                  <li><a href="#znacky">Brother<span class="value">286</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">HP<span class="value">412</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">Canon<span class="value">318</span></a></li>
+                  <li><a href="vypis-kategorie.dc.html">Brother<span class="value">286</span></a></li>
                 </ul>
               </div>
             </dc-gi>
@@ -119,7 +168,33 @@
       <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
     </div>
     <dc-con class="dcHeader">
-      <a class="_quickBuy" href="#rychly-nakup"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
+      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
+      <div class="LoginUserView v1a v1 bs-view dcon dc000 {{ loginActive }}" id="prihlaseni">
+        <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ loginActive }}" role="dialog" aria-label="Přihlášení">
+          <dc-con class="dcHeader">
+            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
+            <span class="caption">Přihlášení</span>
+            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="formRow">
+              <label class="label" for="loginEmail">E-mail</label>
+              <input id="loginEmail" class="textBox" type="email" autocomplete="email" placeholder="vas@email.cz">
+            </div>
+            <div class="formRow">
+              <label class="label" for="loginPassword">Heslo</label>
+              <input id="loginPassword" class="textBox" type="password" autocomplete="current-password" placeholder="Vaše heslo">
+              <a class="forgot" href="#heslo">Zapomenuté heslo</a>
+            </div>
+            <button type="button" class="button login">Přihlásit se</button>
+            <a class="button register a5" href="#registrace">Registrace</a>
+            <div class="formRow inline">
+              <input id="loginPersist" class="checkBox" type="checkbox">
+              <label class="label" for="loginPersist">Zůstat přihlášen</label>
+            </div>
+          </dc-con>
+        </div>
+      </div>
       <div class="SimpleBasketView v1a v1 bs-view dcon dc000 {{ basketEmptyClass }}">
         <a href="#kosik" onClick="{{ toggleBasket }}" aria-expanded="{{ basketOpen }}">
           <span class="icons"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">{{ cartCount }}</span></span>
@@ -138,7 +213,7 @@
                   <li>
                     <span class="image"><img src="{{ it.image }}" alt="" loading="lazy"></span>
                     <span class="text">
-                      <a class="name" href="#produkt">{{ it.name }}</a>
+                      <a class="name" href="detail-produktu.dc.html">{{ it.name }}</a>
                       <span class="unitsDescription">{{ it.quantityLabel }}</span>
                     </span>
                     <span class="actions">
@@ -177,51 +252,51 @@
       </button>
       <span class="separator" aria-hidden="true"></span>
       <ul class="items">
-        <li class="root"><a href="#tonery">Tonery a náplně</a></li>
-        <li class="root"><a href="#kancelar">Kancelářské potřeby</a></li>
-        <li class="root"><a href="#papirnictvi">Papírnictví</a></li>
-        <li class="root"><a href="#skola">Školní potřeby</a></li>
-        <li class="root"><a href="#baleni">Balicí materiál</a></li>
-        <li class="root"><a href="#hygiena">Hygiena a úklid</a></li>
-        <li class="root"><a href="#nabytek">Vybavení a nábytek</a></li>
-        <li class="root"><a href="#znacky">Značky</a></li>
-        <li class="root sale"><a href="#akce">Akce %</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Balicí materiál</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Hygiena a úklid</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Vybavení a nábytek</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Značky</a></li>
+        <li class="root sale"><a href="vypis-kategorie.dc.html">Akce %</a></li>
       </ul>
     </dc-con>
   </nav>
   <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
     <dc-con class="dcContent">
       <ul class="items">
-        <li class="level_0 selected"><a href="#tonery"><svg class="icon ico2" aria-hidden="true"><use href="#tp-printer"></use></svg>Tonery a náplně<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+        <li class="level_0 selected"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-printer"></use></svg>Tonery a náplně<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
           <ul class="_subLevels level_1">
-            <li><a class="name" href="#tonery">Tonery</a>
-              <ul class="level_2"><li><a href="#tonery">Kompatibilní tonery</a></li><li><a href="#tonery">Originální tonery</a></li><li><a href="#tonery">Sady tonerů</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Tonery</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kompatibilní tonery</a></li><li><a href="vypis-kategorie.dc.html">Originální tonery</a></li><li><a href="vypis-kategorie.dc.html">Sady tonerů</a></li></ul>
             </li>
-            <li><a class="name" href="#tonery">Inkoustové náplně</a>
-              <ul class="level_2"><li><a href="#tonery">Kompatibilní náplně</a></li><li><a href="#tonery">Originální náplně</a></li><li><a href="#tonery">Sady náplní</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Inkoustové náplně</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kompatibilní náplně</a></li><li><a href="vypis-kategorie.dc.html">Originální náplně</a></li><li><a href="vypis-kategorie.dc.html">Sady náplní</a></li></ul>
             </li>
-            <li><a class="name" href="#tonery">Válce a fotoválce</a>
-              <ul class="level_2"><li><a href="#tonery">Válce Brother</a></li><li><a href="#tonery">Válce HP</a></li><li><a href="#tonery">Odpadní nádobky</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Válce a fotoválce</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Válce Brother</a></li><li><a href="vypis-kategorie.dc.html">Válce HP</a></li><li><a href="vypis-kategorie.dc.html">Odpadní nádobky</a></li></ul>
             </li>
-            <li><a class="name" href="#tonery">Pásky do tiskáren</a>
-              <ul class="level_2"><li><a href="#tonery">Jehličkové tiskárny</a></li><li><a href="#tonery">Kalkulačky</a></li><li><a href="#tonery">Etiketovací kleště</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Pásky do tiskáren</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Jehličkové tiskárny</a></li><li><a href="vypis-kategorie.dc.html">Kalkulačky</a></li><li><a href="vypis-kategorie.dc.html">Etiketovací kleště</a></li></ul>
             </li>
-            <li><a class="name" href="#papirnictvi">Papír do tiskáren</a>
-              <ul class="level_2"><li><a href="#papirnictvi">Kancelářský papír</a></li><li><a href="#papirnictvi">Fotopapír</a></li><li><a href="#papirnictvi">Etikety</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Papír do tiskáren</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kancelářský papír</a></li><li><a href="vypis-kategorie.dc.html">Fotopapír</a></li><li><a href="vypis-kategorie.dc.html">Etikety</a></li></ul>
             </li>
-            <li><a class="name" href="#tonery">Podle tiskárny</a>
-              <ul class="level_2"><li><a href="#tonery">HP</a></li><li><a href="#tonery">Canon</a></li><li><a href="#tonery">Brother</a></li><li><a href="#tonery">Epson</a></li></ul>
+            <li><a class="name" href="vypis-kategorie.dc.html">Podle tiskárny</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">HP</a></li><li><a href="vypis-kategorie.dc.html">Canon</a></li><li><a href="vypis-kategorie.dc.html">Brother</a></li><li><a href="vypis-kategorie.dc.html">Epson</a></li></ul>
             </li>
           </ul>
         </li>
-        <li class="level_0"><a href="#kancelar"><svg class="icon ico2"><use href="#tp-shopping-bag"></use></svg>Kancelářské potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#papirnictvi"><svg class="icon ico2"><use href="#tp-book"></use></svg>Papírnictví<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#skola"><svg class="icon ico2"><use href="#tp-package"></use></svg>Školní potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#baleni"><svg class="icon ico2"><use href="#tp-package-export"></use></svg>Balicí materiál<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#hygiena"><svg class="icon ico2"><use href="#tp-trash"></use></svg>Hygiena a úklid<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#nabytek"><svg class="icon ico2"><use href="#tp-building-store"></use></svg>Vybavení a nábytek<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="#znacky"><svg class="icon ico2"><use href="#tp-tag"></use></svg>Značky<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0 sale"><a href="#akce"><svg class="icon ico2"><use href="#tp-discount"></use></svg>Akce %<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-shopping-bag"></use></svg>Kancelářské potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-book"></use></svg>Papírnictví<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-package"></use></svg>Školní potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-package-export"></use></svg>Balicí materiál<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-trash"></use></svg>Hygiena a úklid<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-building-store"></use></svg>Vybavení a nábytek<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-tag"></use></svg>Značky<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0 sale"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-discount"></use></svg>Akce %<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
       </ul>
       <bs-lazy-render class="expanded">
         <span class="caption">Tonery a náplně</span>
@@ -229,67 +304,67 @@
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/toner-hp-cf226x.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#tonery">Tonery</a>
+              <a class="name" href="vypis-kategorie.dc.html">Tonery</a>
               <ul class="level_2">
-                <li><a href="#tonery">Kompatibilní tonery</a></li>
-                <li><a href="#tonery">Jak vybrat vhodný toner do tiskárny</a></li>
-                <li><a href="#tonery">Originální tonery</a></li>
+                <li><a href="vypis-kategorie.dc.html">Kompatibilní tonery</a></li>
+                <li><a href="vypis-kategorie.dc.html">Jak vybrat vhodný toner do tiskárny</a></li>
+                <li><a href="vypis-kategorie.dc.html">Originální tonery</a></li>
               </ul>
             </span>
           </li>
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/toner-brother-tn2411.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#tonery">Inkoustové náplně</a>
+              <a class="name" href="vypis-kategorie.dc.html">Inkoustové náplně</a>
               <ul class="level_2">
-                <li><a href="#tonery">Kompatibilní náplně</a></li>
-                <li><a href="#tonery">Originální náplně</a></li>
-                <li><a href="#tonery">Sady náplní</a></li>
+                <li><a href="vypis-kategorie.dc.html">Kompatibilní náplně</a></li>
+                <li><a href="vypis-kategorie.dc.html">Originální náplně</a></li>
+                <li><a href="vypis-kategorie.dc.html">Sady náplní</a></li>
               </ul>
             </span>
           </li>
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/toner-canon-crg039h.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#tonery">Válce a fotoválce</a>
+              <a class="name" href="vypis-kategorie.dc.html">Válce a fotoválce</a>
               <ul class="level_2">
-                <li><a href="#tonery">Válce Brother</a></li>
-                <li><a href="#tonery">Válce HP</a></li>
-                <li><a href="#tonery">Odpadní nádobky</a></li>
+                <li><a href="vypis-kategorie.dc.html">Válce Brother</a></li>
+                <li><a href="vypis-kategorie.dc.html">Válce HP</a></li>
+                <li><a href="vypis-kategorie.dc.html">Odpadní nádobky</a></li>
               </ul>
             </span>
           </li>
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/paska-tesa-4280.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#tonery">Pásky do tiskáren</a>
+              <a class="name" href="vypis-kategorie.dc.html">Pásky do tiskáren</a>
               <ul class="level_2">
-                <li><a href="#tonery">Jehličkové tiskárny</a></li>
-                <li><a href="#tonery">Kalkulačky</a></li>
-                <li><a href="#tonery">Etiketovací kleště</a></li>
+                <li><a href="vypis-kategorie.dc.html">Jehličkové tiskárny</a></li>
+                <li><a href="vypis-kategorie.dc.html">Kalkulačky</a></li>
+                <li><a href="vypis-kategorie.dc.html">Etiketovací kleště</a></li>
               </ul>
             </span>
           </li>
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#papirnictvi">Papír do tiskáren</a>
+              <a class="name" href="vypis-kategorie.dc.html">Papír do tiskáren</a>
               <ul class="level_2">
-                <li><a href="#papirnictvi">Kancelářský papír</a></li>
-                <li><a href="#papirnictvi">Fotopapír</a></li>
-                <li><a href="#papirnictvi">Etikety</a></li>
+                <li><a href="vypis-kategorie.dc.html">Kancelářský papír</a></li>
+                <li><a href="vypis-kategorie.dc.html">Fotopapír</a></li>
+                <li><a href="vypis-kategorie.dc.html">Etikety</a></li>
               </ul>
             </span>
           </li>
           <li class="level_1">
             <span class="image"><img src="ds/assets/produkty/skartovacka-at-13c.jpg" alt="" loading="lazy"></span>
             <span>
-              <a class="name" href="#znacky">Podle tiskárny</a>
+              <a class="name" href="vypis-kategorie.dc.html">Podle tiskárny</a>
               <ul class="level_2">
-                <li><a href="#znacky">HP</a></li>
-                <li><a href="#znacky">Canon</a></li>
-                <li><a href="#znacky">Brother</a></li>
-                <li><a href="#znacky">Epson</a></li>
+                <li><a href="vypis-kategorie.dc.html">HP</a></li>
+                <li><a href="vypis-kategorie.dc.html">Canon</a></li>
+                <li><a href="vypis-kategorie.dc.html">Brother</a></li>
+                <li><a href="vypis-kategorie.dc.html">Epson</a></li>
               </ul>
             </span>
           </li>
@@ -312,7 +387,7 @@
           <li><svg class="icon ico3"><use href="#tp-heart-handshake"></use></svg><span><span class="name">Poradíme s výběrem</span><span class="note">541 123 456</span></span></li>
         </ul>
         <dc-con class="dcActions">
-          <a class="button big" href="#tonery">Začít nakupovat</a>
+          <a class="button big" href="vypis-kategorie.dc.html">Začít nakupovat</a>
           <a class="button a5 big" href="#poradna">Nákupní rádci</a>
         </dc-con>
       </dc-gi>
@@ -325,7 +400,7 @@
         <svg class="icon ico4" aria-hidden="true"><use href="#tp-star"></use></svg>
         <p class="name">Vybíráme pro kancelář</p>
         <p class="shortDescription">Produkty, které dlouhodobě doporučujeme zákazníkům.</p>
-        <a class="readMore" href="#vyber">Zobrazit výběr<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+        <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit výběr<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
       </div>
       <div class="PromoTileView v1a v1 bs-view warning">
         <svg class="icon ico4"><use href="#tp-book"></use></svg>
@@ -357,25 +432,25 @@
       <div class="SituationView v1a v1 bs-view success">
         <p class="name">Zařizujete kancelář?</p>
         <p class="shortDescription">Kompletní vybavení pro moderní kancelář.</p>
-        <a class="readMore" href="#kancelar">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+        <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
         <span class="image"><img src="ds/assets/kategorie/kancelar.png" alt="Kancelářské vybavení" loading="lazy"></span>
       </div>
       <div class="SituationView v1a v1 bs-view warning">
         <p class="name">Připravujete školní rok?</p>
         <p class="shortDescription">Vše pro školy, učitele i studenty.</p>
-        <a class="readMore" href="#skola">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+        <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
         <span class="image"><img src="ds/assets/kategorie/skola.png" alt="Školní potřeby" loading="lazy"></span>
       </div>
       <div class="SituationView v1a v1 bs-view main">
         <p class="name">Balíte zásilky?</p>
         <p class="shortDescription">Obaly, krabice, pásky a vše pro bezpečné balení.</p>
-        <a class="readMore" href="#baleni">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+        <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
         <span class="image"><img src="ds/assets/kategorie/baleni.png" alt="Balicí materiál" loading="lazy"></span>
       </div>
       <div class="SituationView v1a v1 bs-view storage">
         <p class="name">Potřebujete tisknout?</p>
         <p class="shortDescription">Tonery, náplně, papíry a tiskové příslušenství.</p>
-        <a class="readMore" href="#tonery">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+        <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
         <span class="image"><img src="ds/assets/kategorie/tisk.png" alt="Tonery a papíry" loading="lazy"></span>
       </div>
       <div class="SituationView v1a v1 bs-view neutral">
@@ -401,14 +476,14 @@
   <section class="ProductCarouselView v1a v1 bs-view dcon dc000">
     <dc-con class="dcHeader">
       <span class="caption"><svg class="icon ico3" aria-hidden="true"><use href="#tp-star"></use></svg>Vybíráme pro kancelář</span>
-      <a class="readMore" href="#vyber">Zobrazit celý výběr<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit celý výběr<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
     </dc-con>
     <dc-con class="dcContent">
       <button type="button" class="_carouselArrow prev" aria-label="Předchozí produkty" onClick="{{ carouselPrev }}" disabled="{{ prevDisabled }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
       <div class="scrollContainer" tabindex="0" role="group" aria-label="Vybíráme pro kancelář" ref="{{ carouselRef }}" onScroll="{{ onCarouselScroll }}">
         <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
-          <a class="image" href="#produkt"><img class="mainImage" src="ds/assets/produkty/toner-hp-cf279a.jpg" alt="Kompatibilní toner HP CF279A (79A), černý, 1 000 stran" loading="lazy"></a>
-          <dc-con class="dcHeader"><span class="code">CF279A</span><a class="name" href="#produkt">Kompatibilní toner HP CF279A (79A), černý, 1 000 stran</a></dc-con>
+          <a class="image" href="detail-produktu.dc.html"><img class="mainImage" src="ds/assets/produkty/toner-hp-cf279a.jpg" alt="Kompatibilní toner HP CF279A (79A), černý, 1 000 stran" loading="lazy"></a>
+          <dc-con class="dcHeader"><span class="code">CF279A</span><a class="name" href="detail-produktu.dc.html">Kompatibilní toner HP CF279A (79A), černý, 1 000 stran</a></dc-con>
           <dc-con class="dcPrice">
             <div class="priceParts">
               <span class="price bs-priceLayout notranslate vat primary"><span class="value">479 Kč</span><span class="vatText">s DPH</span></span>
@@ -429,8 +504,8 @@
           </dc-con>
         </div>
         <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
-          <a class="image" href="#produkt"><img class="mainImage" src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="Laminovací fólie A4, 80 mic, 100 ks" loading="lazy"></a>
-          <dc-con class="dcHeader"><span class="code">LF-A4-80</span><a class="name" href="#produkt">Laminovací fólie A4, 80 mic, 100 ks</a></dc-con>
+          <a class="image" href="detail-produktu.dc.html"><img class="mainImage" src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="Laminovací fólie A4, 80 mic, 100 ks" loading="lazy"></a>
+          <dc-con class="dcHeader"><span class="code">LF-A4-80</span><a class="name" href="detail-produktu.dc.html">Laminovací fólie A4, 80 mic, 100 ks</a></dc-con>
           <dc-con class="dcPrice">
             <div class="priceParts">
               <span class="price bs-priceLayout notranslate vat primary"><span class="value">129 Kč</span><span class="vatText">s DPH</span></span>
@@ -451,8 +526,8 @@
           </dc-con>
         </div>
         <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
-          <a class="image" href="#produkt"><img class="mainImage" src="ds/assets/produkty/kreslo-tina-cerne.jpg" alt="Kancelářská židle Tina, ergonomická, černá" loading="lazy"></a>
-          <dc-con class="dcHeader"><span class="code">PW-TINA-CE</span><a class="name" href="#produkt">Kancelářská židle Tina, ergonomická, černá</a></dc-con>
+          <a class="image" href="detail-produktu.dc.html"><img class="mainImage" src="ds/assets/produkty/kreslo-tina-cerne.jpg" alt="Kancelářská židle Tina, ergonomická, černá" loading="lazy"></a>
+          <dc-con class="dcHeader"><span class="code">PW-TINA-CE</span><a class="name" href="detail-produktu.dc.html">Kancelářská židle Tina, ergonomická, černá</a></dc-con>
           <dc-con class="dcPrice">
             <div class="priceParts">
               <span class="price bs-priceLayout notranslate vat primary"><span class="value">2 990 Kč</span><span class="vatText">s DPH</span></span>
@@ -473,8 +548,8 @@
           </dc-con>
         </div>
         <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
-          <a class="image" href="#produkt"><img class="mainImage" src="ds/assets/produkty/toner-hp-cf226x.jpg" alt="Kompatibilní toner HP CF226X (26X), černý, 9 000 stran" loading="lazy"></a>
-          <dc-con class="dcHeader"><span class="code">CF226X</span><a class="name" href="#produkt">Kompatibilní toner HP CF226X (26X), černý, 9 000 stran</a></dc-con>
+          <a class="image" href="detail-produktu.dc.html"><img class="mainImage" src="ds/assets/produkty/toner-hp-cf226x.jpg" alt="Kompatibilní toner HP CF226X (26X), černý, 9 000 stran" loading="lazy"></a>
+          <dc-con class="dcHeader"><span class="code">CF226X</span><a class="name" href="detail-produktu.dc.html">Kompatibilní toner HP CF226X (26X), černý, 9 000 stran</a></dc-con>
           <dc-con class="dcPrice">
             <div class="priceParts">
               <span class="price bs-priceLayout notranslate vat primary"><span class="value">589 Kč</span><span class="vatText">s DPH</span></span>
@@ -495,8 +570,8 @@
           </dc-con>
         </div>
         <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
-          <a class="image" href="#produkt"><img class="mainImage" src="ds/assets/produkty/toner-brother-tn2411.jpg" alt="Kompatibilní toner Brother TN-2411, černý, 1 200 stran" loading="lazy"></a>
-          <dc-con class="dcHeader"><span class="code">TN-2411</span><a class="name" href="#produkt">Kompatibilní toner Brother TN-2411, černý, 1 200 stran</a></dc-con>
+          <a class="image" href="detail-produktu.dc.html"><img class="mainImage" src="ds/assets/produkty/toner-brother-tn2411.jpg" alt="Kompatibilní toner Brother TN-2411, černý, 1 200 stran" loading="lazy"></a>
+          <dc-con class="dcHeader"><span class="code">TN-2411</span><a class="name" href="detail-produktu.dc.html">Kompatibilní toner Brother TN-2411, černý, 1 200 stran</a></dc-con>
           <dc-con class="dcPrice">
             <div class="priceParts">
               <span class="price bs-priceLayout notranslate vat primary"><span class="value">349 Kč</span><span class="vatText">s DPH</span></span>
@@ -590,12 +665,12 @@
     <dc-gi class="column expanded">
       <button type="button" class="caption" aria-expanded="true" onClick="{{ toggleColumn }}">Kategorie<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></button>
       <ul class="items">
-        <li><a href="#tonery">Tonery a náplně</a></li>
-        <li><a href="#kancelar">Kancelářské potřeby</a></li>
-        <li><a href="#papirnictvi">Papírnictví</a></li>
-        <li><a href="#skola">Školní potřeby</a></li>
-        <li><a href="#baleni">Balicí materiál</a></li>
-        <li><a href="#hygiena">Hygiena a úklid</a></li>
+        <li><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
+        <li><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
+        <li><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
+        <li><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
+        <li><a href="vypis-kategorie.dc.html">Balicí materiál</a></li>
+        <li><a href="vypis-kategorie.dc.html">Hygiena a úklid</a></li>
       </ul>
     </dc-gi>
     <dc-gi class="newsletter">
@@ -641,7 +716,7 @@
 class Component extends DCLogic {
   state = {
     mega: false, email: '', error: '', sent: false, atStart: true, atEnd: false,
-    q: '', searchOpen: false, basketOpen: false, cart: [], usp: 0, qtys: {}, fixed: false,
+    q: '', searchOpen: false, basketOpen: false, loginOpen: false, cart: [], usp: 0, qtys: {}, fixed: false,
   };
 
   /* Pod 820 px se výhody v topbaru střídají po 5 s (DS: TopUtilityBar). Šipka
@@ -748,8 +823,14 @@ class Component extends DCLogic {
       basketOpen: this.state.basketOpen,
       basketActive: this.state.basketOpen ? 'active' : '',
       basketEmptyClass: count ? '' : 'empty',
-      toggleBasket: e => { e.preventDefault(); this.setState(s => ({ basketOpen: !s.basketOpen, searchOpen: false })); },
-      closePopups: () => this.setState({ basketOpen: false, searchOpen: false }),
+      toggleBasket: e => { e.preventDefault(); this.setState(s => ({ basketOpen: !s.basketOpen, searchOpen: false, loginOpen: false })); },
+      closePopups: () => this.setState({ basketOpen: false, searchOpen: false, loginOpen: false }),
+
+      /* Přihlášení: spouští ho ikona v hlavičce, „Rychlý nákup“ (bez účtu ho nejde
+         použít) i odkaz v horním pruhu. Panel žije v .LoginUserView jako ._headerPopup. */
+      loginOpen: this.state.loginOpen,
+      loginActive: this.state.loginOpen ? 'active' : '',
+      toggleLogin: e => { e.preventDefault(); this.setState(s => ({ loginOpen: !s.loginOpen, basketOpen: false, searchOpen: false })); },
       cartCount: count,
       cartTotal: this.price(total),
       cartItemsLabel: this.itemsLabel(count),
@@ -892,13 +973,15 @@ class Component extends DCLogic {
     this.onDocDown = e => {
       const inSearch = e.target.closest && e.target.closest('.SimpleSearchView');
       const inBasket = e.target.closest && e.target.closest('.SimpleBasketView');
+      const inLogin = e.target.closest && e.target.closest('.LoginUserView, ._quickBuy, .UserContentPanelView');
       if (!inSearch && this.state.searchOpen) this.setState({ searchOpen: false });
       if (!inBasket && this.state.basketOpen) this.setState({ basketOpen: false });
+      if (!inLogin && this.state.loginOpen) this.setState({ loginOpen: false });
     };
     this.onKeyDown = e => {
       if (e.key !== 'Escape') return;
-      if (this.state.searchOpen || this.state.basketOpen || this.state.mega) {
-        this.setState({ searchOpen: false, basketOpen: false, mega: false });
+      if (this.state.searchOpen || this.state.basketOpen || this.state.mega || this.state.loginOpen) {
+        this.setState({ searchOpen: false, basketOpen: false, mega: false, loginOpen: false });
       }
     };
     document.addEventListener('mousedown', this.onDocDown);

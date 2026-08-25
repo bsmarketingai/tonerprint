@@ -140,7 +140,33 @@ Prokreslit i do `Quantity` a `ProductCard` (`units`).
   na 12 px, protože `tokens/typography.css` zakazuje 11 px v produktovém UI —
   pokud má u vlajek platit výjimka, je potřeba ji do DS napsat.
 
-## 6. Ceny: celé koruny (ROZHODNUTO)
+## 9. LoginPopupView — nositel, spouštěče a mobil
+
+DS má komponentu i CSS, ale nikde nestojí, **kdo panel otevírá a kde žije**, takže se to
+při každé stránce vynechává:
+
+- Nositelem je `.LoginUserView` (`._headerPopup` uvnitř), stejně jako u košíku.
+- **Spouštěče jsou `._quickBuy` („Rychlý nákup“ — je to login, jen se tak jmenuje)
+  a odkaz „Přihlášení“ v `UserContentPanelView`.** V hlavičce není žádné samostatné
+  tlačítko „Přihlásit“.
+- Nositel musí mít výšku řádku hlavičky — `top: calc(100% + var(--spacer-8))` z DS by
+  jinak panel posadilo přes tlačítka.
+- **Pod 550 px má být panel přes celou obrazovku**, přesně jako
+  `.BasketProductsPopupView` (`position: fixed; inset: 0`, `.button.back` viditelný,
+  `.caption` skrytý). DS to má jen u košíku.
+- DS navíc pod 820 px `.HeaderView .LoginUserView` skrývá (účet v mobilním menu) —
+  to panel na mobilu vypne. Nositel musí zůstat.
+- Doplnit specimen do `guidelines/`.
+
+## 10. Hero má mít strop plochy
+
+`.HeroBannerView` se roztahuje bez omezení, ale fotka (2172 × 724) se sází `auto 100 %`
+na výšku pásu (max 420 px) — nad ~1900 px zbyde vedle textu prázdná bílá plocha.
+Guide říká, že plocha okolo obsahu jde do 1920 px: `width: 100%; max-width:
+var(--eshop-width-outer); margin-inline: auto` (bez `width: 100 %` se blok v `.HomeView`
+scvrkne na fit-content — DS to u ostatních sekcí takhle má).
+
+## 11. Ceny: celé koruny (ROZHODNUTO)
 
 Ceny všude v **celých korunách bez haléřů** — `106 Kč`, `2 490 Kč`. DS si protiřečí:
 guide i `Price.prompt.md` mají příklady s `,00`, `ui_kits/eshop/index.html` celé koruny —
