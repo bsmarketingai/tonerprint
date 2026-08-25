@@ -14,21 +14,18 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
-    /* CHYBA V DS: ._headerPopup už má vlastní hladinu (--z-header-popup), ale panel
-       našeptávače v .SimpleSearchView > dc-con.pivot pořád nese --z-popup (200) —
-       stejně jako ._menuWrap. Na stejné hladině vyhraje pozdější prvek v DOM, tedy
-       lišta kategorií, a překryje horní hranu panelu. .HeaderView je navíc
-       position: static, takže z-index na ní samotné neplatí. V DS chce dát pivotu
-       --z-header-popup. */
-    .HeaderView { position: relative; z-index: var(--z-header-popup); }
-    /* CHYBA V DS: home.css dává .MenuView > dc-con.dcContent overflow: visible (aby mohl
-       vylézt panel mega-menu), ale panel je sourozenec .MenuView v ._menuWrap — dcContent
-       ho neořezává. Nekonečná lišta kategorií tak roztahuje celou stránku (1018 px v 909 px
-       viewportu). V DS má dcContent scrollovat vodorovně a od 1150 px, kde se lišta vejde,
-       se přepnout na visible. */
-    .MenuView > dc-con.dcContent { overflow-x: auto; scrollbar-width: none; }
-    .MenuView > dc-con.dcContent::-webkit-scrollbar { display: none; }
-    @media (min-width: 1150px) { .MenuView > dc-con.dcContent { overflow-x: visible; } }
+    /* Obchází runtime, ne DS: host má height: 100 %, takže obsah přetéká mimo svůj
+       containing block a sticky hlavička by se po výšce okna odlepila. */
+    html, body { height: auto; min-height: 100%; }
+    #dc-root, #dc-root > .sc-host { height: auto; min-height: 100%; }
+    /* CHYBÍ V DS: přilepená má zůstat hlavička i lišta kategorií — zákazník musí mít
+       menu na dosah i uprostřed dlouhé stránky. DS zná jen .HeaderView…fixed.
+       Výšku hlavičky měří logika do --tp-header-h (na mobilu má dva řádky). */
+    ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+    /* CHYBA V DS: .fixed dává hlavičce --z-header (100) a zakládá stacking kontext,
+       takže panel našeptávače (250 uvnitř) skončí pod lištou kategorií. Přilepená
+       hlavička musí být nad ní. */
+    .HeaderView.isFixedHeaderAware.fixed { z-index: var(--z-header-popup); }
   </style>
 </helmet>
 
@@ -51,7 +48,7 @@
   </dc-con>
 </div>
 
-<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware">
+<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
   <dc-gi class="headerFixPivot"></dc-gi>
   <dc-con class="dcContent">
     <div class="LogoView v1a v1 bs-view dcon dc000">
@@ -118,6 +115,9 @@
         </div>
       </dc-con>
     </div>
+    <div class="AiAssistantView v1a v1 bs-view dcon dc000">
+      <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
+    </div>
     <dc-con class="dcHeader">
       <a class="_quickBuy" href="#rychly-nakup"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
       <div class="SimpleBasketView v1a v1 bs-view dcon dc000 {{ basketEmptyClass }}">
@@ -163,8 +163,8 @@
           </dc-con>
         </div>
       </div>
-      <button type="button" class="button menuButton" aria-label="Menu" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-menu-2"></use></svg></button>
     </dc-con>
+    <button type="button" class="button menuButton" aria-label="Menu" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-menu-2"></use></svg></button>
   </dc-con>
   <dc-gi class="headerUnfixPivot"></dc-gi>
 </header>
@@ -641,7 +641,7 @@
 class Component extends DCLogic {
   state = {
     mega: false, email: '', error: '', sent: false, atStart: true, atEnd: false,
-    q: '', searchOpen: false, basketOpen: false, cart: [], usp: 0, qtys: {},
+    q: '', searchOpen: false, basketOpen: false, cart: [], usp: 0, qtys: {}, fixed: false,
   };
 
   /* Pod 820 px se výhody v topbaru střídají po 5 s (DS: TopUtilityBar). Šipka
@@ -710,6 +710,7 @@ class Component extends DCLogic {
     const gaps = this.props.showDsGaps ?? false;
     const cardKeys = ['cf279a', 'lfa480', 'tina', 'cf226x', 'tn2411'];
     return {
+      headerFixed: this.state.fixed ? 'fixed' : '',
       megaOpen: this.state.mega,
       megaDisplay: this.state.mega ? 'block' : 'none',
       toggleMega: () => this.setState(s => ({ mega: !s.mega })),
@@ -848,8 +849,39 @@ class Component extends DCLogic {
     });
   }
 
+  /* Sticky hlavička + lišta kategorií. Měří se scroll proti statickému offsetTop
+     hlavičky (sticky ji z toku nevyjímá). Pozor: IntersectionObserver na pivotu
+     uvnitř hlavičky se zacyklí — přilepená hlavička si pivot přitáhne do viewportu.
+     Výška hlavičky jde do --tp-header-h, o který se odsazuje lišta kategorií. */
+  watchHeader() {
+    const header = document.querySelector('.HeaderView.isFixedHeaderAware');
+    if (!header) return;
+    const measure = () => {
+      if (!this.state.fixed) this.headerTop = header.offsetTop;
+      document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
+    };
+    measure();
+    this.onScroll = () => {
+      const fixed = window.scrollY > this.headerTop + 4;
+      if (fixed !== this.state.fixed) this.setState({ fixed });
+    };
+    this.onHeaderResize = measure;
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onHeaderResize);
+    /* Styly z helmetu i logo dojdou až po mountu — bez přeměření by se do
+       --tp-header-h zapsala výška nestylované hlavičky. */
+    window.addEventListener('load', this.onHeaderResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    if (window.ResizeObserver) {
+      this.headerRo = new ResizeObserver(measure);
+      this.headerRo.observe(header);
+    }
+    this.onScroll();
+  }
+
   componentDidMount() {
     this.syncCustomElementClasses();
+    this.watchHeader();
     this.startUsp();
     this.syncEdges(this.scroller);
     this.onResize = () => this.syncEdges(this.scroller);
@@ -881,6 +913,10 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     clearInterval(this.uspTimer);
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onHeaderResize);
+    window.removeEventListener('load', this.onHeaderResize);
+    if (this.headerRo) this.headerRo.disconnect();
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('load', this.onResize);
     document.removeEventListener('mousedown', this.onDocDown);

@@ -14,14 +14,24 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* Obchází runtime, ne DS: host má height: 100 %, takže obsah přetéká mimo svůj
+       containing block a sticky hlavička se po ~456 px odlepí. */
+    html, body { height: auto; min-height: 100%; }
+    #dc-root, #dc-root > .sc-host { height: auto; min-height: 100%; }
+    /* CHYBÍ V DS: přilepená má zůstat hlavička i lišta kategorií — menu musí být
+       na dosah i uprostřed dlouhé stránky. Výšku hlavičky měří logika
+       do --tp-header-h (na mobilu má hlavička dva řádky). */
+    ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+    /* CHYBA V DS: .fixed dává hlavičce --z-header (100) a zakládá stacking kontext,
+       takže panel našeptávače (250 uvnitř) skončí pod lištou kategorií. Přilepená
+       hlavička musí být nad ní. */
+    .HeaderView.isFixedHeaderAware.fixed { z-index: var(--z-header-popup); }
     /* CHYBÍ V DS: pro detail produktu není obal stránky. .CategoryView drží rytmus
        --eshop-gap (16 px), což je správné pro výpis (lišta, mřížka, stránkování),
        ale detail má tři samostatné bloky (sestava, karusel, taby) a ty chtějí
        --section-gap jako sekce homepage. V DS chce ProductDetailView / DetailView. */
     .CategoryView { padding-top: var(--eshop-gap); gap: var(--section-gap); }
     .CategoryView > .BreadcrumbView { margin-bottom: calc(-1 * var(--section-gap) + var(--eshop-gap)); }
-    /* CHYBÍ V DS: výchozí karta výpisu = číselník s jednotkou + ikonové CTA (rozhodnuto
-       na výpisu kategorie). DS v3a číselník skrývá a jednotku dává 12px muted. */
     /* CHYBÍ V DS (rozhodnuto): vlajky mají větnou velikost písmen a menší text —
        tokeny --flag-text-transform: uppercase a --flag-font-size: 12 dělají z krátkých
        textů („Doprava zdarma“) hlasitý blok. Do DS patří none + 12 px a lehčí řez.
@@ -33,9 +43,9 @@
        vypadá ztmavená a průhledná. V DS má mít .ActionIconsView z-index a isolation,
        ať blending zůstane jen mezi fotkou a bílým podkladem karty. */
     .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
-    .ProductView .AddToCartView.v3a .quantity { display: inline-flex; flex: none; }
-    .ProductView .AddToCartView.v3a .quantity .unitsDescription { font: var(--font-weight-bold) var(--font-size-14) var(--font-family); color: var(--text-color); }
-    .ProductView .AddToCartView .quantity .button { width: var(--spacer-40); min-width: var(--spacer-40); padding: 0; }
+    /* Výchozí karta (číselník + ikonové CTA) i čtvercová tlačítka číselníku už jsou v DS
+       (update 2026-08-25) — zůstává jen písmo jednotky. */
+    .ProductView .AddToCartView .quantity .unitsDescription { font: var(--font-weight-bold) var(--font-size-14) var(--font-family); color: var(--text-color); }
     /* CHYBÍ V DS: číselník nemá obal pro dvojici číslo + jednotka, takže „1 bal“ nejde
        vycentrovat — odsazení paddingem vždy posune pár mimo osu. Na stránce je obal
        span.value: jedna položka, která dobírá zbytek řádku a obsah centruje.
@@ -109,7 +119,7 @@
   </dc-con>
 </div>
 
-<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware">
+<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
   <dc-gi class="headerFixPivot"></dc-gi>
   <dc-con class="dcContent">
     <div class="LogoView v1a v1 bs-view dcon dc000">
@@ -337,7 +347,7 @@
               <div class="AvailabilityView v1a v1 bs-view {{ p.availClass }}"><span class="label">{{ p.availability }}</span></div>
             </dc-con>
             <dc-con class="dcContent">
-              <div class="AddToCartView v3a v3 bs-view dcon dc000 active">
+              <div class="AddToCartView v1a v1 bs-view dcon dc000">
                 <div class="quantity">
                   <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ p.dec }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
                   <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ p.qty }}" min="1" max="999" onChange="{{ p.setQty }}" style="width: {{ p.qtyWidth }}"><span class="unitsDescription">{{ p.unit }}</span></span>
@@ -465,7 +475,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { usp: 0, gallery: 0, qty: 1, tab: 0, fav: false, cart: [], qtys: {}, atStart: true, atEnd: false, mega: false };
+  state = { usp: 0, gallery: 0, qty: 1, tab: 0, fav: false, cart: [], qtys: {}, atStart: true, atEnd: false, mega: false, fixed: false };
 
   photos = [
     { src: 'assets/at13c/1.jpg', alt: 'Skartovačka AT-13C zepředu' },
@@ -555,6 +565,7 @@ class Component extends DCLogic {
       uspPrev: () => this.uspStep(-1),
       uspNext: () => this.uspStep(1),
 
+      headerFixed: this.state.fixed ? 'fixed' : '',
       megaOpen: this.state.mega,
       megaDisplay: this.state.mega ? 'block' : 'none',
       toggleMega: () => this.setState(s => ({ mega: !s.mega })),
@@ -640,12 +651,32 @@ class Component extends DCLogic {
 
   /* DS: .HeaderView.isFixedHeaderAware dostane .fixed, jakmile projde pivot nad ní
      (BS Shop dělá totéž přes headerFixPivot) — sticky hlavička se stínem. */
+  /* Třída jde do stavu, ne přes classList — className hlavičky drží šablona,
+     takže každý další render (např. tik topbaru) by ruční třídu smazal. */
   watchHeader() {
-    const pivot = document.querySelector('.HeaderView dc-gi.headerFixPivot');
     const header = document.querySelector('.HeaderView.isFixedHeaderAware');
-    if (!pivot || !header || !window.IntersectionObserver) return;
-    this.headerIo = new IntersectionObserver(([e]) => header.classList.toggle('fixed', !e.isIntersecting), { threshold: 0 });
-    this.headerIo.observe(pivot);
+    if (!header) return;
+    const measure = () => {
+      if (!this.state.fixed) this.headerTop = header.offsetTop;
+      document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
+    };
+    measure();
+    this.onScroll = () => {
+      const fixed = window.scrollY > this.headerTop + 4;
+      if (fixed !== this.state.fixed) this.setState({ fixed });
+    };
+    this.onHeaderResize = measure;
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onHeaderResize);
+    /* Styly z helmetu i logo dojdou až po mountu — bez přeměření by se do
+       --tp-header-h zapsala výška nestylované hlavičky. */
+    window.addEventListener('load', this.onHeaderResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    if (window.ResizeObserver) {
+      this.headerRo = new ResizeObserver(measure);
+      this.headerRo.observe(header);
+    }
+    this.onScroll();
   }
 
   componentDidMount() {
@@ -673,7 +704,10 @@ class Component extends DCLogic {
     window.removeEventListener('load', this.onResize);
     document.removeEventListener('keydown', this.onKeyDown);
     if (this.ro) this.ro.disconnect();
-    if (this.headerIo) this.headerIo.disconnect();
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onHeaderResize);
+    window.removeEventListener('load', this.onHeaderResize);
+    if (this.headerRo) this.headerRo.disconnect();
   }
 }
 

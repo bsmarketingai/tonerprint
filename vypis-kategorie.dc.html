@@ -14,6 +14,18 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* Obchází runtime, ne DS: host má height: 100 %, takže obsah přetéká mimo svůj
+       containing block a sticky hlavička se po ~456 px odlepí. */
+    html, body { height: auto; min-height: 100%; }
+    #dc-root, #dc-root > .sc-host { height: auto; min-height: 100%; }
+    /* CHYBÍ V DS: přilepená má zůstat hlavička i lišta kategorií — menu musí být
+       na dosah i uprostřed dlouhého výpisu. Výšku hlavičky měří logika
+       do --tp-header-h (na mobilu má hlavička dva řádky). */
+    ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+    /* CHYBA V DS: .fixed dává hlavičce --z-header (100) a zakládá stacking kontext,
+       takže panel našeptávače (250 uvnitř) skončí pod lištou kategorií. Přilepená
+       hlavička musí být nad ní. */
+    .HeaderView.isFixedHeaderAware.fixed { z-index: var(--z-header-popup); }
     /* CategoryView, ._eshopWidth, rytmus dcQuery, ._categoryText, ._expandButton,
        řádková v5a, jednotka v číselníku, zlom CTA na kartě 820–999 px, popis 13 px
        i v mřížce a ořez lišty kategorií — to všechno už řeší DS (update 2026-08-25). */
@@ -21,29 +33,26 @@
     /* CHYBÍ V DS: podtitul nad textem kategorie (na webu je to h2 pod H1). DS zná
        jen .title a .shortDescription, pro ._categoryTextBlock .caption pravidlo nemá. */
     ._categoryTextBlock .caption { font-size: var(--font-size-16); font-weight: var(--font-weight-bold); color: var(--text-color); }
-    /* CHYBÍ V DS: výchozí karta výpisu = číselník s jednotkou + ikonové CTA. DS varianta
-       v3a číselník skrývá (`.v3a .quantity { display: none }`) a rozbaluje ho až po kliknutí,
-       takže zákazník nevidí, v čem nakupuje. Na kartě je proto v3a trvale otevřená
-       a jednotka má stejné písmo jako číslo — 12px muted popisek u čísla nefunguje. */
-    .ProductView .AddToCartView.v3a .quantity { display: inline-flex; flex: none; }
-    /* CHYBÍ V DS: klikatelné plochy číselníku jsou dané paddingem (na kartě 0 6px),
-       takže „−“ a „+“ nejsou čtvercové a na kartě mají jen 28 px šířky. Mají být
-       čtvercové 40 × 40 px — v DS chce .quantity .button pevnou šířku, ne padding. */
-    .ProductView .AddToCartView .quantity .button { width: var(--spacer-40); min-width: var(--spacer-40); padding: 0; }
-    .ProductView .AddToCartView.v3a .quantity .unitsDescription {
+    /* Výchozí karta (číselník + ikonové CTA), čtvercová tlačítka číselníku i skrytý
+       label CTA už řeší DS (update 2026-08-25) — zůstává jen písmo jednotky. */
+    .ProductView .AddToCartView .quantity .unitsDescription {
       font: var(--font-weight-bold) var(--font-size-14) var(--font-family);
       color: var(--text-color);
     }
-    /* CHYBÍ V DS: „1 bal“ je dvojice číslo + jednotka, ale DS dává odsazení jen zprava
-       (.unitsDescription padding-right), takže dvojice sedí mimo osu číselníku.
-       Odsazení má být symetrické — pak je „1 bal“ uprostřed mezi „−“ a „+“. */
-    .ProductView > dc-con.dcContent .AddToCartView .quantity:has(.unitsDescription) .real {
-      flex: 1 1 auto; width: auto; min-width: var(--spacer-20);
-      text-align: right; padding: 0;
+    /* CHYBÍ V DS: číselník nemá obal pro dvojici číslo + jednotka, takže „1 bal“ nejde
+       vycentrovat — odsazení paddingem vždy posune pár mimo osu. Na stránce je obal
+       span.value: jedna položka, která dobírá zbytek řádku a obsah centruje; šířka
+       číselného pole jde podle počtu číslic (inline style), jinak zbyde prázdné místo.
+       V DS chce .quantity > .value { flex: 1; justify-content: center }. */
+    .AddToCartView .quantity > .value,
+    .ProductView > dc-con.dcContent .AddToCartView .quantity > .value {
+      flex: 1 1 auto; display: inline-flex; align-items: center; justify-content: center;
+      gap: var(--spacer-2); min-width: 0;
     }
-    .ProductView > dc-con.dcContent .AddToCartView .quantity:has(.unitsDescription) .unitsDescription {
-      flex: 1 1 auto; text-align: left; padding: 0 0 0 var(--spacer-2);
-    }
+    .AddToCartView .quantity > .value .real,
+    .ProductView > dc-con.dcContent .AddToCartView .quantity > .value .real { flex: none; min-width: 0; text-align: right; padding: 0; }
+    .AddToCartView .quantity > .value .unitsDescription,
+    .ProductView > dc-con.dcContent .AddToCartView .quantity > .value .unitsDescription { flex: none; padding: 0; }
     /* CHYBÍ V DS: drawer filtrů je široký min(--eshop-left-width, 88vw) = 300 px a patička
        s tlačítky „Zrušit filtry“ + „Zobrazit 212 produktů“ se do něj nevejde — tlačítka
        přetékají. V DS chce buď širší panel (~360 px), nebo patičku, která umí zlomit. */
@@ -103,7 +112,7 @@
   </dc-con>
 </div>
 
-<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware">
+<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
   <dc-gi class="headerFixPivot"></dc-gi>
   <dc-con class="dcContent">
     <div class="LogoView v1a v1 bs-view dcon dc000">
@@ -307,11 +316,10 @@
                 <div class="AvailabilityView v1a v1 bs-view {{ p.availClass }}"><span class="label">{{ p.availability }}</span></div>
               </dc-con>
               <dc-con class="dcContent">
-                <div class="AddToCartView v3a v3 bs-view dcon dc000 active">
+                <div class="AddToCartView v1a v1 bs-view dcon dc000">
                   <div class="quantity">
                     <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ p.dec }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
-                    <input class="real" type="number" aria-label="Počet" value="{{ p.qty }}" min="1" max="999" onChange="{{ p.setQty }}">
-                    <span class="unitsDescription">{{ p.unit }}</span>
+                    <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ p.qty }}" min="1" max="999" onChange="{{ p.setQty }}" style="width: {{ p.qtyWidth }}"><span class="unitsDescription">{{ p.unit }}</span></span>
                     <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ p.inc }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
                   </div>
                   <button type="button" class="button buy" aria-label="Vložit do košíku" onClick="{{ p.buy }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
@@ -452,7 +460,7 @@
 class Component extends DCLogic {
   state = {
     mega: false, usp: 0, sort: 'top', view: 'grid', page: 1, shown: 8,
-    textOpen: false, filterOpen: false, qtys: {}, cart: [],
+    textOpen: false, filterOpen: false, qtys: {}, cart: [], fixed: false,
     checked: { hp: true, skladem: true }, collapsedGroups: { typ: true },
   };
 
@@ -573,6 +581,7 @@ class Component extends DCLogic {
       usp3: this.state.usp === 3 ? 'current' : '',
       uspPrev: () => this.uspStep(-1),
       uspNext: () => this.uspStep(1),
+      headerFixed: this.state.fixed ? 'fixed' : '',
       megaOpen: this.state.mega,
       megaDisplay: this.state.mega ? 'block' : 'none',
       toggleMega: () => this.setState(s => ({ mega: !s.mega })),
@@ -630,6 +639,9 @@ class Component extends DCLogic {
         availability: p.avail,
         availClass: p.availClass,
         qty: this.qtyOf(p.key),
+        /* Šířka pole podle počtu číslic — jinak zbyde v poli prázdné místo a dvojice
+           „1 bal“ se opticky odsune od osy číselníku. */
+        qtyWidth: String(this.qtyOf(p.key)).length + 'ch',
         inc: () => this.setQty(p.key, this.qtyOf(p.key) + 1),
         dec: () => this.setQty(p.key, this.qtyOf(p.key) - 1),
         setQty: e => this.setQty(p.key, parseInt(e.target.value, 10)),
@@ -693,15 +705,34 @@ class Component extends DCLogic {
 
   /* DS: .HeaderView.isFixedHeaderAware dostane .fixed, jakmile projde pivot nad ní
      (BS Shop dělá totéž přes headerFixPivot) — sticky hlavička se stínem. */
+  /* Sticky hlavička: měří se scroll proti statickému offsetTop hlavičky (sticky ji
+     z toku nevyjímá, takže offsetTop drží). IntersectionObserver na pivotu uvnitř
+     hlavičky nejde — přilepená hlavička si pivot přitáhne do viewportu a stav
+     se zacyklí. Třída jde do stavu, ne přes classList: className drží šablona. */
   watchHeader() {
-    const pivot = document.querySelector('.HeaderView dc-gi.headerFixPivot');
     const header = document.querySelector('.HeaderView.isFixedHeaderAware');
-    if (!pivot || !header || !window.IntersectionObserver) return;
-    this.headerIo = new IntersectionObserver(
-      ([e]) => header.classList.toggle('fixed', !e.isIntersecting),
-      { rootMargin: '0px 0px 0px 0px', threshold: 0 },
-    );
-    this.headerIo.observe(pivot);
+    if (!header) return;
+    const measure = () => {
+      if (!this.state.fixed) this.headerTop = header.offsetTop;
+      document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
+    };
+    measure();
+    this.onScroll = () => {
+      const fixed = window.scrollY > this.headerTop + 4;
+      if (fixed !== this.state.fixed) this.setState({ fixed });
+    };
+    this.onHeaderResize = measure;
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onHeaderResize);
+    /* Styly z helmetu i logo dojdou až po mountu — bez přeměření by se do
+       --tp-header-h zapsala výška nestylované hlavičky. */
+    window.addEventListener('load', this.onHeaderResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    if (window.ResizeObserver) {
+      this.headerRo = new ResizeObserver(measure);
+      this.headerRo.observe(header);
+    }
+    this.onScroll();
   }
 
   componentDidMount() {
@@ -718,7 +749,10 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearInterval(this.uspTimer);
     document.removeEventListener('keydown', this.onKeyDown);
-    if (this.headerIo) this.headerIo.disconnect();
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onHeaderResize);
+    window.removeEventListener('load', this.onHeaderResize);
+    if (this.headerRo) this.headerRo.disconnect();
   }
 }
 
