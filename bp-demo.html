@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Náhled breakpointů</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { padding: var(--spacer-16); }
+  .demo { max-width: var(--eshop-width); margin: 0 auto; display: flex; flex-direction: column; gap: var(--spacer-16); }
+  .band {
+    display: flex; align-items: center; gap: var(--spacer-8);
+    background: var(--color-main-100); color: var(--color-main-800);
+    border-radius: var(--border-4-radius-base);
+    padding: var(--spacer-10) var(--spacer-14);
+    font-size: var(--font-size-12); font-weight: var(--font-weight-bold);
+  }
+  .band b { font-size: var(--font-size-16); font-weight: var(--font-weight-extrabold); }
+  .cols { display: grid; gap: var(--spacer-12); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 550px) { .cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 820px) { .cols { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .cols { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .cell {
+    background: var(--color-white); border: var(--border);
+    border-radius: var(--border-3-radius-base);
+    aspect-ratio: 4 / 3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--font-size-12); color: var(--text-color-muted);
+  }
+  .hideXs { display: none; }
+  @media (min-width: 550px) { .hideXs { display: flex; } }
+</style>
+</head>
+<body>
+  <div class="demo">
+    <div class="band">
+      <span>Aktivní pásmo</span><b id="band">xs</b><span id="w">0 px</span>
+    </div>
+    <div class="cols">
+      <div class="cell">1</div>
+      <div class="cell">2</div>
+      <div class="cell hideXs">3</div>
+      <div class="cell hideXs">4</div>
+      <div class="cell hideXs">5</div>
+    </div>
+  </div>
+<script>
+  function update() {
+    var w = document.documentElement.clientWidth;
+    var b = w >= 1440 ? 'xxxl' : w >= 1150 ? 'xxl' : w >= 1000 ? 'xl' : w >= 820 ? 'l' : w >= 550 ? 'm' : w >= 420 ? 's' : 'xs';
+    document.getElementById('band').textContent = b;
+    document.getElementById('w').textContent = w + ' px';
+  }
+  update();
+  window.addEventListener('resize', update);
+</script>
+</body>
+</html>

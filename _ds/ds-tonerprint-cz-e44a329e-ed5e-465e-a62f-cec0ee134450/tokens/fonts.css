@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap&subset=latin,latin-ext');
+
+/* TonerPrint — písmo
+   Figtree, váhy 400/500/600/700/800. Subset latin-ext je POVINNÝ kvůli
+   české diakritice (ř, ě, ů, č). Servírováno z Google Fonts; pokud
+   provoz vyžaduje self-hosting, stáhni .woff2 do assets/fonts/
+   a nahraď tento @import za @font-face pravidla se stejnými váhami. */

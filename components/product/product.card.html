@@ -1,0 +1,89 @@
+<!-- @dsCard group="Components" viewport="700x420" name="ProductCard · Price · Rating · AvailabilityBadge" subtitle="Karta v mřížce, cenový blok a doplňkové prvky." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--bg-color); }
+  
+  .productHolder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .side { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; background: var(--color-white); border-radius: var(--radius-8); padding: 14px 16px; }
+</style>
+</head>
+<body>
+<div class="ProductsView v1a v1 bs-view columns3">
+    <div class="productHolder">
+      <div class="ProductView v1a v1 bs-view canBuy">
+        <a class="image" href="#">
+          <div class="ActionIconsView v1a v1 bs-view count1" data-look="B"><div class="productFlag icon flag01"><span>Akce −18 %</span></div></div>
+          <img class="mainImage" src="../../assets/detail/at13c-1.jpg" alt="">
+        </a>
+        <dc-con class="dcHeader">
+          <span class="code">125127</span>
+          <a class="name" href="#">Skartovačka papíru AT-13C, 13 listů</a>
+        </dc-con>
+        <dc-con class="dcPrice">
+          <div class="priceParts">
+            <span class="value ghost">3 049,00 Kč</span>
+            <span class="price bs-priceLayout vat primary"><span class="value">2 490,00 Kč</span><span class="vatText">s DPH</span></span>
+            <span class="price bs-priceLayout novat secondary"><span class="value">2 057,85 Kč</span><span class="vatText">bez DPH</span></span>
+          </div>
+          <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 18 ks</span></div>
+        </dc-con>
+        <dc-con class="dcContent">
+          <div class="AddToCartView v3a v3 bs-view">
+            <button type="button" class="button buy" aria-label="Do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+          </div>
+        </dc-con>
+      </div>
+      <div class="ProductView v1a v1 bs-view canBuy">
+        <a class="image" href="#"><img class="mainImage" src="../../assets/produkty/powerton-kancelarske-ergonomicke-kreslo-tina-tmave-modre.jpg" alt=""></a>
+        <dc-con class="dcHeader">
+          <span class="code">PWT-TINA-TM</span>
+          <a class="name" href="#">Powerton ergonomické křeslo Tina, tmavě modré</a>
+        </dc-con>
+        <dc-con class="dcPrice">
+          <div class="priceParts">
+            <span class="price bs-priceLayout vat primary"><span class="value">4 290,00 Kč</span><span class="vatText">s DPH</span></span>
+            <span class="price bs-priceLayout novat secondary"><span class="value">3 545,45 Kč</span><span class="vatText">bez DPH</span></span>
+          </div>
+          <div class="AvailabilityView v1a v1 bs-view cs_zluta"><span class="label">Do 4 dnů</span></div>
+        </dc-con>
+        <dc-con class="dcContent">
+          <div class="AddToCartView v3a v3 bs-view">
+            <button type="button" class="button buy" aria-label="Do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+          </div>
+        </dc-con>
+      </div>
+      <div class="ProductView v1a v1 bs-view empty">
+        <a class="image" href="#"><img class="mainImage" src="../../assets/produkty/skolni-batoh-midi-star-26-l-od-3-tridy.jpg" alt=""></a>
+        <dc-con class="dcHeader">
+          <span class="code">BAT-MIDI-STAR</span>
+          <a class="name" href="#">Školní batoh Midi Star 26 l, od 3. třídy</a>
+        </dc-con>
+        <dc-con class="dcPrice">
+          <div class="priceParts">
+            <span class="price bs-priceLayout vat primary"><span class="value">1 190,00 Kč</span><span class="vatText">s DPH</span></span>
+          </div>
+          <div class="AvailabilityView v1a v1 bs-view cs_cervena"><span class="label">Vyprodáno</span></div>
+        </dc-con>
+      </div>
+    </div>
+  </div>
+  <div class="side">
+    <span class="rating">
+      <svg class="icon selected"><use href="#tp-star"></use></svg>
+      <svg class="icon selected"><use href="#tp-star"></use></svg>
+      <svg class="icon selected"><use href="#tp-star"></use></svg>
+      <svg class="icon selected"><use href="#tp-star"></use></svg>
+      <svg class="icon"><use href="#tp-star"></use></svg>
+      <span class="value">(38 hodnocení)</span>
+    </span>
+    <div class="AvailabilityView v1a v1 bs-view cs_seda"><span class="label">Neaktivní</span></div>
+    <div class="AvailabilityView v1a v1 bs-view cs_storage"><span class="label">Externí sklad</span></div>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

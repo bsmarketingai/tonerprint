@@ -1,0 +1,27 @@
+<!-- @dsCard group="Components" viewport="700x150" name="Icon" subtitle="Ikona ze sprite ve čtyřech velikostech." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .row + .row { margin-top: 12px; }
+  .row { color: var(--color-main-700); gap: 20px; }
+</style>
+</head>
+<body>
+<div class="row">
+    <svg class="icon ico1"><use href="#tp-shopping-cart"></use></svg>
+    <svg class="icon ico2"><use href="#tp-search"></use></svg>
+    <svg class="icon ico3"><use href="#tp-truck-delivery"></use></svg>
+    <svg class="icon ico4"><use href="#tp-package-off"></use></svg>
+    <svg class="icon ico3" style="color:var(--color-primary-500)"><use href="#tp-heart"></use></svg>
+    <svg class="icon ico3" style="color:var(--color-success-500)"><use href="#tp-circle-check"></use></svg>
+    <svg class="icon ico3" style="color:var(--color-warning-600)"><use href="#tp-alert-triangle"></use></svg>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!-- @dsCard group="Components" viewport="700x180" name="Header" subtitle="Logo, vyhledávání, přihlášení a košík." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 0; background: var(--bg-color); }
+  
+  .HeaderView { border-bottom: var(--border); }
+</style>
+</head>
+<body>
+<header class="HeaderView v1a v1 bs-view">
+    <dc-con class="dcContent">
+      <button type="button" class="button menuButton" aria-label="Menu"><svg class="icon ico3"><use href="#tp-menu-2"></use></svg></button>
+      <a class="logo" href="#">
+        <svg width="150" height="43" viewBox="0 0 210 60" role="img" aria-label="TonerPrint">
+          <circle cx="26" cy="15" r="9" fill="#FDAC00"></circle>
+          <circle cx="12" cy="30" r="9" fill="#25BBFB"></circle>
+          <circle cx="40" cy="30" r="9" fill="#FD453D"></circle>
+          <circle cx="26" cy="45" r="9" fill="#011B3D"></circle>
+          <text x="54" y="41" font-family="Figtree, Arial, sans-serif" font-size="33" font-weight="800" letter-spacing="-1.4">
+            <tspan fill="#011B3D">Toner</tspan><tspan fill="#0065FC">print</tspan>
+          </text>
+        </svg>
+      </a>
+      <div class="SimpleSearchView v1a v1 bs-view">
+        <input class="textBox" type="search" placeholder="Hledejte podle názvu nebo kódu" aria-label="Hledat">
+        <button type="button" class="button search" aria-label="Hledat"><svg class="icon ico2"><use href="#tp-search"></use></svg></button>
+      </div>
+      <dc-con class="dcHeader">
+        <div class="LoginUserView v1a v1 bs-view"><a href="#"><svg class="icon ico3"><use href="#tp-user"></use></svg><span class="name">Přihlásit</span></a></div>
+        <div class="BasketPanelView v1a v1 bs-view"><a href="#"><svg class="icon ico3"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">3</span></a></div>
+      </dc-con>
+    </dc-con>
+  </header>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+/* TonerPrint — barvy
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     1. ZNAČKA — referenční hodnoty z loga
+     Nejsou to tokeny. Slouží jako zdroj pravdy pro seedy níže
+     a pro vykreslení samotného loga.
+     ====================================================================== */
+  /* Wordmark "Toner"  #011B3D   → --color-main-900                        */
+  /* Wordmark "print"  #0065FC   → --color-main-500  (seed)                */
+  /* Tečka žlutá       #FDAC00   → --color-warning-500 (seed)              */
+  /* Tečka azurová     #25BBFB   → dekorativní, mimo škálu                 */
+  /* Tečka červená     #FD453D   → blízko --color-primary-400 (#FA3844)    */
+  /* Tečka tmavá       #011B3D   → --color-main-900                        */
+
+
+  /* ======================================================================
+     2. SEEDY
+     Celá paleta se odvozuje z těchto čtyř (nově šesti) hodnot.
+     Změna seedu = přepočítat celou škálu dané role.
+     ====================================================================== */
+  --color-neutral-base:   #737373;  /* beze změny z produkce             */
+  --color-main-base:      #0065FC;  /* ZMĚNA: bylo #1192F9 → modrá z loga */
+  --color-primary-base:   #E30613;  /* beze změny z produkce             */
+  --color-secondary-base: #598896;  /* beze změny z produkce             */
+  --color-success-base:   #0B834B;  /* NOVÁ ROLE                         */
+  --color-warning-base:   #FDAC00;  /* NOVÁ ROLE — žlutá z loga          */
+
+
+  /* ======================================================================
+     3. PALETA
+     Devět stupňů na roli. Stupeň 500 = seed.
+     Komentář „AA" = kontrastní poměr proti bílé (min. 4.5 pro běžný text).
+     ====================================================================== */
+
+  /* neutral — H0 S0% */
+  --color-neutral-100: #F7F7F7;  /* AdjustLigtnessHex(500, 108.3) */
+  --color-neutral-200: #C7C7C7;  /* AdjustLigtnessHex(500,  68.8) */
+  --color-neutral-300: #B2B2B2;  /* AdjustLigtnessHex(500,  52.1) */
+  --color-neutral-400: #969696;  /* AdjustLigtnessHex(500,  29.2) */
+  --color-neutral-500: var(--color-neutral-base);   /* AA 4.74 */
+  --color-neutral-600: #4F4F4F;  /* AA 8.19  · AdjustLigtnessHex(500, -29.2) */
+  --color-neutral-700: #303030;  /* AA 13.20 · AdjustLigtnessHex(500, -54.2) */
+  --color-neutral-800: #292929;  /* AdjustLigtnessHex(500, -60.4) */
+  --color-neutral-900: #121212;  /* AdjustLigtnessHex(500, -79.2) */
+
+  /* main — H216 S100% */
+  --color-main-100: #DBEAFF;
+  --color-main-200: #9EC5FF;
+  --color-main-300: #66A3FF;
+  --color-main-400: #3385FF;
+  --color-main-500: var(--color-main-base);   /* AA 4.92 — CTA */
+  --color-main-600: #0052CC;  /* AA 6.82  — hover na CTA */
+  --color-main-700: #00378A;  /* AA 10.97 */
+  --color-main-800: #001F4C;
+  --color-main-900: #011B3D;  /* = navy z loga · horní informační pruh */
+
+  /* primary — H356 S95% */
+  --color-primary-100: #FEE6E8;
+  --color-primary-200: #FDB4B9;
+  --color-primary-300: #FB6A72;
+  --color-primary-400: #FA3844;  /* ≈ červená tečka z loga */
+  --color-primary-500: var(--color-primary-base);  /* AA 4.88 — „Akce %" */
+  --color-primary-600: #A9040E;  /* AA 7.75 */
+  --color-primary-700: #6D0309;  /* AA 12.60 */
+  --color-primary-800: #4B0206;
+  --color-primary-900: #190102;
+
+  /* secondary — H194 S26% */
+  --color-secondary-100: #F2F6F7;  /* podklad statistického pásu */
+  --color-secondary-200: #DFE9EC;
+  --color-secondary-300: #7FA7B3;
+  --color-secondary-400: #6F9CAA;
+  --color-secondary-500: var(--color-secondary-base);  /* AA 3.90 — NE na text */
+  --color-secondary-600: #4E7783;  /* AA 4.89 — nejnižší použitelný na text */
+  --color-secondary-700: #35515A;  /* AA 8.48 */
+  --color-secondary-800: #22343A;
+  --color-secondary-900: #0D1416;
+
+  /* success — H152 S85% */
+  --color-success-100: #E3FDF1;  /* mátový podklad karet */
+  --color-success-200: #B4F9D8;
+  --color-success-300: #68F2B2;
+  --color-success-400: #12D479;
+  --color-success-500: var(--color-success-base);  /* AA 4.81 — „Skladem" */
+  --color-success-600: #097141;  /* AA 6.09 */
+  --color-success-700: #085933;  /* AA 8.44 */
+  --color-success-800: #064226;
+  --color-success-900: #032616;
+
+  /* warning — H41 S100% */
+  --color-warning-100: #FFF5E0;  /* žlutý podklad karet */
+  --color-warning-200: #FFE7B2;
+  --color-warning-300: #FFD375;
+  --color-warning-400: #FFC13D;
+  --color-warning-500: var(--color-warning-base);  /* AA 1.90 — POUZE výplň */
+  --color-warning-600: #D69200;  /* AA 2.63 — POUZE výplň */
+  --color-warning-700: #996800;  /* AA 4.84 — jediný použitelný na text */
+  --color-warning-800: #5C3E00;
+  --color-warning-900: #291C00;
+
+
+  /* ======================================================================
+     4. ALIASY
+     ====================================================================== */
+  --color-white:     #ffffff;
+  --color-black:     var(--color-neutral-900);
+  --color-neutral:   var(--color-neutral-500);
+  --color-main:      var(--color-main-500);
+  --color-primary:   var(--color-primary-500);
+  --color-secondary: var(--color-secondary-500);
+  --color-success:   var(--color-success-500);
+  --color-warning:   var(--color-warning-500);
+
+
+  /* ======================================================================
+     5. KONTRASTNÍ BARVY TEXTU
+     Nahrazuje HighestLightnessDistance(). Vypočítáno podle WCAG.
+     ====================================================================== */
+  --color-on-dark:  var(--color-white);
+  --color-on-light: var(--color-black);
+
+  --color-on-neutral: var(--color-on-dark);
+  --color-on-main:      var(--color-on-dark);
+  --color-on-primary:   var(--color-on-dark);
+  --color-on-secondary: var(--color-on-light);
+  --color-on-success:   var(--color-on-dark);
+  --color-on-warning:   var(--color-on-light);
+
+  --color-on-neutral-100: var(--color-on-light);
+  --color-on-neutral-200: var(--color-on-light);
+  --color-on-neutral-300: var(--color-on-light);
+  --color-on-neutral-400: var(--color-on-light);
+  --color-on-neutral-500: var(--color-on-dark);
+  --color-on-neutral-600: var(--color-on-dark);
+  --color-on-neutral-700: var(--color-on-dark);
+  --color-on-neutral-800: var(--color-on-dark);
+  --color-on-neutral-900: var(--color-on-dark);
+
+  --color-on-main-100: var(--color-on-light);
+  --color-on-main-200: var(--color-on-light);
+  --color-on-main-300: var(--color-on-light);
+  --color-on-main-400: var(--color-on-light);
+  --color-on-main-500: var(--color-on-dark);
+  --color-on-main-600: var(--color-on-dark);
+  --color-on-main-700: var(--color-on-dark);
+  --color-on-main-800: var(--color-on-dark);
+  --color-on-main-900: var(--color-on-dark);
+
+  --color-on-primary-100: var(--color-on-light);
+  --color-on-primary-200: var(--color-on-light);
+  --color-on-primary-300: var(--color-on-light);
+  --color-on-primary-400: var(--color-on-light);
+  --color-on-primary-500: var(--color-on-dark);
+  --color-on-primary-600: var(--color-on-dark);
+  --color-on-primary-700: var(--color-on-dark);
+  --color-on-primary-800: var(--color-on-dark);
+  --color-on-primary-900: var(--color-on-dark);
+
+  --color-on-secondary-100: var(--color-on-light);
+  --color-on-secondary-200: var(--color-on-light);
+  --color-on-secondary-300: var(--color-on-light);
+  --color-on-secondary-400: var(--color-on-light);
+  --color-on-secondary-500: var(--color-on-light);
+  --color-on-secondary-600: var(--color-on-dark);
+  --color-on-secondary-700: var(--color-on-dark);
+  --color-on-secondary-800: var(--color-on-dark);
+  --color-on-secondary-900: var(--color-on-dark);
+
+  --color-on-success-100: var(--color-on-light);
+  --color-on-success-200: var(--color-on-light);
+  --color-on-success-300: var(--color-on-light);
+  --color-on-success-400: var(--color-on-light);
+  --color-on-success-500: var(--color-on-dark);
+  --color-on-success-600: var(--color-on-dark);
+  --color-on-success-700: var(--color-on-dark);
+  --color-on-success-800: var(--color-on-dark);
+  --color-on-success-900: var(--color-on-dark);
+
+  --color-on-warning-100: var(--color-on-light);
+  --color-on-warning-200: var(--color-on-light);
+  --color-on-warning-300: var(--color-on-light);
+  --color-on-warning-400: var(--color-on-light);
+  --color-on-warning-500: var(--color-on-light);
+  --color-on-warning-600: var(--color-on-light);
+  --color-on-warning-700: var(--color-on-dark);
+  --color-on-warning-800: var(--color-on-dark);
+  --color-on-warning-900: var(--color-on-dark);
+
+
+  /* ======================================================================
+     6. POZADÍ, TEXT, ODKAZY
+     POZOR: --bg-color a --text-color jsou VYHRAZENÉ názvy. BS Shop je
+     přepisuje per-instance inline (produktové vlajky). Nepoužívat jinak.
+     ====================================================================== */
+  --bg-color:        var(--color-neutral-100);
+  --bg-view-color:   var(--color-white);
+  --bg-header-color: var(--color-white);      /* ZMĚNA: header je v redesignu bílý */
+  --bg-topbar-color: var(--color-main-900);   /* horní informační pruh */
+
+  --text-color:          var(--color-neutral-900);
+  --text-color-muted:    var(--color-neutral-600);
+  --text-color-on-dark:  var(--color-on-dark);
+  --text-color-on-light: var(--color-on-light);
+
+  --link-color:            var(--color-main-600);
+  --link-color-hover:      var(--color-main-700);
+  --link-decoration:       none;
+  --link-decoration-hover: underline;
+
+}
+
+
+/* ==========================================================================
+   STAVY DOSTUPNOSTI (AvailabilityView)
+   České názvy tříd jsou z BS Shopu — nepřejmenovávat.
+   ========================================================================== */
+.cs_zelena  { --bg-color: var(--color-success-100); --text-color: var(--color-success-500); }
+.cs_zluta   { --bg-color: var(--color-warning-100); --text-color: var(--color-warning-700); }
+.cs_cervena { --bg-color: var(--color-primary-100); --text-color: var(--color-primary-600); }
+.cs_seda    { --bg-color: var(--color-neutral-100); --text-color: var(--color-neutral-600); }
+.cs_storage { --bg-color: var(--color-secondary-100); --text-color: var(--color-secondary-700); }

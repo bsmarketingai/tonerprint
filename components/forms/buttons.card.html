@@ -1,0 +1,35 @@
+<!-- @dsCard group="Components" viewport="700x230" name="Button" subtitle="Čtyři varianty, tři velikosti, ikonová a stavy." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .row + .row { margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="row">
+    <button type="button" class="button"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg>Vložit do košíku</button>
+    <button type="button" class="button a2">Nákupní rádci</button>
+    <button type="button" class="button a3">Zobrazit více</button>
+    <button type="button" class="button a4"><svg class="icon ico2"><use href="#tp-trash"></use></svg>Odebrat</button>
+  </div>
+  <div class="row">
+    <button type="button" class="button small">Small · 32</button>
+    <button type="button" class="button">Default · 44</button>
+    <button type="button" class="button big">Big · 56</button>
+    <button type="button" class="button empty" aria-label="Do košíku"><svg class="icon"><use href="#tp-shopping-cart"></use></svg></button>
+    <button type="button" class="button a2 empty" aria-label="Filtry"><svg class="icon ico2"><use href="#tp-filter"></use></svg></button>
+  </div>
+  <div class="row">
+    <button type="button" class="button" disabled>Nedostupné</button>
+    <button type="button" class="button a2" disabled>Nedostupné</button>
+    <button type="button" class="button inactive"><svg class="icon ico2 loader"><use href="#tp-loader-2"></use></svg>Odesílám…</button>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* TonerPrint — spacing, padding, margin
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     7. SPACING — škála pojmenovaná hodnotou v px
+     ====================================================================== */
+  --spacer-base: 1px;
+  --spacer-0: 0; /* @kind spacing */      --spacer-1: 1px;    --spacer-2: 2px;    --spacer-4: 4px;
+  --spacer-6: 6px;    --spacer-8: 8px;    --spacer-10: 10px;  --spacer-12: 12px;
+  --spacer-14: 14px;  --spacer-16: 16px;  --spacer-18: 18px;  --spacer-20: 20px;
+  --spacer-22: 22px;  --spacer-24: 24px;  --spacer-26: 26px;  --spacer-28: 28px;
+  --spacer-30: 30px;  --spacer-32: 32px;  --spacer-40: 40px;  --spacer-48: 48px;
+  --spacer-56: 56px;  --spacer-64: 64px;  --spacer-72: 72px;  --spacer-80: 80px;
+  --spacer-128: 128px; --spacer-256: 256px;
+  --spacer: var(--spacer-16);
+
+  /* padding — sémantická škála 0–5 */
+  --p:      var(--p-t) var(--p-r) var(--p-b) var(--p-l);
+  --p-x:    var(--p-base);  --p-y: var(--p-base);
+  --p-r:    var(--p-x);     --p-l: var(--p-x);
+  --p-t:    var(--p-y);     --p-b: var(--p-y);
+  --p-base: var(--p-2-base);
+
+  --p-0: var(--p-0-t) var(--p-0-r) var(--p-0-b) var(--p-0-l);
+  --p-0-x: var(--p-0-base); --p-0-y: var(--p-0-base);
+  --p-0-l: var(--p-0-x); --p-0-r: var(--p-0-x);
+  --p-0-t: var(--p-0-y); --p-0-b: var(--p-0-y);
+  --p-0-base: var(--spacer-0);
+
+  --p-1: var(--p-1-t) var(--p-1-r) var(--p-1-b) var(--p-1-l);
+  --p-1-x: var(--p-1-base); --p-1-y: var(--p-1-base);
+  --p-1-l: var(--p-1-x); --p-1-r: var(--p-1-x);
+  --p-1-t: var(--p-1-y); --p-1-b: var(--p-1-y);
+  --p-1-base: var(--spacer-4);
+
+  --p-2: var(--p-2-t) var(--p-2-r) var(--p-2-b) var(--p-2-l);
+  --p-2-x: var(--p-2-base); --p-2-y: var(--p-2-base);
+  --p-2-l: var(--p-2-x); --p-2-r: var(--p-2-x);
+  --p-2-t: var(--p-2-y); --p-2-b: var(--p-2-y);
+  --p-2-base: var(--spacer-8);
+
+  --p-3: var(--p-3-t) var(--p-3-r) var(--p-3-b) var(--p-3-l);
+  --p-3-x: var(--p-3-base); --p-3-y: var(--p-3-base);
+  --p-3-l: var(--p-3-x); --p-3-r: var(--p-3-x);
+  --p-3-t: var(--p-3-y); --p-3-b: var(--p-3-y);
+  --p-3-base: var(--spacer-16);
+
+  --p-4: var(--p-4-t) var(--p-4-r) var(--p-4-b) var(--p-4-l);
+  --p-4-x: var(--p-4-base); --p-4-y: var(--p-4-base);
+  --p-4-l: var(--p-4-x); --p-4-r: var(--p-4-x);
+  --p-4-t: var(--p-4-y); --p-4-b: var(--p-4-y);
+  --p-4-base: var(--spacer-32);
+
+  --p-5: var(--p-5-t) var(--p-5-r) var(--p-5-b) var(--p-5-l);
+  --p-5-x: var(--p-5-base); --p-5-y: var(--p-5-base);
+  --p-5-l: var(--p-5-x); --p-5-r: var(--p-5-x);
+  --p-5-t: var(--p-5-y); --p-5-b: var(--p-5-y);
+  --p-5-base: var(--spacer-64);
+
+  /* margin — stejná struktura */
+  --m:      var(--m-t) var(--m-r) var(--m-b) var(--m-l);
+  --m-x:    var(--m-base);  --m-y: var(--m-base);
+  --m-r:    var(--m-x);     --m-l: var(--m-x);
+  --m-t:    var(--m-y);     --m-b: var(--m-y);
+  --m-base: var(--m-3-base);
+
+  --m-0-base: var(--spacer-0);
+  --m-1-base: var(--spacer-4);
+  --m-2-base: var(--spacer-8);
+  --m-3-base: var(--spacer-16);
+  --m-4-base: var(--spacer-32);
+  --m-5-base: var(--spacer-64);
+
+}

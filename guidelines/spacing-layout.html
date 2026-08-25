@@ -1,0 +1,31 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Breakpointy" subtitle="Prahy BS Shopu: 420 / 550 / 820 / 1000 / 1150 / 1440. Vlastní se nezavádějí." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  
+  .scale { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .step { background: var(--color-main-100); color: var(--color-main-800); padding: 10px 8px;
+          border-radius: 2px; font-size: 10px; display: flex; flex-direction: column; gap: 2px; }
+  .step b { font-size: 13px; font-weight: 800; }
+  .note { margin-top: 12px; font-size: 12px; color: var(--text-color-muted); }
+</style>
+</head>
+<body>
+<div class="scale">
+    <div class="step"><b>xs</b>0–419</div>
+    <div class="step"><b>s</b>420–549</div>
+    <div class="step"><b>m</b>550–819</div>
+    <div class="step"><b>l</b>820–999</div>
+    <div class="step"><b>xl</b>1000–1149</div>
+    <div class="step"><b>xxl</b>1150–1439</div>
+    <div class="step"><b>xxxl</b>1440+</div>
+  </div>
+  <p class="note">Obsah je vycentrovaný na <b>1260 px</b> (--eshop-width), plocha okolo jde do 1920 px. Drawer filtrů má 300 px.</p>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+/* TonerPrint — layout, z-index, breakpointy
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     12. LAYOUT
+     ====================================================================== */
+  --eshop-width:       1260px;
+  --eshop-width-outer: 1920px;
+  --eshop-gap:         16px;
+  --eshop-left-width:  300px;   /* levý sloupec filtrů na kategorii */
+  --eshop-width-side:  calc((var(--eshop-width-outer) - var(--eshop-width)) / 2);
+
+  --logo-width:  210; /* @kind spacing */           /* záměrně bez px — počítá se poměr */
+  --logo-height: 60; /* @kind spacing */
+  --logo-ratio:  calc(var(--logo-width) / var(--logo-height));
+
+  --header-height: 72px;
+  --topbar-height: 36px;
+
+  --z-header:  100; /* @kind other */
+  --z-popup:   200; /* @kind other */
+  --z-overlay: 300; /* @kind other */
+
+}
+
+
+/* ==========================================================================
+   BREAKPOINTY BS SHOP
+   Prahy: 420 / 550 / 820 / 1000 / 1150 / 1440
+   Každý blok je označen tak, aby šel 1:1 rozpadnout do samostatných
+   stylesheetů, které BS Shop načítá per pásmo.
+   NEZAVÁDĚT VLASTNÍ PRAHY.
+   ========================================================================== */
+
+/* ===== BP: XS (0–419) — základ, mobile-first ===== */
+
+/* ===== BP: S (420–549) ===== */
+@media (min-width: 420px) { :root { } }
+
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) { :root { } }
+
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { :root { } }
+
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { :root { } }
+
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) { :root { } }
+
+/* ===== BP: XXXL (1440+) ===== */
+@media (min-width: 1440px) { :root { } }

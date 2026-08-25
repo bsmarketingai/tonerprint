@@ -1,0 +1,438 @@
+<!-- @dsCard group="Eshop" viewport="1260x900" name="Výpis kategorie" subtitle="Kategorie s řazením, mřížkou produktů, stránkováním a drawerem filtrů." -->
+<!-- @startingPoint section="Eshop" subtitle="Výpis kategorie s filtry a řazením" viewport="1260x900" -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kompatibilní tonery — TonerPrint</title>
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { background: var(--bg-color); }
+  .page { max-width: var(--eshop-width); margin: 0 auto; padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-16); }
+  
+</style>
+</head>
+<body>
+  <div class="UserContentPanelView v1a v1 bs-view dcon dc000 TopBar">
+    <div class="items top">
+      <span><svg class="icon ico2"><use href="#tp-truck-delivery"></use></svg>Doprava zdarma od 1 500 Kč</span>
+      <span><svg class="icon ico2"><use href="#tp-package"></use></svg>Odesíláme do 24 hodin</span>
+      <span><svg class="icon ico2"><use href="#tp-receipt"></use></svg>Na fakturu pro školy a instituce</span>
+      <a href="#"><svg class="icon ico2"><use href="#tp-phone"></use></svg>541 123 456</a>
+    </div>
+  </div>
+
+  <header class="HeaderView CustomMasterView v3b v3 bs-view dcon dc000 isFixedHeaderAware Header" id="Header">
+    <dc-gi class="headerFixPivot"></dc-gi>
+    <dc-con class="dcContent">
+      <div class="LogoView v1a v1 bs-view dcon dc000 Logo">
+        <a href="index.html" class="image" aria-label="TonerPrint — domovská stránka"><svg viewBox="0 0 210 60" width="180" height="51" role="img" aria-label="TonerPrint">
+          <circle cx="26" cy="15" r="9" fill="#FDAC00"></circle>
+          <circle cx="12" cy="30" r="9" fill="#25BBFB"></circle>
+          <circle cx="40" cy="30" r="9" fill="#FD453D"></circle>
+          <circle cx="26" cy="45" r="9" fill="#011B3D"></circle>
+          <text x="54" y="41" font-family="Figtree, Arial, sans-serif" font-size="33" font-weight="800" letter-spacing="-1.4">
+            <tspan fill="#011B3D">Toner</tspan><tspan fill="#0065FC">print</tspan>
+          </text>
+        </svg></a>
+      </div>
+      <div class="SimpleSearchView v2a v2 bs-view dcon dc000 Search">
+        <dc-con class="dcQuery">
+          <svg class="icon ico3 query"><use href="#tp-search"></use></svg>
+          <input class="textBox" type="search" placeholder="Hledejte podle názvu nebo kódu náplně…" aria-label="Hledat">
+          <button type="button" class="button search">Hledat</button>
+        </dc-con>
+      </div>
+      <dc-con class="dcHeader">
+        <div class="AiAssistantView v1a v1 bs-view dcon dc000 AiAssistant">
+          <button type="button" class="button"><svg class="icon ico3"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
+        </div>
+        <div class="LoginUserView v1a v1 bs-view dcon dc000 Login">
+          <a href="#"><svg class="icon ico3"><use href="#tp-user"></use></svg><span class="name">Přihlásit</span></a>
+        </div>
+        <div class="SimpleBasketView v1a v1 bs-view dcon dc000 Basket">
+          <a href="#">
+            <span class="icons"><svg class="icon ico3"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">3</span></span>
+            <span class="priceParts">
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">3 598,00 Kč</span></span>
+              <span class="totalItemsParts">3 produkty</span>
+            </span>
+          </a>
+        </div>
+      </dc-con>
+    </dc-con>
+    <dc-gi class="headerUnfixPivot"></dc-gi>
+  </header>
+  <main class="page">
+    <nav class="BreadcrumbView v1a v1 bs-view dcon dc000 Breadcrumb" aria-label="Drobečková navigace">
+      <ul class="path">
+        <li><a href="index.html">Úvod</a></li>
+        <li class="separator"><svg class="icon"><use href="#tp-chevron-right"></use></svg></li>
+        <li><a href="index.html">Tonery a náplně</a></li>
+        <li class="separator"><svg class="icon"><use href="#tp-chevron-right"></use></svg></li>
+        <li class="last">Kompatibilní tonery</li>
+      </ul>
+    </nav>
+
+    <div class="ProductsMasterView ProductsMasterViewBase v1a v1 bs-view dcon dc000 firstPage CategoryProducts">
+      <dc-con class="dcQuery">
+        <h1 class="title">Kompatibilní tonery</h1>
+        <p class="shortDescription">Náplně z nových komponent, ne z repasovaných kazet. Dvouletá záruka a garance, že je tiskárna přijme.</p>
+
+        <div class="SimpleFilterView v1a v1 bs-view dcon dc000">
+          <button type="button" class="button _filterButton" data-filter-open>
+            <svg class="icon ico2"><use href="#tp-filter"></use></svg>Filtry<span class="value">2</span>
+          </button>
+          <select class="select sortOrder" aria-label="Řazení">
+            <option>Nejprodávanější</option><option>Nejlevnější</option><option>Nejdražší</option>
+          </select>
+          <div class="sortingBox">
+            <input class="radio" type="radio" name="sort" id="sort1" checked><label for="sort1">Nejprodávanější</label>
+            <input class="radio" type="radio" name="sort" id="sort2"><label for="sort2">Nejlevnější</label>
+            <input class="radio" type="radio" name="sort" id="sort3"><label for="sort3">Nejdražší</label>
+            <input class="radio" type="radio" name="sort" id="sort4"><label for="sort4">Novinky</label>
+          </div>
+          <span class="totalItems"><strong>842</strong> produktů</span>
+          <div class="viewTypeButtons">
+            <div class="ViewTypeSelectorView v1a v1 bs-view dcon dc000 ViewType">
+              <a href="#" class="page default active" aria-label="Dlaždice"><svg class="icon ico2"><use href="#tp-layout-grid"></use></svg></a>
+              <a href="#" class="page custom1 inactive" aria-label="Řádky"><svg class="icon ico2"><use href="#tp-layout-list"></use></svg></a>
+            </div>
+          </div>
+        </div>
+      </dc-con>
+
+      <dc-con class="dcContent">
+        <div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 columns4 CategoryList">
+          <div class="productHolder">
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            <div class="ActionIconsView v1a v1 bs-view count1" data-look="B"><div class="productFlag icon flag01"><span>Akce −26 %</span></div></div>
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-hp-cf279a-79a-cerny-pro-hp-laserjet-pro-m12-a-m26-1-000-stran.jpg" alt="Kompatibilní toner HP CF279A (79A), černý, 1 000 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CF279A</span>
+            <a class="name" href="detail.html">Kompatibilní toner HP CF279A (79A), černý, 1 000 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              <span class="value ghost">389,00 Kč</span>
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">289,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">238,84 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 240 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            <div class="ActionIconsView v1a v1 bs-view count1" data-look="B"><div class="productFlag icon flag02"><span>Nejprodávanější</span></div></div>
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-hp-cf226x-26x-cerny-pro-hp-laserjet-pro-m402-m426-9-000-stran.jpg" alt="Kompatibilní toner HP CF226X (26X), černý, 9 000 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CF226X</span>
+            <a class="name" href="detail.html">Kompatibilní toner HP CF226X (26X), černý, 9 000 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">899,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">742,98 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 84 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-canon-crg-039h-black-pro-i-sensys-lbp351-a-lbp352-25-000-stran.jpg" alt="Kompatibilní toner Canon CRG-039H, černý, 25 000 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CRG039H</span>
+            <a class="name" href="detail.html">Kompatibilní toner Canon CRG-039H, černý, 25 000 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">1 690,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">1 396,69 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zluta"><span class="label">Naskladňujeme do 4 dnů</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-brother-tn-2411-cerny-pro-hl-l2312d-mfc-l2712dn-1-200-stran.jpg" alt="Kompatibilní toner Brother TN-2411, černý, 1 200 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">TN-2411</span>
+            <a class="name" href="detail.html">Kompatibilní toner Brother TN-2411, černý, 1 200 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">349,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">288,43 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 156 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            <div class="ActionIconsView v1a v1 bs-view count1" data-look="B"><div class="productFlag icon flag01"><span>Akce −21 %</span></div></div>
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-hp-ce505x-05x-cerny-pro-hp-laserjet-p2055-6-500-stran.jpg" alt="Kompatibilní toner HP CE505X (05X), černý, 6 500 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CE505X</span>
+            <a class="name" href="detail.html">Kompatibilní toner HP CE505X (05X), černý, 6 500 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              <span class="value ghost">949,00 Kč</span>
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">749,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">619,01 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 62 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-hp-cb435a-35a-cerny-pro-hp-laserjet-p1005-a-p1006-1-500-stran.jpg" alt="Kompatibilní toner HP CB435A (35A), černý, 1 500 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CB435A</span>
+            <a class="name" href="detail.html">Kompatibilní toner HP CB435A (35A), černý, 1 500 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">269,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">222,31 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 310 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 canBuy Product" data-name="Product">
+          <a class="image" href="detail.html">
+            
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-brother-tn-1030-tn-1050-pro-brother-dcp-1510-hl-1110.jpg" alt="Kompatibilní toner Brother TN-1030 / TN-1050, černý" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">TN-1030</span>
+            <a class="name" href="detail.html">Kompatibilní toner Brother TN-1030 / TN-1050, černý</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">259,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">214,05 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_zelena"><span class="label">Skladem 98 ks</span></div>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="AddToCartView v3a v3 bs-view dcon dc000">
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+          </dc-con>
+        </div>
+        <div class="ProductView v1a v1 bs-view dcon dc000 empty Product" data-name="Product">
+          <a class="image" href="detail.html">
+            
+            <img class="mainImage" src="../../assets/produkty/kompatibilni-toner-hp-cf283x-83x-cerny-pro-hp-laserjet-pro-m201-a-m225-2-200-stran.jpg" alt="Kompatibilní toner HP CF283X (83X), černý, 2 200 stran" loading="lazy">
+          </a>
+          <dc-con class="dcHeader">
+            <span class="code">CF283X</span>
+            <a class="name" href="detail.html">Kompatibilní toner HP CF283X (83X), černý, 2 200 stran</a>
+          </dc-con>
+          <dc-con class="dcPrice">
+            <div class="priceParts">
+              
+              <span class="price bs-priceLayout notranslate vat primary"><span class="value">529,00 Kč</span><span class="vatText">s DPH</span></span>
+              <span class="price bs-priceLayout notranslate novat secondary"><span class="value">437,19 Kč</span><span class="vatText">bez DPH</span></span>
+            </div>
+            <div class="AvailabilityView v1a v1 bs-view cs_cervena"><span class="label">Momentálně vyprodáno</span></div>
+          </dc-con>
+          
+        </div>
+          </div>
+        </div>
+
+        <div class="CompoundPagingView v1a v1 bs-view dcon dc000 bottom">
+          <button type="button" class="button a2">Načíst dalších 24 produktů</button>
+          <div class="pages">
+            <button type="button" class="button page previous" aria-label="Předchozí" disabled><svg class="icon ico2"><use href="#tp-chevron-left"></use></svg></button>
+            <button type="button" class="button page selected">1</button>
+            <button type="button" class="button page">2</button>
+            <button type="button" class="button page">3</button>
+            <span class="separator">…</span>
+            <button type="button" class="button page">36</button>
+            <button type="button" class="button page next" aria-label="Další"><svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></button>
+          </div>
+        </div>
+      </dc-con>
+    </div>
+  </main>
+  <div class="FilterView v1a v1 bs-view dcon dc000 ProductFilter" id="ProductFilter" role="dialog" aria-modal="true" aria-label="Filtry">
+    <div class="overlay" data-filter-close></div>
+    <dc-con class="wrap">
+      <dc-con class="dcHeader">
+        <span class="caption"><svg class="icon ico2"><use href="#tp-filter"></use></svg>Filtry<span class="value">2</span></span>
+        <button type="button" class="button toggle" aria-label="Zavřít filtry" data-filter-close><svg class="icon ico3"><use href="#tp-x"></use></svg></button>
+      </dc-con>
+      <dc-con class="dcContent">
+        <div class="group">
+          <button type="button" class="label">Výrobce<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <label><input class="checkBox" type="checkbox" checked>HP<span class="value">842</span></label>
+            <label><input class="checkBox" type="checkbox">Canon<span class="value">613</span></label>
+            <label><input class="checkBox" type="checkbox">Brother<span class="value">288</span></label>
+            <label><input class="checkBox" type="checkbox">Epson<span class="value">177</span></label>
+            <button type="button" class="_expandButton">Zobrazit dalších 12</button>
+          </div>
+        </div>
+        <div class="group">
+          <button type="button" class="label">Cena<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <div class="query">
+              <input class="textBox" type="number" value="0" aria-label="Cena od">
+              <span class="separator">–</span>
+              <input class="textBox" type="number" value="5000" aria-label="Cena do">
+              <span class="unitsDescription">Kč</span>
+            </div>
+          </div>
+        </div>
+        <div class="group">
+          <button type="button" class="label">Dostupnost<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <label><input class="checkBox" type="checkbox" checked>Skladem<span class="value">1 204</span></label>
+            <label><input class="checkBox" type="checkbox">Do 4 dnů<span class="value">318</span></label>
+            <label class="disabled"><input class="checkBox" type="checkbox" disabled>Na dotaz<span class="value">0</span></label>
+          </div>
+        </div>
+        <div class="group noAutoExpand">
+          <button type="button" class="label">Typ náplně<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <label><input class="checkBox" type="checkbox">Originální<span class="value">402</span></label>
+            <label><input class="checkBox" type="checkbox">Kompatibilní<span class="value">1 120</span></label>
+          </div>
+        </div>
+      </dc-con>
+      <dc-con class="bottom">
+        <button type="button" class="button toggle">Zrušit</button>
+        <button type="button" class="button buy" data-filter-close>Zobrazit 842 produktů</button>
+      </dc-con>
+    </dc-con>
+  </div>
+  <footer class="FooterView v1a v1 bs-view dcon dc000 Footer">
+    <dc-con class="top">
+      <div class="block">
+        <span class="caption">Nákup</span>
+        <ul class="items">
+          <li><a href="#">Doprava a platba</a></li>
+          <li><a href="#">Reklamace a vrácení</a></li>
+          <li><a href="#">Nákup na fakturu</a></li>
+          <li><a href="#">Časté dotazy</a></li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="caption">Sortiment</span>
+        <ul class="items">
+          <li><a href="#">Tonery a náplně</a></li>
+          <li><a href="#">Kancelářská technika</a></li>
+          <li><a href="#">Školní potřeby</a></li>
+          <li><a href="#">Balicí materiál</a></li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="caption">O nás</span>
+        <ul class="items">
+          <li><a href="#">Kdo jsme</a></li>
+          <li><a href="#">Kontakty</a></li>
+          <li><a href="#">Prodejna Brno</a></li>
+          <li><a href="#">Kariéra</a></li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="caption">Kontakt</span>
+        <ul class="items">
+          <li><a href="tel:541123456">541 123 456</a></li>
+          <li><a href="mailto:info@tonerprint.cz">info@tonerprint.cz</a></li>
+          <li>Po–Pá 8:00–16:30</li>
+        </ul>
+      </div>
+      <div class="block">
+        <span class="caption">Novinky a slevy</span>
+        <div class="SubscribeToNewsletterView v1a v1 bs-view dcon dc000 Newsletter">
+          <p class="shortDescription">Jednou měsíčně, jen když máme co říct.</p>
+          <div class="query">
+            <input class="textBox" type="email" placeholder="vas@email.cz" aria-label="E-mail">
+            <button type="button" class="button">Odebírat</button>
+          </div>
+          <div class="GdprAgreementView v1a v1 bs-view dcon dc000">
+            <label><input class="checkBox" type="checkbox"><span>Souhlasím se zasíláním novinek.</span></label>
+          </div>
+        </div>
+      </div>
+    </dc-con>
+    <dc-con class="bottom">
+      <span class="copyright">© 2026 TonerPrint s.r.o.</span>
+      <span class="icons">
+        <img src="../../assets/platby/visa-mastercard.svg" alt="Visa a Mastercard">
+        <img src="../../assets/platby/maestro.svg" alt="Maestro">
+        <img src="../../assets/platby/applepay.svg" alt="Apple Pay">
+        <img src="../../assets/platby/googlepay.svg" alt="Google Pay">
+        <img src="../../assets/platby/comgate.svg" alt="Comgate">
+      </span>
+    </dc-con>
+  </footer>
+<script src="../../assets/icons/sprite.js"></script>
+<script>
+  document.addEventListener('click', function (e) {
+    var open = e.target.closest('[data-filter-open]');
+    var close = e.target.closest('[data-filter-close]');
+    var drawer = document.getElementById('ProductFilter');
+    if (!drawer) return;
+    if (open) drawer.classList.add('active');
+    if (close) drawer.classList.remove('active');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var d = document.getElementById('ProductFilter');
+      if (d) d.classList.remove('active');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Velikosti ikon" subtitle="ico1 8 · ico2 16 · ico3 24 (výchozí) · ico4 32 px. Tabler, stroke 2." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  
+  .row { display: flex; gap: 28px; align-items: flex-end; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--color-main-700); }
+  .n { font-size: 11px; font-weight: 700; color: var(--text-color-muted); }
+</style>
+</head>
+<body>
+<div class="row">
+    <div class="col"><svg class="icon ico1"><use href="#tp-shopping-cart"></use></svg><span class="n">ico1 · 8</span></div>
+    <div class="col"><svg class="icon ico2"><use href="#tp-shopping-cart"></use></svg><span class="n">ico2 · 16</span></div>
+    <div class="col"><svg class="icon ico3"><use href="#tp-shopping-cart"></use></svg><span class="n">ico3 · 24</span></div>
+    <div class="col"><svg class="icon ico4"><use href="#tp-shopping-cart"></use></svg><span class="n">ico4 · 32</span></div>
+  </div>
+<script src="../assets/icons/sprite.js"></script>
+</body>
+</html>

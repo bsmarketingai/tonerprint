@@ -1,0 +1,137 @@
+/* TonerPrint — primitiva — ikony, tlačítka, ceny, vlajky, hodnocení
+   Názvy tříd a struktura jsou z BS Shopu. Nepřejmenovávat. */
+
+/* --- ikony ---------------------------------------------------------------
+   Sprite je vložený inline v dokumentu.
+   Použití: <svg class="icon"><use href="#tp-check"></use></svg>
+
+   POZOR: selektor je záměrně `svg.icon`, ne `.icon`. BS Shop používá slovo
+   `icon` i jako sémantický marker na ne-SVG elementech (např. produktová
+   vlajka `productFlag icon flag02`), které se nesmí změnit na ikonu 24×24.
+   ------------------------------------------------------------------------ */
+svg.icon {
+  width: var(--ico-size);
+  height: var(--ico-size);
+  flex: none;
+  display: inline-block;
+  vertical-align: middle;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+svg.icon.ico1 { width: var(--ico-1-size); height: var(--ico-1-size); stroke-width: 2.5; }
+svg.icon.ico2 { width: var(--ico-2-size); height: var(--ico-2-size); }
+svg.icon.ico3 { width: var(--ico-3-size); height: var(--ico-3-size); }
+svg.icon.ico4 { width: var(--ico-4-size); height: var(--ico-4-size); stroke-width: 1.75; }
+
+/* --- tlačítka -----------------------------------------------------------
+   Základ pro `button` + funkční třídy (buy, increase, search, toggle…).
+   Kompletní varianty a stavy přijdou v bloku „Formulářové a pomocné".
+   ------------------------------------------------------------------------ */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--btn-gap);
+  min-height: var(--btn-min-height);
+  padding: var(--btn-p-t) var(--btn-p-r) var(--btn-p-b) var(--btn-p-l);
+  background: var(--btn-bg-color);
+  color: var(--btn-text-color);
+  border: var(--btn-border);
+  border-radius: var(--btn-border-radius);
+  font: var(--btn-font);
+  text-transform: var(--btn-text-transform);
+  text-decoration: var(--btn-text-decoration);
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.button:hover { background: var(--btn-bg-color-hover); color: var(--btn-text-color-hover); border-color: var(--btn-border-color-hover); text-decoration: none; }
+.button:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.button .icon { width: var(--btn-ico-size); height: var(--btn-ico-size); }
+
+.button.ghost {
+  --btn-bg-color: transparent;
+  --btn-bg-color-hover: var(--color-main-100);
+  --btn-text-color: var(--color-main-600);
+  --btn-text-color-hover: var(--color-main-700);
+  --btn-border-width: var(--spacer-1);
+  --btn-border-color: var(--color-neutral-200);
+  --btn-border-color-hover: var(--color-main-300);
+}
+
+/* --- logo (LogoView) ---------------------------------------------------- */
+.LogoView { display: inline-flex; }
+.LogoView .image { display: block; width: 210px; max-width: 100%; height: auto; }
+
+/* --- hvězdičkové hodnocení --------------------------------------------- */
+.rating { display: inline-flex; align-items: center; gap: var(--spacer-2); }
+.rating .icon { width: var(--ico-2-size); height: var(--ico-2-size); color: var(--review-star-color-disabled); fill: none; }
+.rating .icon.selected { color: var(--review-star-color); fill: var(--review-star-color); }
+.rating .value { margin-left: var(--spacer-4); font-size: var(--font-size-11); color: var(--text-color-muted); }
+
+/* --- ceny (bs-priceLayout) --------------------------------------------- */
+.price.bs-priceLayout { display: inline-flex; align-items: baseline; gap: var(--spacer-4); }
+.price.bs-priceLayout .value { font-weight: var(--font-weight-bold); color: var(--text-color); }
+.price.bs-priceLayout .vatText { font-size: var(--font-size-11); font-weight: var(--font-weight-regular); color: var(--text-color-muted); }
+.price.bs-priceLayout.primary .value { font-size: var(--font-size-18); }
+.price.bs-priceLayout.secondary .value { font-size: var(--font-size-13); font-weight: var(--font-weight-medium); color: var(--text-color-muted); }
+.price.bs-priceLayout.user .value { color: var(--color-main-600); }
+.priceParts { display: flex; flex-direction: column; gap: var(--spacer-2); }
+
+/* --- AvailabilityView -------------------------------------------------- */
+.AvailabilityView .label {
+  display: inline-flex; align-items: center; gap: var(--spacer-6);
+  padding: var(--spacer-4) var(--spacer-10);
+  border-radius: var(--radius-pill);
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-bold);
+  cursor: default;
+}
+.AvailabilityView .label::before {
+  content: ''; width: var(--spacer-6); height: var(--spacer-6);
+  border-radius: var(--radius-circle); background: currentColor; flex: none;
+}
+.AvailabilityView .label:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* --- ActionIconsView — produktové vlajky ------------------------------- */
+.ActionIconsView {
+  display: flex; flex-wrap: wrap; gap: var(--flag-gap);
+  pointer-events: var(--flag-pointer-events);
+}
+.productFlag {
+  display: inline-flex; align-items: center; gap: var(--spacer-4);
+  padding: var(--flag-p);
+  border-radius: var(--flag-border-radius);
+  font-size: var(--flag-font-size);
+  font-weight: var(--flag-font-weight);
+  text-transform: var(--flag-text-transform);
+  letter-spacing: .04em;
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: var(--line-height-tight);
+}
+.productFlag > span { white-space: nowrap; }
+/* výchozí barvy vlajek, pokud je BS Shop nepřepíše inline */
+.productFlag.flag01 { --bg-color: var(--flag-01-bg-color); --text-color: var(--flag-01-text-color); }
+.productFlag.flag02 { --bg-color: var(--flag-02-bg-color); --text-color: var(--flag-02-text-color); }
+.productFlag.flag03 { --bg-color: var(--flag-03-bg-color); --text-color: var(--flag-03-text-color); }
+.productFlag.flag04 { --bg-color: var(--flag-04-bg-color); --text-color: var(--flag-04-text-color); }
+.productFlag.flag05 { --bg-color: var(--flag-05-bg-color); --text-color: var(--flag-05-text-color); }
+.productFlag.flag06 { --bg-color: var(--flag-06-bg-color); --text-color: var(--flag-06-text-color); }
+.productFlag.flag07 { --bg-color: var(--flag-07-bg-color); --text-color: var(--flag-07-text-color); }
+.productFlag.flag08 { --bg-color: var(--flag-08-bg-color); --text-color: var(--flag-08-text-color); }
+/* data-look B — plná dlaždice bez zaoblení vlevo, sedí na hraně fotky */
+.ActionIconsView[data-look="B"] .productFlag { border-radius: 0 var(--flag-border-radius) var(--flag-border-radius) 0; padding-left: var(--spacer-10); }
+/* data-look C — obrysová, tichá varianta */
+.ActionIconsView[data-look="C"] .productFlag {
+  background: var(--color-white);
+  color: var(--bg-color);
+  border: var(--border-1-width-base) var(--border-style) currentColor;
+}
+.productFlag svg.icon { width: var(--flag-icon-size); height: var(--flag-icon-size); }
+.ActionIconsView.count2 .productFlag:nth-child(n+3),
+.ActionIconsView.count1 .productFlag:nth-child(n+2) { display: none; }

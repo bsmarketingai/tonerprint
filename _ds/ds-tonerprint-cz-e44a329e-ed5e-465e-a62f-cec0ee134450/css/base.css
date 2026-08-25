@@ -1,0 +1,33 @@
+/* TonerPrint — reset a základní sazba
+   Jediné globální styly v systému. Vše ostatní patří ke komponentě. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 { margin: 0; line-height: var(--line-height-tight); font-weight: var(--font-weight-bold); }
+p { margin: 0 0 var(--spacer-12); text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+
+a { color: var(--link-color); text-decoration: var(--link-decoration); }
+a:hover { color: var(--link-color-hover); text-decoration: var(--link-decoration-hover); }
+
+img, svg, video { max-width: 100%; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* dc-con je strukturální kontejner BS Shopu — sám o sobě nic nekreslí */
+dc-con { display: block; }

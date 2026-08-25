@@ -1,0 +1,30 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Neutral — šedá škála" subtitle="Text, rámečky, podklady. 900 je základní barva textu." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  
+  .ramp { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; border-radius: var(--radius-6); overflow: hidden; }
+  .sw { height: 96px; display: flex; align-items: flex-end; padding: 8px; }
+  .sw b { font-size: 11px; font-weight: 700; opacity: .85; }
+</style>
+</head>
+<body>
+<div class="ramp">
+    <div class="sw" style="background:var(--color-neutral-100)"><b style="color:var(--color-on-neutral-100)">100</b></div>
+    <div class="sw" style="background:var(--color-neutral-200)"><b style="color:var(--color-on-neutral-200)">200</b></div>
+    <div class="sw" style="background:var(--color-neutral-300)"><b style="color:var(--color-on-neutral-300)">300</b></div>
+    <div class="sw" style="background:var(--color-neutral-400)"><b style="color:var(--color-on-neutral-400)">400</b></div>
+    <div class="sw" style="background:var(--color-neutral-500)"><b style="color:var(--color-on-neutral-500)">500</b></div>
+    <div class="sw" style="background:var(--color-neutral-600)"><b style="color:var(--color-on-neutral-600)">600</b></div>
+    <div class="sw" style="background:var(--color-neutral-700)"><b style="color:var(--color-on-neutral-700)">700</b></div>
+    <div class="sw" style="background:var(--color-neutral-800)"><b style="color:var(--color-on-neutral-800)">800</b></div>
+    <div class="sw" style="background:var(--color-neutral-900)"><b style="color:var(--color-on-neutral-900)">900</b></div>
+  </div>
+
+</body>
+</html>

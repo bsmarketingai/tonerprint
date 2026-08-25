@@ -1,0 +1,463 @@
+/* TonerPrint — bloky homepage
+   Názvosloví: sekční view = *View, pomocné třídy = _camelCase.
+   Views v tomto souboru nemají ekvivalent v BS Shopu → K OVĚŘENÍ S BS SHOPEM:
+   HeroBannerView, PromoTilesView, SituationsView, StatsBarView,
+   ArticleListView, ProductCarouselView, FaqListView, ._quickBuy, ._sectionHeader.
+   Plochý vizuál: stín jen funkčně (--shadow-2 hover, --shadow-3 plovoucí). */
+
+/* --- rytmus stránky ---------------------------------------------------- */
+.HomeView { display: flex; flex-direction: column; gap: var(--section-gap); padding-bottom: var(--section-gap); }
+/* V flex column zruší vodorovný margin: auto stretch a blok se scvrkne na fit-content.
+   Sekce s max-width proto musí mít i width: 100% — pak se auto margin použije
+   jen na vycentrování. */
+.HomeView > * { align-self: stretch; }
+.HomeView > .StatsBarView, .HomeView > .ProductCarouselView, .HomeView > ._homeAside { width: 100%; }
+/* ._eshopWidth žije v css/global.css — používá ho i výpis kategorie */
+
+/* --- ._sectionHeader — hlavička sekce ---------------------------------- */
+._sectionHeader { display: flex; flex-direction: column; gap: var(--spacer-6); margin-bottom: var(--spacer-24); }
+._sectionHeader .title { font-size: var(--font-size-24); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); margin: 0; }
+._sectionHeader .shortDescription { font-size: var(--font-size-16); color: var(--color-neutral-600); margin: 0; max-width: 68ch; }
+._sectionHeader.center { align-items: center; text-align: center; }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { ._sectionHeader .title { font-size: var(--font-size-32); } }
+
+/* --- jednotný nadpis sekce/karty: ikona v main barvě + 8px mezera ------- */
+.ProductCarouselView > dc-con.dcHeader .caption,
+.ArticleListView > dc-con.dcHeader .caption,
+.FaqListView > dc-con.dcHeader .caption,
+.SituationsView > dc-con.dcHeader .caption,
+.PromoTilesView > dc-con.dcHeader .caption {
+  display: flex; align-items: center; gap: var(--spacer-8); min-width: 0;
+  font-size: var(--font-size-18); font-weight: var(--font-weight-extrabold);
+}
+.ProductCarouselView > dc-con.dcHeader .caption > .icon,
+.ArticleListView > dc-con.dcHeader .caption > .icon,
+.FaqListView > dc-con.dcHeader .caption > .icon,
+.SituationsView > dc-con.dcHeader .caption > .icon,
+.PromoTilesView > dc-con.dcHeader .caption > .icon { flex: none; color: var(--color-main-500); }
+
+/* --- ._quickBuy — rychlý nákup v hlavičce ------------------------------ */
+._quickBuy {
+  display: inline-flex; align-items: center; gap: var(--spacer-8);
+  min-height: var(--btn-min-height); padding: var(--spacer-6) var(--spacer-12);
+  border-radius: var(--border-3-radius-base);
+  color: var(--text-color); font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+._quickBuy:hover { background: var(--color-neutral-100); color: var(--text-color); text-decoration: none; }
+._quickBuy .icon { color: var(--color-neutral-600); }
+._quickBuy .label { display: none; }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { ._quickBuy .label { display: inline; } }
+
+/* --- HeroBannerView ---------------------------------------------------- */
+/* Pod textem je vždy světlý přechod přes fotku — fotka je přilepená vpravo a při
+   zužování viewportu se schová pod přechod, takže text drží kontrast na všech pásmech. */
+.HeroBannerView { position: relative; overflow: hidden; background-color: var(--color-white); }
+.HeroBannerView > dc-con.dcContent {
+  display: grid; grid-template-columns: 1fr; gap: var(--spacer-24);
+  max-width: var(--eshop-width); margin: 0 auto; padding: var(--spacer-32) var(--spacer-16);
+  align-items: center;
+}
+.HeroBannerView .title { font-size: var(--font-size-32); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); margin: 0 0 var(--spacer-12); }
+.HeroBannerView .shortDescription { font-size: var(--font-size-16); color: var(--color-neutral-600); margin: 0 0 var(--spacer-24); max-width: 52ch; }
+.HeroBannerView .items {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacer-16) var(--spacer-20); margin: 0 0 var(--spacer-24); padding: 0; list-style: none;
+}
+.HeroBannerView .items > li { display: flex; align-items: flex-start; gap: var(--spacer-10); }
+.HeroBannerView .items .icon { flex: none; color: var(--color-main-500); margin-top: var(--spacer-2); }
+.HeroBannerView .items .name { display: block; font-size: var(--font-size-14); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); }
+.HeroBannerView .items .note { display: block; font-size: var(--font-size-13); color: var(--color-neutral-600); }
+.HeroBannerView dc-con.dcActions { display: flex; flex-wrap: wrap; gap: var(--spacer-12); }
+.HeroBannerView dc-con.dcActions > .button { flex: 1 1 100%; justify-content: center; }
+/* ===== BP: XS (0–419) — mobilní fotka nahoře, přechod do bílé pod ní ===== */
+.HeroBannerView {
+  background-image: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 30%, rgba(255,255,255,.92) 46%, var(--color-white) 56%), var(--hero-image-mobile);
+  background-position: top center, top center;
+  background-size: 100% 100%, 100% auto;
+  background-repeat: no-repeat, no-repeat;
+}
+.HeroBannerView > dc-con.dcContent { position: relative; padding-top: 46vw; }
+/* ===== BP: S (420–549) ===== */
+@media (min-width: 420px) { .HeroBannerView dc-con.dcActions > .button { flex: 0 0 auto; } }
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) { .HeroBannerView > dc-con.dcContent { padding-top: 34vw; } }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) {
+  /* fotka přilepená vpravo, přes ni vodorovný přechod do bílé zleva pod text */
+  .HeroBannerView {
+    background-image: linear-gradient(90deg, var(--color-white) 0%, var(--color-white) 30%, rgba(255,255,255,.88) 42%, rgba(255,255,255,0) 66%), var(--hero-image);
+    background-position: left center, right center;
+    background-size: 100% 100%, auto 100%;
+  }
+  .HeroBannerView > dc-con.dcContent { grid-template-columns: minmax(0, 48%); gap: var(--spacer-24); padding: var(--spacer-40) var(--spacer-16); min-height: min(34vw, 420px); }
+  .HeroBannerView .title { font-size: var(--font-size-40); }
+  .HeroBannerView .items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { .HeroBannerView .title { font-size: var(--font-size-48); } }
+
+/* --- PromoTilesView + PromoTileView ------------------------------------ */
+.PromoTilesView > dc-con.dcContent {
+  display: grid; gap: var(--spacer-16);
+  grid-template-columns: 1fr;
+  max-width: var(--eshop-width); margin: 0 auto; padding: 0 var(--spacer-16);
+}
+/* ===== BP: S (420–549) ===== */
+@media (min-width: 420px) { .PromoTilesView > dc-con.dcContent { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { .PromoTilesView.columns4 > dc-con.dcContent { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .PromoTilesView.columns3 > dc-con.dcContent { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.PromoTileView {
+  position: relative; display: flex; flex-direction: column; gap: var(--spacer-8);
+  background: var(--color-white); border-radius: var(--radius-8);
+  padding: var(--spacer-24); min-height: 180px;
+  transition: box-shadow 150ms ease;
+}
+.PromoTileView.success { background: var(--color-success-100); }
+.PromoTileView.warning { background: var(--color-warning-100); }
+.PromoTileView.main    { background: var(--color-main-100); }
+/* neutral je bílá, ne neutral-100 — dlaždice stojí na --bg-color (neutral-100)
+   a stejný odstín by se s plochou slil */
+.PromoTileView.neutral { background: var(--color-white); }
+.PromoTileView .icon { color: var(--color-neutral-700); }
+.PromoTileView .name { font-size: var(--font-size-18); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); margin: 0; }
+.PromoTileView .shortDescription { font-size: var(--font-size-14); color: var(--color-neutral-700); margin: 0; }
+.PromoTileView .readMore {
+  display: inline-flex; align-items: center; gap: var(--spacer-4);
+  margin-top: auto; padding-top: var(--spacer-12);
+  font-size: var(--font-size-14); font-weight: var(--font-weight-bold); color: var(--color-main-600);
+}
+.PromoTileView .readMore::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-8); }
+.PromoTileView:hover { box-shadow: var(--shadow-2); }
+.PromoTileView:hover .readMore { color: var(--color-main-700); text-decoration: none; }
+.PromoTileView .readMore:focus-visible { outline: none; }
+.PromoTileView:focus-within { box-shadow: var(--focus-ring); }
+
+/* --- SituationsView + SituationView ------------------------------------ */
+/* Blok stojí na bílé ploše — barevné dlaždice by se na --bg-color (neutral-100) slily. */
+.SituationsView { background: var(--bg-view-color); padding: var(--section-gap) 0; }
+.SituationsView > dc-con.dcContent {
+  display: grid; gap: var(--spacer-16); grid-template-columns: 1fr;
+  max-width: var(--eshop-width); margin: 0 auto; padding: 0 var(--spacer-16);
+}
+.SituationView {
+  position: relative; display: flex; flex-direction: column; gap: var(--spacer-8);
+  background: var(--color-neutral-100); border-radius: var(--radius-8);
+  padding: var(--spacer-20); min-height: 380px; overflow: hidden;
+  transition: box-shadow 150ms ease;
+}
+.SituationView.success { background: var(--color-success-100); }
+.SituationView.warning { background: var(--color-warning-100); }
+.SituationView.main    { background: var(--color-main-100); }
+.SituationView.neutral { background: var(--color-neutral-100); }
+.SituationView.storage { background: var(--color-secondary-100); }
+.SituationView.neutral { background: var(--color-neutral-100); }
+.SituationView .name { font-size: var(--font-size-20); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); margin: 0; min-height: 2.3em; }
+.SituationView .shortDescription { font-size: var(--font-size-14); color: var(--color-neutral-700); margin: 0; }
+.SituationView .readMore { display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-14); font-weight: var(--font-weight-bold); color: var(--color-main-600); }
+.SituationView .readMore::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-8); }
+/* fotka kopíruje tvar karty: sedí dole, přesahuje vpravo a ořízne ji maska karty */
+.SituationView .image { position: absolute; left: 0; right: 0; bottom: 0; height: 58%; pointer-events: none; }
+.SituationView .image img { display: block; width: 108%; max-width: none; height: 106%; object-fit: cover; object-position: left top; }
+.SituationView .name, .SituationView .shortDescription { position: relative; }
+.SituationView .shortDescription { max-width: 88%; }
+.SituationView .readMore { margin-top: var(--spacer-4); margin-right: auto; }
+.SituationView:hover { box-shadow: var(--shadow-2); }
+.SituationView:focus-within { box-shadow: var(--focus-ring); }
+/* ===== BP: S (420–549) — swipe pod S ===== */
+.SituationsView.swipe > dc-con.dcContent {
+  grid-auto-flow: column; grid-auto-columns: 78%; grid-template-columns: none;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.SituationsView.swipe > dc-con.dcContent::-webkit-scrollbar { display: none; }
+.SituationsView.swipe > dc-con.dcContent > * { scroll-snap-align: start; }
+@media (min-width: 420px) {
+  .SituationsView.swipe > dc-con.dcContent { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+}
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { /* Blok stojí na bílé ploše — barevné dlaždice by se na --bg-color (neutral-100) slily. */
+.SituationsView { background: var(--bg-view-color); padding: var(--section-gap) 0; }
+.SituationsView > dc-con.dcContent { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { /* Blok stojí na bílé ploše — barevné dlaždice by se na --bg-color (neutral-100) slily. */
+.SituationsView { background: var(--bg-view-color); padding: var(--section-gap) 0; }
+.SituationsView > dc-con.dcContent { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) { .SituationsView.columns5 > dc-con.dcContent { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+/* --- StatsBarView ------------------------------------------------------ */
+.StatsBarView { width: 100%; max-width: var(--eshop-width); margin: 0 auto; padding: 0 var(--spacer-16); box-sizing: border-box; }
+.StatsBarView > dc-con.dcContent {
+  display: grid; gap: var(--spacer-20) var(--spacer-24); grid-template-columns: 1fr;
+  background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24);
+}
+.StatsBarView .items { display: flex; align-items: center; gap: var(--spacer-12); }
+.StatsBarView .icon { flex: none; color: var(--color-main-500); }
+.StatsBarView .value { display: block; font-size: var(--font-size-24); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); }
+.StatsBarView .label { display: block; font-size: var(--font-size-13); color: var(--color-neutral-600); }
+.StatsBarView .items.noValue .label { font-size: var(--font-size-16); font-weight: var(--font-weight-bold); color: var(--text-color); }
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) { .StatsBarView > dc-con.dcContent { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { .StatsBarView > dc-con.dcContent { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) { .StatsBarView.columns6 > dc-con.dcContent { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+/* --- ArticleListView --------------------------------------------------- */
+.ArticleListView { background: var(--bg-view-color); border-radius: var(--radius-8); overflow: hidden; }
+.ArticleListView > dc-con.dcHeader { display: flex; align-items: center; gap: var(--spacer-8); padding: var(--spacer-16) var(--spacer-20); }
+.ArticleListView .items { list-style: none; margin: 0; padding: 0; }
+.ArticleListView .items > li + li { border-top: var(--border); }
+.ArticleListView .items > li > a {
+  display: flex; align-items: center; gap: var(--spacer-12);
+  min-height: var(--btn-min-height); padding: var(--spacer-12) var(--spacer-20);
+  color: var(--text-color); text-decoration: none;
+}
+.ArticleListView .items > li > a:hover { background: var(--color-neutral-100); }
+.ArticleListView .items > li > a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.ArticleListView .image { flex: none; width: 56px; height: 56px; border-radius: var(--radius-6); overflow: hidden; background: var(--color-white); }
+.ArticleListView .image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ArticleListView .name { display: block; font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); line-height: var(--line-height-tight); }
+.ArticleListView .note { display: block; font-size: var(--font-size-13); color: var(--color-neutral-600); }
+.ArticleListView .items .icon.bs-crv { margin-left: auto; flex: none; color: var(--color-neutral-400); }
+.ArticleListView > dc-con.dcFooter { padding: var(--spacer-12) var(--spacer-20); border-top: var(--border); }
+.ArticleListView .readMore { display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-14); font-weight: var(--font-weight-bold); }
+
+/* --- ProductCarouselView ---------------------------------------------- */
+.ProductCarouselView { width: 100%; max-width: var(--eshop-width); margin: 0 auto; padding: 0 var(--spacer-16); box-sizing: border-box; }
+.ProductCarouselView > dc-con.dcHeader { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacer-4) var(--spacer-12); margin-bottom: var(--spacer-16); }
+.ProductCarouselView .readMore { margin-left: auto; display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-14); font-weight: var(--font-weight-bold); white-space: nowrap; }
+/* XXS/XS: odkaz se zalomí pod nadpis a začíná vlevo — nikdy nepřetéká z displeje. */
+@media (max-width: 549px) { .ProductCarouselView .readMore { margin-left: 0; } }
+.ProductCarouselView > dc-con.dcContent { position: relative; }
+.ProductCarouselView .scrollContainer {
+  display: grid; grid-auto-flow: column; gap: var(--spacer-16);
+  grid-auto-columns: 100%;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+  padding-bottom: var(--spacer-4);
+}
+.ProductCarouselView .scrollContainer::-webkit-scrollbar { display: none; }
+.ProductCarouselView .scrollContainer > * { scroll-snap-align: start; }
+.ProductCarouselView ._carouselArrow { display: none; }
+/* Navigace pod produkty — jediná navigace do 819 px (i na dotyku), aby bylo
+   vždy vidět, že se karusel posouvá. Vizuál = sekundární tlačítka stránkování. */
+.ProductCarouselView > dc-con.dcFooter { display: flex; justify-content: flex-end; margin-top: var(--spacer-12); }
+.ProductCarouselView ._carouselNav { display: flex; align-items: center; gap: var(--spacer-4); }
+.ProductCarouselView ._carouselNav[hidden] { display: none; }
+.ProductCarouselView ._carouselNav .button.page {
+  min-width: var(--btn-min-height); min-height: var(--btn-min-height);
+  padding: 0; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-white); color: var(--color-main-700);
+  border: var(--border-1-width-base) var(--border-style) var(--color-main-200);
+  border-radius: var(--radius-8);
+}
+.ProductCarouselView ._carouselNav .button.page:hover { background: var(--color-main-100); color: var(--color-main-800); border-color: var(--color-main-300); }
+.ProductCarouselView ._carouselNav .button.page:disabled { color: var(--color-neutral-300); border-color: var(--color-neutral-200); background: var(--color-white); pointer-events: none; }
+/* Vždy celé karty — 1 / 2 / 3 / 4 / 5 sloupců, nikdy „karta a kus další“. */
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) { .ProductCarouselView .scrollContainer { grid-auto-columns: calc((100% - var(--spacer-16)) / 2); } }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { .ProductCarouselView .scrollContainer { grid-auto-columns: calc((100% - 2 * var(--spacer-16)) / 3); } }
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) { .ProductCarouselView .scrollContainer { grid-auto-columns: calc((100% - 3 * var(--spacer-16)) / 4); } }
+/* ===== BP: 1440+ ===== */
+@media (min-width: 1440px) { .ProductCarouselView .scrollContainer { grid-auto-columns: calc((100% - 4 * var(--spacer-16)) / 5); } }
+@media (hover: hover) and (min-width: 820px) {
+  .ProductCarouselView ._carouselArrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: var(--spacer-40); height: var(--spacer-40);
+    background: var(--color-white); color: var(--text-color);
+    border: 0; border-radius: var(--radius-circle); box-shadow: var(--shadow-3);
+    cursor: pointer; z-index: 1;
+  }
+  /* Šipky leží UVNITŘ obsahové šířky sekce — nikdy nepřetékají do sousedních sloupců.
+     Krajní karty jsou proto odsazené o --carousel-gutter (šipka + mezera). */
+  /* Od L jdou karty na plnou šířku kontejneru (zarovnané s nadpisem) a šipky
+     leží přes kraje karet — nepřetékají ven ze sekce. */
+  .ProductCarouselView > dc-con.dcContent { padding-inline: 0; }
+  .ProductCarouselView ._carouselArrow.prev { left: 0; }
+  .ProductCarouselView ._carouselArrow.next { right: 0; }
+  .ProductCarouselView ._carouselArrow:hover { color: var(--color-main-600); }
+  .ProductCarouselView ._carouselArrow:focus-visible { outline: none; box-shadow: var(--shadow-3), var(--focus-ring); }
+  .ProductCarouselView ._carouselArrow:disabled { opacity: .35; cursor: default; }
+  /* Na desktopu s hoverem stačí boční šipky — dvojí navigace by byla redundantní. */
+  .ProductCarouselView > dc-con.dcFooter { display: none; }
+}
+
+/* --- FaqListView ------------------------------------------------------- */
+.FaqListView { background: var(--bg-view-color); border-radius: var(--radius-8); overflow: hidden; }
+.FaqListView > dc-con.dcHeader { padding: var(--spacer-16) var(--spacer-20); }
+.FaqListView .items { list-style: none; margin: 0; padding: 0; }
+.FaqListView .items > li + li { border-top: var(--border); }
+.FaqListView .items > li > a,
+.FaqListView .items > li > button {
+  display: flex; align-items: center; gap: var(--spacer-12); width: 100%;
+  min-height: var(--btn-min-height); padding: var(--spacer-12) var(--spacer-20);
+  background: transparent; border: 0; text-align: left;
+  font: var(--font-weight-semibold) var(--font-size-14) var(--font-family);
+  color: var(--text-color); cursor: pointer;
+}
+.FaqListView .items > li > a:hover,
+.FaqListView .items > li > button:hover { background: var(--color-neutral-100); text-decoration: none; }
+.FaqListView .items > li > a:focus-visible,
+.FaqListView .items > li > button:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.FaqListView .items .icon.bs-crv { margin-left: auto; flex: none; color: var(--color-neutral-400); transition: transform 240ms ease; }
+.FaqListView .items > li.expanded .icon.bs-crv { transform: rotate(90deg); }
+.FaqListView .answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 240ms ease; }
+.FaqListView .items > li.expanded .answer { grid-template-rows: 1fr; }
+.FaqListView .answer > div { overflow: hidden; }
+.FaqListView .answer p { margin: 0; padding: 0 var(--spacer-20) var(--spacer-16); font-size: var(--font-size-14); color: var(--color-neutral-700); max-width: 78ch; }
+.FaqListView > dc-con.dcFooter { padding: var(--spacer-12) var(--spacer-20); border-top: var(--border); }
+.FaqListView .readMore { display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-14); font-weight: var(--font-weight-bold); }
+
+/* --- dvousloupec rady + FAQ ------------------------------------------- */
+._homeAside { display: grid; gap: var(--spacer-16); grid-template-columns: 1fr; width: 100%; max-width: var(--eshop-width); margin: 0 auto; padding: 0 var(--spacer-16); box-sizing: border-box; }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { ._homeAside { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* --- patička — doplnění pro homepage ---------------------------------- */
+.FooterView { background: var(--bg-view-color); }
+.FooterView .socials a { background: none; color: var(--color-main-500); }
+.FooterView .socials a:hover { color: var(--color-main-600); }
+.FooterView > dc-con.top > dc-gi { display: block; }
+.FooterView .paymentLogos { margin-left: auto; }
+.FooterView .claim { font-size: var(--font-size-12); color: var(--color-neutral-600); }
+/* ===== BP: XS (0–419) — sloupce jako rozbalovací sekce ===== */
+.FooterView .column > .caption {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  background: none; border: 0; padding: 0; margin: 0 0 var(--spacer-14);
+  font: var(--font-weight-extrabold) var(--font-size-16) var(--font-family);
+  color: var(--text-color); text-align: left; cursor: pointer;
+}
+.FooterView .column > .caption:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.FooterView .column > .caption .icon.bs-crv { color: var(--color-neutral-400); transition: transform 240ms ease; }
+.FooterView .column.expanded > .caption .icon.bs-crv { transform: rotate(90deg); }
+.FooterView .column > .items { display: none; }
+.FooterView .column.expanded > .items { display: flex; }
+/* ===== BP: S (420–549) ===== */
+@media (min-width: 420px) {
+  .FooterView .column > .items { display: flex; }
+  .FooterView .column > .caption { cursor: default; }
+  .FooterView .column > .caption .icon.bs-crv { display: none; }
+}
+
+/* --- newsletter — stav po odeslání ------------------------------------ */
+.SubscribeToNewsletterView .query .button { flex: 0 0 auto; }
+.SubscribeToNewsletterView.loading .button { opacity: .6; pointer-events: none; }
+.SubscribeToNewsletterView .errorText { display: block; margin-top: var(--spacer-6); font-size: var(--font-size-13); color: var(--color-primary-600); }
+.SubscribeToNewsletterView .textBox.error { border-color: var(--color-primary-500); }
+/* Pole a tlačítko vedle sebe, dokud se do bloku vejdou (grid + container query
+   v css/global.css). V úzkém bloku se zalomí pod sebe na plnou šířku. Tlačítko
+   má text na všech pásmech — nikdy z něj nedělej jen ikonu. */
+.SubscribeToNewsletterView .query .button { flex: 0 0 auto; }
+
+/* --- hlavička — rychlý nákup, logo s burgerem, košík s cenou ----------- */
+.HeaderView .LogoView { display: flex; align-items: center; gap: var(--spacer-8); }
+.HeaderView .LogoView .image img { display: block; width: 100%; height: auto; }
+.HeaderView .button.menuButton { background: transparent; color: var(--text-color); border-color: transparent; padding: var(--spacer-8); }
+.HeaderView .button.menuButton:hover { background: var(--color-neutral-100); color: var(--text-color); }
+/* ===== BP: XS (0–419) — košík jen jako ikona s bublinou ===== */
+.SimpleBasketView .priceParts { display: none; }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { .SimpleBasketView .priceParts { display: flex; } }
+/* ===== BP: L (820–999) — burger jen na mobilu ===== */
+@media (min-width: 820px) { .HeaderView .button.menuButton { display: none; margin-left: 0; } }
+
+/* --- mega-menu jako plovoucí panel pod lištou kategorií ------------------
+   Panel je SOUROZENEC .MenuView, ne jeho potomek — uvnitř by přebral flex
+   pravidla .MenuView .items a seznam by se zalomil do řádku. */
+._menuWrap { position: relative; z-index: var(--z-popup); }
+._menuWrap > .MenuCategoriesRwdView {
+  position: absolute; top: 100%; left: 0; right: 0;
+  max-width: var(--eshop-width); margin: 0 auto;
+  border-radius: var(--radius-8); box-shadow: var(--shadow-4);
+  overflow: hidden;
+}
+.MenuCategoriesRwdView .items { display: block; }
+.MenuCategoriesRwdView .items > .level_0 { display: block; }
+.MenuCategoriesRwdView .items > .level_0 > a { white-space: nowrap; }
+.MenuCategoriesRwdView bs-lazy-render { min-height: 100%; }
+.MenuCategoriesRwdView bs-lazy-render .items { display: grid; }
+.MenuCategoriesRwdView bs-lazy-render .items > .level_1 { display: block; }
+.MenuCategoriesRwdView bs-lazy-render .level_1 > a { white-space: nowrap; }
+
+/* --- mega-menu: promo položka Akce % ----------------------------------- */
+.MenuCategoriesRwdView .items > .level_0.sale > a { color: var(--color-primary-500); font-weight: var(--font-weight-bold); }
+.MenuCategoriesRwdView .items > .level_0.sale > a .icon { color: var(--color-primary-500); }
+.MenuCategoriesRwdView .items > .level_0.sale > a:hover { background: var(--color-primary-100); color: var(--color-primary-600); }
+
+/* --- mega-menu: skupiny podkategorií s náhledem, 3 sloupce ------------- */
+.MenuCategoriesRwdView bs-lazy-render > .items { grid-template-columns: 1fr; gap: var(--spacer-20) var(--spacer-24); }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) { .MenuCategoriesRwdView bs-lazy-render > .items { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) { .MenuCategoriesRwdView bs-lazy-render > .items { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.MenuCategoriesRwdView bs-lazy-render > .items > .level_1 { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--spacer-12); align-items: start; }
+.MenuCategoriesRwdView bs-lazy-render .image { width: 56px; height: 56px; border-radius: var(--radius-6); overflow: hidden; background: var(--color-white); }
+.MenuCategoriesRwdView bs-lazy-render .image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.MenuCategoriesRwdView bs-lazy-render .level_1 .name {
+  display: block; padding: 0; white-space: normal;
+  font-size: var(--font-size-16); font-weight: var(--font-weight-extrabold); color: var(--text-color);
+}
+.MenuCategoriesRwdView bs-lazy-render .level_1 .name:hover { color: var(--color-main-600); text-decoration: none; }
+.MenuCategoriesRwdView bs-lazy-render .level_2 {
+  display: flex; flex-direction: column; gap: var(--spacer-2);
+  list-style: none; margin: var(--spacer-6) 0 0; padding: 0;
+}
+.MenuCategoriesRwdView bs-lazy-render .level_2 > li { display: block; }
+.MenuCategoriesRwdView bs-lazy-render .level_2 a { display: block; padding: var(--spacer-2) 0; font-size: var(--font-size-14); color: var(--color-neutral-600); white-space: normal; }
+.MenuCategoriesRwdView bs-lazy-render .level_2 a:hover { color: var(--color-main-600); }
+
+/* --- lišta kategorií: mobilní režim do pásma m ------------------------- */
+/* ===== BP: XS (0–419) — základ je hamburger, ne scrollující lišta ===== */
+/* lišta kategorií se do 1149 px posouvá vodorovně, od xxl se vejde celá */
+.MenuView > dc-con.dcContent { overflow-x: auto; }
+@media (min-width: 1150px) { .MenuView > dc-con.dcContent { overflow: visible; } }
+.MenuView .items { display: none; }
+.MenuView .separator { display: none; }
+.MenuView .button.toggle { width: 100%; justify-content: flex-start; gap: var(--spacer-10); min-height: var(--btn-min-height); }
+/* panel se rozbalí přes celou šířku displeje pod hlavičkou */
+._menuWrap > .MenuCategoriesRwdView {
+  position: absolute; top: 100%; left: 0; right: 0;
+  max-width: none; border-radius: 0; box-shadow: var(--shadow-4);
+  max-height: calc(100vh - 100%); overflow-y: auto;
+}
+._menuWrap > .MenuCategoriesRwdView > dc-con.dcContent { grid-template-columns: 1fr; }
+.MenuCategoriesRwdView bs-lazy-render { border-left: 0; border-top: var(--border); }
+/* ===== BP: L (820–999) — od l zpět vodorovná lišta a plovoucí panel ===== */
+@media (min-width: 820px) {
+  .MenuView .items { display: flex; }
+  .MenuView .separator { display: block; }
+  .MenuView .button.toggle { width: auto; }
+  ._menuWrap > .MenuCategoriesRwdView {
+    max-width: var(--eshop-width); margin: 0 auto;
+    border-radius: var(--radius-8); max-height: none; overflow: hidden;
+  }
+  ._menuWrap > .MenuCategoriesRwdView > dc-con.dcContent { grid-template-columns: 280px minmax(0, 1fr); }
+  .MenuCategoriesRwdView bs-lazy-render { border-left: var(--border); border-top: 0; }
+}
+
+/* --- mobilní režim hlavičky do pásma m -------------------------------- */
+/* ===== BP: XS (0–419) — vpravo akcentní hamburger, lišta kategorií mizí ===== */
+.HeaderView .button.menuButton {
+  flex: none;
+  margin-left: var(--spacer-8);
+  width: var(--btn-min-height); height: var(--btn-min-height); padding: 0;
+  background: var(--color-main-500); color: var(--color-on-main-500);
+  border: 0; border-radius: var(--border-3-radius-base);
+}
+.HeaderView .button.menuButton:hover { background: var(--color-main-600); color: var(--color-on-main-500); }
+.HeaderView .button.menuButton:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+/* přihlášení v hlavičce není nikde — řeší ho horní pruh a mobilní menu (css/global.css) */
+/* rychlý nákup zůstává i na mobilu — jen jako ikona bez labelu */
+._menuWrap > .MenuView, body > .MenuView { display: none; }
+/* ===== BP: L (820–999) — od l zpět desktopový režim ===== */
+@media (min-width: 820px) {
+  ._menuWrap > .MenuView, body > .MenuView { display: block; }
+}

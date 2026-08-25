@@ -1,0 +1,323 @@
+/* TonerPrint — výpis kategorie — řazení, filtry (drawer), stránkování
+   Názvy tříd a struktura jsou z BS Shopu. Nepřejmenovávat. */
+
+/* --- CategoryView — obal stránky kategorie -----------------------------
+   Rytmus stránky, obdoba .HomeView. K OVĚŘENÍ S BS SHOPEM: název View.
+   ------------------------------------------------------------------------ */
+.CategoryView { display: flex; flex-direction: column; gap: var(--eshop-gap); padding-bottom: var(--section-gap); }
+.CategoryView > * { min-width: 0; }
+
+/* --- ProductsMasterView — šablona výpisu -------------------------------
+   Filtry jsou drawer, ne sloupec — obsah proto drží plnou šířku na všech
+   pásmech a --eshop-left-width se použije jako šířka vysunutého panelu.
+   ------------------------------------------------------------------------ */
+.ProductsMasterView {
+  display: flex; flex-direction: column; gap: var(--eshop-gap);
+  max-width: var(--eshop-width); margin: 0 auto;
+}
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) {
+  .ProductsMasterView > dc-con.dcQuery { order: -1; }
+}
+.ProductsMasterView > dc-con.dcContent { display: flex; flex-direction: column; gap: var(--eshop-gap); min-width: 0; }
+.ProductsMasterView > dc-con.dcQuery { display: flex; flex-direction: column; gap: var(--eshop-gap); min-width: 0; }
+.ProductsMasterView .title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); }
+.ProductsMasterView .shortDescription { margin: var(--spacer-8) 0 0; color: var(--text-color-muted); max-width: 70ch; }
+.ProductsMasterView.firstPage .shortDescription { display: block; }
+.ProductsMasterView .shortDescription { display: none; }
+
+/* --- ._categoryText — rozbalovací text kategorie -----------------------
+   Víceodstavcový SEO text: ve výchozím stavu zkrácený s přechodem do bílé.
+   K OVĚŘENÍ S BS SHOPEM: název pomocné třídy. */
+._categoryTextBlock { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacer-4); }
+._categoryText { color: var(--text-color-muted); max-width: 78ch; }
+._categoryText > p { margin: 0 0 var(--spacer-10); }
+._categoryText > p:last-child { margin-bottom: 0; }
+._categoryText.collapsed {
+  max-height: calc(3 * var(--font-size-16) * var(--line-height-base));
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, var(--color-black) 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, var(--color-black) 55%, transparent 100%);
+}
+/* otvírák textu je stejný prvek jako v drawru filtrů, jen mimo něj */
+._expandButton {
+  display: inline-flex; align-items: center; gap: var(--spacer-4);
+  background: none; border: 0; padding: var(--spacer-6) 0;
+  font: var(--font-weight-semibold) var(--font-size-14) var(--font-family);
+  color: var(--link-color); cursor: pointer;
+}
+._expandButton:hover { color: var(--color-main-700); }
+._expandButton:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+._expandButton .icon { transition: transform .15s ease; }
+._expandButton[aria-expanded="true"] .icon { transform: rotate(180deg); }
+
+/* --- ProductsHostView -------------------------------------------------- */
+.ProductsHostView { background: var(--bg-view-color); border-radius: var(--border-4-radius-base); padding: var(--spacer-8); min-width: 0; }
+
+/* --- SimpleFilterView — řazení a přepínač zobrazení -------------------- */
+.SimpleFilterView {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacer-8) var(--spacer-16);
+  background: var(--bg-view-color);
+  border-radius: var(--border-4-radius-base);
+  padding: var(--spacer-10) var(--spacer-12);
+}
+.SimpleFilterView .totalItems { font-size: var(--font-size-13); color: var(--text-color-muted); }
+.SimpleFilterView .totalItems strong { color: var(--text-color); font-weight: var(--font-weight-bold); }
+.SimpleFilterView .sortingBox { display: none; flex-wrap: wrap; gap: var(--spacer-4); }
+.SimpleFilterView .sortingBox label {
+  display: inline-flex; align-items: center; min-height: var(--spacer-32);
+  padding: var(--spacer-4) var(--spacer-12);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-13); font-weight: var(--font-weight-medium);
+  color: var(--text-color-muted); cursor: pointer;
+  white-space: nowrap;
+}
+.SimpleFilterView .sortingBox label:hover { background: var(--color-neutral-100); color: var(--text-color); }
+.SimpleFilterView .sortingBox .radio { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.SimpleFilterView .sortingBox .radio:checked + label,
+.SimpleFilterView .sortingBox label.selected {
+  background: var(--color-main-100); color: var(--color-main-700); font-weight: var(--font-weight-bold);
+}
+.SimpleFilterView .sortingBox .radio:focus-visible + label { box-shadow: var(--focus-ring); }
+.SimpleFilterView .sortOrder {
+  min-height: var(--btn-min-height);
+  padding: var(--spacer-8) var(--spacer-32) var(--spacer-8) var(--spacer-12);
+  background: var(--color-white); border: var(--border-3);
+  border-radius: var(--border-3-radius-base);
+  font: var(--font-weight-semibold) var(--font-size-14) var(--font-family);
+  color: var(--text-color);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 49%, var(--color-neutral-600) 50%), linear-gradient(-45deg, transparent 49%, var(--color-neutral-600) 50%);
+  background-size: 6px 6px, 6px 6px;
+  background-position: right 16px center, right 10px center;
+  background-repeat: no-repeat;
+}
+.SimpleFilterView .viewTypeButtons { margin-left: auto; }
+
+/* --- ViewTypeSelectorView — přepínač dlaždice / řádky ------------------- */
+.ViewTypeSelectorView { display: inline-flex; gap: var(--spacer-2); background: var(--color-neutral-100); border-radius: var(--border-3-radius-base); padding: var(--spacer-2); }
+.ViewTypeSelectorView > .page {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--spacer-32); height: var(--spacer-32);
+  border-radius: var(--radius-4);
+  color: var(--color-neutral-600);
+}
+.ViewTypeSelectorView > .page:hover { color: var(--text-color); text-decoration: none; }
+.ViewTypeSelectorView > .page.active { background: var(--color-white); color: var(--color-main-700); box-shadow: var(--shadow-1); }
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) {
+  .SimpleFilterView .sortingBox { display: flex; }
+  .SimpleFilterView .sortOrder { display: none; }
+}
+
+/* --- _filterButton — otvírák drawru filtrů ----------------------------- */
+._filterButton {
+  --btn-bg-color: var(--color-white); --btn-bg-color-hover: var(--color-neutral-100);
+  --btn-text-color: var(--text-color); --btn-text-color-hover: var(--text-color);
+  --btn-border-width: var(--spacer-1); --btn-border-color: var(--color-neutral-200); --btn-border-color-hover: var(--color-neutral-300);
+  width: 100%;
+}
+._filterButton .value {
+  min-width: var(--spacer-20); height: var(--spacer-20);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 var(--spacer-6);
+  background: var(--color-main-500); color: var(--color-on-main-500);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-12);
+}
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) { ._filterButton { width: auto; } }
+
+/* --- FilterView — drawer s filtry (NÁVRH) ------------------------------
+   Panel vyjíždí zleva přes overlay. Zavřený stav je bez modifikátoru,
+   otevřený nese `active`. Drawer je `position: fixed` vůči oknu; v náhledech
+   styleguide ho do rámu uzavírá scéna s vlastním containing blockem.
+   ------------------------------------------------------------------------ */
+.FilterView {
+  position: fixed; inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+.FilterView .overlay {
+  position: absolute; inset: 0;
+  background: var(--color-main-900);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.FilterView > dc-con.wrap {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  /* mobile-first: drawer přes celý displej — na malém okně nemá smysl
+     nechat proklik na obsah, který stejně není vidět */
+  width: 100%;
+  display: flex; flex-direction: column;
+  background: var(--bg-view-color);
+  box-shadow: var(--shadow-4);
+  transform: translateX(-100%);
+  transition: transform .24s ease;
+}
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) {
+  .FilterView > dc-con.wrap { width: min(var(--eshop-left-width), 88vw); }
+}
+.FilterView.active { pointer-events: auto; }
+.FilterView.active .overlay { opacity: .5; }
+.FilterView.active > dc-con.wrap { transform: translateX(0); }
+
+.FilterView > dc-con.wrap > dc-con.dcHeader {
+  display: flex; align-items: center; gap: var(--spacer-8);
+  padding: var(--spacer-14) var(--spacer-16);
+  border-bottom: var(--border);
+  flex: none;
+}
+.FilterView dc-con.dcHeader .caption { font-size: var(--font-size-16); font-weight: var(--font-weight-bold); display: flex; align-items: center; gap: var(--spacer-8); }
+.FilterView dc-con.dcHeader .value { font-size: var(--font-size-12); font-weight: var(--font-weight-bold); color: var(--color-main-700); background: var(--color-main-100); border-radius: var(--radius-pill); padding: var(--spacer-2) var(--spacer-8); }
+.FilterView dc-con.dcHeader .button.toggle {
+  margin-left: auto;
+  width: var(--btn-min-height); min-width: var(--btn-min-height); padding: 0;
+  border-radius: var(--border-3-radius-base);
+  --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100);
+  --btn-text-color: var(--color-neutral-600); --btn-text-color-hover: var(--text-color);
+}
+/* na celé obrazovce je hlavička i patička lepivá — cesta zpět k produktům
+   musí být na dosah i uprostřed dlouhého seznamu hodnot */
+.FilterView > dc-con.wrap > dc-con.dcHeader { position: sticky; top: 0; z-index: 1; background: var(--bg-view-color); }
+.FilterView > dc-con.wrap > dc-con.dcContent {
+  flex: 1 1 auto; overflow-y: auto;
+  padding: 0 var(--spacer-16);
+}
+.FilterView > dc-con.wrap > dc-con.bottom {
+  display: flex; align-items: center; gap: var(--spacer-8);
+  padding: var(--spacer-12) var(--spacer-16);
+  padding-bottom: calc(var(--spacer-12) + env(safe-area-inset-bottom, 0px));
+  border-top: var(--border);
+  background: var(--bg-view-color);
+  flex: none;
+}
+.FilterView dc-con.bottom .button.toggle {
+  flex: none;
+  --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-primary-100);
+  --btn-text-color: var(--color-primary-600); --btn-text-color-hover: var(--color-primary-700);
+  --btn-font-size: var(--font-size-13);
+}
+.FilterView dc-con.bottom .button.buy { flex: 1 1 auto; }
+.FilterView .group { border-bottom: var(--border); padding: var(--spacer-12) 0; }
+.FilterView .group:last-of-type { border-bottom: 0; }
+.FilterView .group > .label {
+  display: flex; align-items: center; gap: var(--spacer-8);
+  width: 100%; min-height: var(--spacer-40);
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: var(--font-weight-bold) var(--font-size-14) var(--font-family);
+  color: var(--text-color); text-align: left;
+}
+.FilterView .group > .label .icon.bs-crv { margin-left: auto; color: var(--color-neutral-400); transition: transform .15s ease; }
+.FilterView .group.noAutoExpand > .label .icon.bs-crv { transform: rotate(-90deg); }
+.FilterView .group > .items { display: flex; flex-direction: column; gap: var(--spacer-2); margin-top: var(--spacer-4); }
+.FilterView .group.noAutoExpand > .items { display: none; }
+.FilterView .group > .items > label {
+  display: flex; align-items: center; gap: var(--spacer-10);
+  min-height: var(--spacer-32); padding: var(--spacer-4) var(--spacer-6);
+  border-radius: var(--radius-4);
+  font-size: var(--font-size-14); cursor: pointer;
+}
+.FilterView .group > .items > label:hover { background: var(--color-neutral-100); }
+.FilterView .group > .items > label.disabled { color: var(--color-neutral-300); pointer-events: none; }
+.FilterView .checkBox { width: var(--spacer-18); height: var(--spacer-18); flex: none; accent-color: var(--color-main-500); }
+.FilterView .group > .items > label .value { margin-left: auto; font-size: var(--font-size-12); color: var(--text-color-muted); }
+.FilterView .group > .items > ._expandButton,
+.FilterView .group > .items > ._collapseButton {
+  align-self: flex-start; background: none; border: 0; padding: var(--spacer-4) var(--spacer-6);
+  font: var(--font-weight-semibold) var(--font-size-13) var(--font-family);
+  color: var(--link-color); cursor: pointer;
+}
+.FilterView .group .query { display: flex; align-items: center; gap: var(--spacer-8); margin-top: var(--spacer-8); }
+.FilterView .group .query .textBox {
+  flex: 1 1 0; min-width: 0; min-height: var(--spacer-40);
+  padding: var(--spacer-6) var(--spacer-10);
+  border: var(--border-3); border-radius: var(--border-3-radius-base);
+  font: var(--font-weight-medium) var(--font-size-14) var(--font-family);
+  color: var(--text-color); background: var(--color-white);
+  text-align: center;
+}
+.FilterView .group .query .textBox:focus-visible { outline: none; border-color: var(--color-main-400); box-shadow: var(--focus-ring); }
+.FilterView .group .query .separator { color: var(--text-color-muted); }
+.FilterView .group .unitsDescription { font-size: var(--font-size-12); color: var(--text-color-muted); }
+
+/* --- PagingView v1a ProductPaging -------------------------------------- */
+.PagingView { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--spacer-4); }
+.PagingView .page {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--btn-min-height); min-height: var(--btn-min-height);
+  padding: 0 var(--spacer-10);
+  border-radius: var(--border-3-radius-base);
+  font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+}
+.PagingView .page:hover { background: var(--color-neutral-100); text-decoration: none; color: var(--text-color); }
+.PagingView .page.active { background: var(--color-main-500); color: var(--color-on-main-500); font-weight: var(--font-weight-bold); }
+.PagingView .page.disabled { color: var(--color-neutral-300); pointer-events: none; }
+.PagingView .separator { color: var(--color-neutral-300); padding: 0 var(--spacer-4); }
+.PagingView .gotoPrevious, .PagingView .gotoNext { gap: var(--spacer-6); }
+
+/* --- PagingView v4a ViewTypeSelector ----------------------------------- */
+.PagingView.v4a { justify-content: flex-end; gap: var(--spacer-2); background: var(--color-neutral-100); border-radius: var(--border-3-radius-base); padding: var(--spacer-2); }
+.PagingView.v4a .page {
+  min-width: var(--spacer-40); min-height: var(--spacer-40); padding: 0;
+  border-radius: var(--radius-4);
+}
+.PagingView.v4a .page.active { background: var(--color-white); color: var(--color-main-700); box-shadow: var(--shadow-1); }
+.PagingView.v4a .page.inactive { color: var(--color-neutral-600); }
+.PagingView.v4a .page.inactive:hover { background: transparent; color: var(--text-color); }
+
+/* --- PagingView v2a NextProducts --------------------------------------- */
+.PagingView.v2a { flex-direction: column; gap: var(--spacer-10); padding: var(--spacer-16) 0; }
+.PagingView.v2a .totalItems { font-size: var(--font-size-12); color: var(--text-color-muted); }
+.PagingView.v2a .button.nextProducts {
+  --btn-bg-color: var(--color-white); --btn-bg-color-hover: var(--color-main-100);
+  --btn-text-color: var(--color-main-700); --btn-text-color-hover: var(--color-main-800);
+  --btn-border-width: var(--spacer-1); --btn-border-color: var(--color-main-200); --btn-border-color-hover: var(--color-main-300);
+  min-width: 260px;
+}
+.PagingView.v2a .value {
+  height: var(--spacer-4); border-radius: var(--radius-pill);
+  background: var(--color-neutral-200); width: 200px; overflow: hidden;
+}
+.PagingView.v2a .value > span { display: block; height: 100%; background: var(--color-main-500); }
+
+/* --- CompoundPagingView ------------------------------------------------ */
+/* Blok na konci výpisu jako celek: „Načíst dalších 24" + počet + stránkování. */
+.CompoundPagingView { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacer-12); }
+.CompoundPagingView.top { justify-content: flex-end; }
+.CompoundPagingView.bottom { flex-direction: column; align-items: center; gap: var(--spacer-16); padding: var(--spacer-24) 0 0; border-top: var(--border); }
+
+.CompoundPagingView > dc-con.dcHeader { display: flex; flex-direction: column; align-items: center; gap: var(--spacer-8); }
+.CompoundPagingView .button.nextProducts {
+  min-width: 260px;
+  background: var(--color-white); color: var(--color-main-700);
+  border: var(--border-1-width-base) var(--border-style) var(--color-main-200);
+}
+.CompoundPagingView .button.nextProducts:hover { background: var(--color-main-100); color: var(--color-main-800); border-color: var(--color-main-300); }
+.CompoundPagingView .totalItems { font-size: var(--font-size-12); color: var(--text-color-muted); }
+
+.CompoundPagingView .pages { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--spacer-4); }
+.CompoundPagingView .pages .button.page {
+  min-width: var(--btn-min-height); min-height: var(--btn-min-height);
+  padding: 0 var(--spacer-10); flex: none;
+  background: var(--color-white); color: var(--text-color);
+  border: var(--border-1-width-base) var(--border-style) var(--color-neutral-200);
+  border-radius: var(--border-3-radius-base);
+  font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
+}
+.CompoundPagingView .pages .button.page:hover { background: var(--color-main-100); color: var(--color-main-700); border-color: var(--color-main-300); }
+.CompoundPagingView .pages .button.page.selected {
+  background: var(--color-main-500); color: var(--color-on-main-500);
+  border-color: var(--color-main-500); font-weight: var(--font-weight-extrabold);
+}
+.CompoundPagingView .pages .button.page.selected:hover { background: var(--color-main-600); color: var(--color-on-main-500); border-color: var(--color-main-600); }
+.CompoundPagingView .pages .button.page.previous,
+.CompoundPagingView .pages .button.page.next { padding: 0; }
+.CompoundPagingView .pages .button.page:disabled { color: var(--color-neutral-300); border-color: var(--color-neutral-200); background: var(--color-white); pointer-events: none; }
+.CompoundPagingView .pages .separator {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--btn-min-height); padding: 0 var(--spacer-4);
+  color: var(--color-neutral-300);
+}

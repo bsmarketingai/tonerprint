@@ -1,0 +1,91 @@
+<!-- @dsCard group="Components" viewport="700x420" name="FilterDrawer · Popup" subtitle="Drawer filtrů zleva a modální okno — oba přes overlay." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 0; background: var(--bg-color); }
+  
+  .wrap2 { display: grid; grid-template-columns: 1fr 1fr; height: 420px; }
+  .stage { position: relative; transform: translateZ(0); overflow: hidden; background: var(--bg-color); }
+  .PopupView > dc-con.popup { width: min(320px, 92%); }
+</style>
+</head>
+<body>
+<div class="wrap2">
+  <div class="stage">
+  <div class="FilterView v1a v1 bs-view active" role="dialog" aria-modal="true" aria-label="Filtry">
+    <div class="overlay"></div>
+    <dc-con class="wrap">
+      <dc-con class="dcHeader">
+        <span class="caption"><svg class="icon ico2"><use href="#tp-filter"></use></svg>Filtry<span class="value">2</span></span>
+        <button type="button" class="button toggle" aria-label="Zavřít filtry"><svg class="icon ico3"><use href="#tp-x"></use></svg></button>
+      </dc-con>
+      <dc-con class="dcContent">
+        <div class="group">
+          <button type="button" class="label">Výrobce<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <label><input class="checkBox" type="checkbox" checked>HP<span class="value">842</span></label>
+            <label><input class="checkBox" type="checkbox">Canon<span class="value">613</span></label>
+            <label><input class="checkBox" type="checkbox">Brother<span class="value">288</span></label>
+            <button type="button" class="_expandButton">Zobrazit dalších 12</button>
+          </div>
+        </div>
+        <div class="group">
+          <button type="button" class="label">Cena<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <div class="query">
+              <input class="textBox" type="number" value="0" aria-label="Cena od">
+              <span class="separator">–</span>
+              <input class="textBox" type="number" value="5000" aria-label="Cena do">
+              <span class="unitsDescription">Kč</span>
+            </div>
+          </div>
+        </div>
+        <div class="group noAutoExpand">
+          <button type="button" class="label">Typ náplně<svg class="icon ico2 bs-crv"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <label><input class="checkBox" type="checkbox">Originální<span class="value">402</span></label>
+          </div>
+        </div>
+      </dc-con>
+      <dc-con class="bottom">
+        <button type="button" class="button toggle">Zrušit</button>
+        <button type="button" class="button buy">Zobrazit 842 produktů</button>
+      </dc-con>
+    </dc-con>
+  </div>
+</div>
+  <div class="stage">
+    <div class="PopupView v1a v1 bs-view active" role="dialog" aria-modal="true" aria-label="Dotaz k produktu">
+      <div class="overlay"></div>
+      <dc-con class="popup">
+        <dc-con class="dcHeader">
+          <span class="caption">Dotaz k produktu</span>
+          <button type="button" class="button toggle" aria-label="Zavřít"><svg class="icon ico3"><use href="#tp-x"></use></svg></button>
+        </dc-con>
+        <dc-con class="dcContent">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div class="formRow">
+              <label class="label" for="q1">Váš e-mail <span class="value">*</span></label>
+              <input class="textBox" type="email" id="q1" placeholder="jan.novak@skola.cz">
+            </div>
+            <div class="formRow">
+              <label class="label" for="q2">Dotaz <span class="value">*</span></label>
+              <textarea class="textArea" id="q2" style="min-height:72px" placeholder="Zvládne skartovačka laminované karty?"></textarea>
+            </div>
+          </div>
+        </dc-con>
+        <dc-con class="bottom">
+          <button type="button" class="button a2">Zrušit</button>
+          <button type="button" class="button">Odeslat</button>
+        </dc-con>
+      </dc-con>
+    </div>
+  </div>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

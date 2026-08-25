@@ -1,0 +1,52 @@
+<!-- @dsCard group="Components" viewport="700x340" name="Notification · EmptyState · Skeleton" subtitle="Zpětná vazba, prázdný stav a načítání." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--bg-color); }
+  
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  .cols { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .productHolder { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+</style>
+</head>
+<body>
+<div class="stack">
+    <div class="NotificationView v1a v1 bs-view cs_zelena">
+      <svg class="icon ico3"><use href="#tp-circle-check"></use></svg>
+      <span><span class="caption">Objednávka odeslána</span>Číslo 2026-004821. Potvrzení jsme poslali na váš e-mail.</span>
+      <button type="button" class="button toggle" aria-label="Zavřít"><svg class="icon ico2"><use href="#tp-x"></use></svg></button>
+    </div>
+    <div class="NotificationView v1a v1 bs-view cs_zluta">
+      <svg class="icon ico3"><use href="#tp-alert-triangle"></use></svg>
+      <span><span class="caption">Poslední 2 kusy</span>Zbytek dodáme do 4 dnů v druhé zásilce.</span>
+    </div>
+    <div class="NotificationView v1a v1 bs-view cs_cervena">
+      <svg class="icon ico3"><use href="#tp-circle-x"></use></svg>
+      <span><span class="caption">Platbu se nepodařilo dokončit</span>Zboží zůstává v košíku.</span>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="EmptyView v1a v1 bs-view empty">
+      <svg class="icon ico4"><use href="#tp-package-off"></use></svg>
+      <span class="caption">Nic jsme nenašli</span>
+      <p class="shortDescription">Tomuto filtru neodpovídá žádný produkt.</p>
+      <button type="button" class="button a2"><svg class="icon ico2"><use href="#tp-filter-x"></use></svg>Zrušit filtry</button>
+    </div>
+    <div class="ProductsView v1a v1 bs-view columns2">
+      <div class="productHolder">
+        <div class="ProductView v1a v1 bs-view inactive">
+          <span class="skeleton image"></span><span class="skeleton name"></span><span class="skeleton short"></span><span class="skeleton price"></span>
+        </div>
+        <div class="ProductView v1a v1 bs-view inactive">
+          <span class="skeleton image"></span><span class="skeleton name"></span><span class="skeleton short"></span><span class="skeleton price"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

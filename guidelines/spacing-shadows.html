@@ -1,0 +1,26 @@
+<!-- @dsCard group="Spacing" viewport="700x150" name="Stíny" subtitle="Redesign je plochý. Stín jen na vyvýšené prvky, nikdy jako dekorace." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-neutral-100); }
+  
+  .row { display: flex; gap: 14px; }
+  .box { flex: 1; height: 84px; background: var(--color-white); border-radius: var(--radius-8);
+         display: flex; align-items: center; justify-content: center;
+         font-size: 11px; font-weight: 700; color: var(--text-color-muted); }
+</style>
+</head>
+<body>
+<div class="row">
+    <div class="box" style="box-shadow:var(--shadow-1)">shadow-1</div>
+    <div class="box" style="box-shadow:var(--shadow-2)">shadow-2 · hover karty</div>
+    <div class="box" style="box-shadow:var(--shadow-3)">shadow-3</div>
+    <div class="box" style="box-shadow:var(--shadow-4)">shadow-4 · popup</div>
+  </div>
+
+</body>
+</html>

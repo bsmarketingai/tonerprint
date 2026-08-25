@@ -1,0 +1,44 @@
+/* TonerPrint — bordery
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     9. BORDERY — sady 0–5, každá s vlastním radiusem
+     ====================================================================== */
+  --border-style: solid; /* @kind other */
+  --border-color: var(--color-neutral-200);
+  --border-width-base: var(--spacer-1);
+  --border: var(--border-width-base) var(--border-style) var(--border-color);
+
+  --border-0-width-base: var(--spacer-0); --border-0-style: solid; /* @kind other */
+  --border-0-color: var(--border-color);  --border-0-radius-base: var(--radius-0);
+  --border-0: var(--border-0-width-base) var(--border-0-style) var(--border-0-color);
+
+  --border-1-width-base: var(--spacer-1); --border-1-style: solid; /* @kind other */
+  --border-1-color: var(--border-color);  --border-1-radius-base: var(--radius-2);
+  --border-1: var(--border-1-width-base) var(--border-1-style) var(--border-1-color);
+
+  --border-2-width-base: var(--spacer-1); --border-2-style: solid; /* @kind other */
+  --border-2-color: var(--border-color);  --border-2-radius-base: var(--radius-4);
+  --border-2: var(--border-2-width-base) var(--border-2-style) var(--border-2-color);
+
+  --border-3-width-base: var(--spacer-1); --border-3-style: solid; /* @kind other */
+  --border-3-color: var(--border-color);  --border-3-radius-base: var(--radius-6);
+  --border-3: var(--border-3-width-base) var(--border-3-style) var(--border-3-color);
+
+  --border-4-width-base: var(--spacer-1); --border-4-style: solid; /* @kind other */
+  --border-4-color: var(--border-color);  --border-4-radius-base: var(--radius-8);
+  --border-4: var(--border-4-width-base) var(--border-4-style) var(--border-4-color);
+
+  --border-5-width-base: var(--spacer-1); --border-5-style: solid; /* @kind other */
+  --border-5-color: var(--border-color);  --border-5-radius-base: var(--radius-16);
+  --border-5: var(--border-5-width-base) var(--border-5-style) var(--border-5-color);
+
+  --border-radius-base: var(--border-3-radius-base);
+  --border-radius: var(--border-radius-base);
+  --border-radius-pill:   var(--radius-pill);
+  --border-radius-circle: var(--radius-circle);
+
+}

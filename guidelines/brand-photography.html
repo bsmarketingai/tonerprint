@@ -1,0 +1,27 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Fotografie" subtitle="Produktové výřezy na bílé. Karty na ně používají mix-blend-mode: multiply." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  figure { margin: 0; border: var(--border); border-radius: var(--radius-6); overflow: hidden; background: var(--color-white); }
+  img { display: block; width: 100%; height: 118px; object-fit: contain; }
+  figcaption { padding: 6px 8px; border-top: var(--border); font-size: 10px; color: var(--text-color-muted); }
+</style>
+</head>
+<body>
+<div class="grid">
+    <figure><img src="../assets/kategorie/tisk.png" alt=""><figcaption>Tisk</figcaption></figure>
+    <figure><img src="../assets/kategorie/kancelar.png" alt=""><figcaption>Kancelář</figcaption></figure>
+    <figure><img src="../assets/kategorie/skola.png" alt=""><figcaption>Škola</figcaption></figure>
+    <figure><img src="../assets/kategorie/baleni.png" alt=""><figcaption>Balení</figcaption></figure>
+    <figure><img src="../assets/kategorie/sklad.png" alt=""><figcaption>Sklad</figcaption></figure>
+  </div>
+
+</body>
+</html>

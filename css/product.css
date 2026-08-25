@@ -1,0 +1,254 @@
+/* TonerPrint — produktové komponenty — karta, mřížka, carousel, dlaždice kategorií
+   Názvy tříd a struktura jsou z BS Shopu. Nepřejmenovávat. */
+
+/* --- AddToCartView ----------------------------------------------------- */
+.AddToCartView { display: flex; align-items: center; gap: var(--spacer-8); }
+.AddToCartView .quantity {
+  display: inline-flex; align-items: center;
+  border: var(--border-3);
+  border-radius: var(--border-3-radius-base);
+  background: var(--color-white);
+  overflow: hidden;
+  flex: none;
+}
+.AddToCartView .quantity .button {
+  --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100);
+  --btn-text-color: var(--color-neutral-700); --btn-text-color-hover: var(--text-color);
+  min-height: var(--spacer-40); padding: 0 var(--spacer-10);
+  border-radius: 0;
+}
+.AddToCartView .quantity .real {
+  width: var(--spacer-40); min-height: var(--spacer-40);
+  border: 0; outline: none; text-align: center;
+  font: var(--font-weight-bold) var(--font-size-14) var(--font-family);
+  color: var(--text-color); background: transparent;
+  -moz-appearance: textfield;
+}
+.AddToCartView .quantity .real::-webkit-outer-spin-button,
+.AddToCartView .quantity .real::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.AddToCartView .quantity .ghost {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);
+}
+.AddToCartView .button.buy { position: relative; flex: 1 1 auto; }
+.AddToCartView .button.buy .basketCount {
+  min-width: var(--spacer-18); height: var(--spacer-18);
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 var(--spacer-4); margin-left: var(--spacer-2);
+  background: var(--color-main-800); color: var(--color-on-main-800);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-11);
+}
+.AddToCartView .unitsDescription { font-size: var(--font-size-11); color: var(--text-color-muted); }
+/* v3a — na kartě je z tlačítka jen ikona, číselník se rozbaluje */
+.AddToCartView.v3a { gap: var(--spacer-6); }
+.AddToCartView.v3a .button.buy {
+  flex: none; width: var(--btn-min-height); min-width: var(--btn-min-height);
+  padding: 0; border-radius: var(--border-3-radius-base);
+}
+.AddToCartView.v3a .quantity { display: none; }
+.AddToCartView.v3a.active .quantity { display: inline-flex; }
+.AddToCartView.disabled { opacity: .5; pointer-events: none; }
+
+/* --- ProductView — karta ----------------------------------------------- */
+.ProductView {
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--spacer-8);
+  padding: var(--spacer-12);
+  background: var(--bg-view-color);
+  border-radius: var(--border-4-radius-base);
+  min-width: 0;
+}
+.ProductView:hover { box-shadow: var(--shadow-2); }
+.ProductView .image { position: relative; display: block; }
+.ProductView .image .mainImage {
+  display: block; width: 100%; aspect-ratio: 1 / 1;
+  object-fit: contain; background: var(--color-white);
+  mix-blend-mode: multiply;
+}
+.ProductView .ActionIconsView {
+  position: absolute; top: var(--spacer-6); left: 0;
+  flex-direction: column; align-items: flex-start;
+  max-width: 100%;
+}
+.ProductView .code { font-size: var(--font-size-11); color: var(--text-color-muted); }
+.ProductView .name {
+  font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-base); color: var(--text-color);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  min-height: calc(var(--font-size-14) * 2 * 1.45);
+}
+.ProductView .name:hover { color: var(--link-color-hover); }
+.ProductView > dc-con.dcPrice { display: flex; flex-direction: column; gap: var(--spacer-2); margin-top: auto; }
+.ProductView > dc-con.dcContent { display: flex; align-items: center; justify-content: space-between; gap: var(--spacer-8); }
+.ProductView.empty .image .mainImage { opacity: .45; filter: grayscale(1); }
+.ProductView.empty .name { color: var(--text-color-muted); }
+/* v1b — tichá varianta bez kódu, pro carousel */
+.ProductView.v1b .code { display: none; }
+/* řádková varianta pro ViewTypeSelector custom1 */
+.ProductView.big {
+  display: grid; grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--spacer-16); align-items: start;
+  padding: var(--spacer-16);
+}
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) {
+  .ProductView.big { grid-template-columns: 140px minmax(0, 1fr) 220px; }
+  .ProductView.big > dc-con.dcPrice { align-items: flex-end; text-align: right; margin-top: 0; }
+}
+.ProductView.big .name { -webkit-line-clamp: 3; min-height: 0; font-size: var(--font-size-16); }
+.ProductView.big .shortDescription {
+  font-size: var(--product-desc-font-size); color: var(--text-color-muted);
+  margin: var(--spacer-4) 0 0;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ProductView.big > dc-con.dcContent { flex-direction: column; align-items: stretch; }
+
+/* --- ProductsView — grid a carousel ------------------------------------ */
+.ProductsView { position: relative; background: var(--bg-view-color); border-radius: var(--border-4-radius-base); }
+.ProductsView .productHolder {
+  display: grid;
+  gap: var(--product-gap-row) var(--product-gap-column);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ProductsView.columns2 .productHolder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* ===== BP: M (550–819) ===== */
+@media (min-width: 550px) {
+  .ProductsView.columns3 .productHolder,
+  .ProductsView.columns4 .productHolder,
+  .ProductsView.columns5 .productHolder,
+  .ProductsView.columns6 .productHolder { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) {
+  .ProductsView.columns4 .productHolder,
+  .ProductsView.columns5 .productHolder,
+  .ProductsView.columns6 .productHolder { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) {
+  .ProductsView.columns5 .productHolder { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ProductsView.columns6 .productHolder { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+.ProductsView.custom1 .productHolder { grid-template-columns: minmax(0, 1fr); gap: var(--spacer-2); }
+bs-separator-vertical { display: block; width: var(--spacer-1); background: var(--border-color); align-self: stretch; }
+bs-separator-horizontal { display: block; height: var(--spacer-1); background: var(--border-color); }
+
+.ProductsView > dc-con.dcHeader {
+  display: flex; align-items: center; gap: var(--spacer-12);
+  padding: var(--spacer-4) var(--spacer-4) var(--spacer-16);
+}
+.ProductsView > dc-con.dcHeader .caption { font-size: var(--font-size-20); font-weight: var(--font-weight-extrabold); display: flex; align-items: center; gap: var(--spacer-10); }
+.ProductsView > dc-con.dcHeader .caption .icon { color: var(--color-main-500); }
+.ProductsView > dc-con.dcHeader .readMore { margin-left: auto; display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); }
+
+.ProductsView .slidingItems { position: relative; }
+.ProductsView .scrollContainer {
+  display: grid; grid-auto-flow: column;
+  grid-auto-columns: minmax(190px, 1fr);
+  gap: var(--product-gap-column);
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: var(--spacer-4);
+}
+.ProductsView .scrollContainer::-webkit-scrollbar { display: none; }
+.ProductsView .scrollContainer > .ProductView { scroll-snap-align: start; }
+.ProductsView .button.previousImage,
+.ProductsView .button.nextProducts {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: var(--btn-min-height); min-width: var(--btn-min-height); padding: 0;
+  border-radius: var(--radius-circle);
+  --btn-bg-color: var(--color-white); --btn-bg-color-hover: var(--color-main-100);
+  --btn-text-color: var(--color-main-700); --btn-text-color-hover: var(--color-main-800);
+  box-shadow: var(--shadow-3);
+  z-index: 1;
+}
+.ProductsView .button.previousImage { left: calc(-1 * var(--spacer-16)); }
+.ProductsView .button.nextProducts { right: calc(-1 * var(--spacer-16)); }
+.ProductsView.empty .productHolder { display: none; }
+.ProductsView .empty {
+  display: flex; flex-direction: column; align-items: center; gap: var(--spacer-8);
+  padding: var(--spacer-48) var(--spacer-16); text-align: center;
+  color: var(--text-color-muted);
+}
+.ProductsView .empty .icon { color: var(--color-neutral-300); }
+
+/* --- FlatCategoriesRwdView --------------------------------------------- */
+.FlatCategoriesRwdView .items {
+  display: grid; gap: var(--eshop-gap);
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none; margin: 0; padding: 0;
+}
+/* ===== BP: S (420–549) ===== */
+@media (min-width: 420px) { .FlatCategoriesRwdView .items { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* ===== BP: L (820–999) ===== */
+@media (min-width: 820px) {
+  .FlatCategoriesRwdView.columns5 .items { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .FlatCategoriesRwdView.columns6 .items { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) {
+  .FlatCategoriesRwdView.columns5 .items { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .FlatCategoriesRwdView.columns6 .items { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* v4a — situační dlaždice na homepage: text vlevo nahoře, fotka vpravo dole */
+.FlatCategoriesRwdView.v4a dc-root {
+  position: relative; display: flex; flex-direction: column;
+  border-radius: var(--border-4-radius-base);
+  overflow: hidden; min-height: 260px;
+  background: var(--color-neutral-100);
+}
+.FlatCategoriesRwdView.v4a dc-root > a { display: flex; flex-direction: column; height: 100%; padding: var(--spacer-20); color: var(--text-color); }
+.FlatCategoriesRwdView.v4a dc-root > a:hover { text-decoration: none; }
+.FlatCategoriesRwdView.v4a .name { font-size: var(--font-size-20); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); max-width: 12ch; }
+.FlatCategoriesRwdView.v4a .shortDescription { font-size: var(--font-size-13); color: var(--text-color-muted); margin: var(--spacer-8) 0 0; max-width: 22ch; }
+.FlatCategoriesRwdView.v4a .readMore { margin-top: var(--spacer-12); display: inline-flex; align-items: center; gap: var(--spacer-4); font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); color: var(--link-color); position: relative; z-index: 1; }
+.FlatCategoriesRwdView.v4a .image {
+  position: absolute; right: 0; bottom: 0;
+  width: 68%; aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+.FlatCategoriesRwdView.v4a .image img { width: 100%; height: 100%; object-fit: contain; object-position: right bottom; mix-blend-mode: multiply; }
+.FlatCategoriesRwdView.v4a dc-root:nth-child(5n+1) { background: var(--color-success-100); }
+.FlatCategoriesRwdView.v4a dc-root:nth-child(5n+2) { background: var(--color-warning-100); }
+.FlatCategoriesRwdView.v4a dc-root:nth-child(5n+3) { background: var(--color-secondary-100); }
+.FlatCategoriesRwdView.v4a dc-root:nth-child(5n+4) { background: var(--color-main-100); }
+.FlatCategoriesRwdView.v4a dc-root:nth-child(5n+5) { background: var(--color-primary-100); }
+
+/* v5a — dlaždice podkategorií: fotka + jméno pod přechodovým overlayem */
+.FlatCategoriesRwdView.v5a dc-root {
+  position: relative; border-radius: var(--border-4-radius-base);
+  overflow: hidden; background: var(--color-white); border: var(--border);
+}
+.FlatCategoriesRwdView.v5a dc-root > a { display: block; color: var(--text-color); }
+.FlatCategoriesRwdView.v5a dc-root > a:hover { text-decoration: none; }
+.FlatCategoriesRwdView.v5a .image { display: block; aspect-ratio: 4 / 3; }
+.FlatCategoriesRwdView.v5a .image img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+.FlatCategoriesRwdView.v5a .overlay {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--spacer-8);
+  padding: var(--spacer-12) var(--spacer-14);
+  border-top: var(--border);
+  background: var(--color-white);
+}
+.FlatCategoriesRwdView.v5a .name { font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); }
+.FlatCategoriesRwdView.v5a .value { font-size: var(--font-size-11); color: var(--text-color-muted); }
+.FlatCategoriesRwdView.v5a dc-root:hover { border-color: var(--color-main-300); }
+.FlatCategoriesRwdView.v5a dc-root:hover .name { color: var(--color-main-700); }
+
+/* --- PDProductAddToCartEffect ------------------------------------------ */
+.PDProductAddToCartEffect {
+  display: flex; align-items: center; gap: var(--spacer-10);
+  padding: var(--spacer-12) var(--spacer-16);
+  background: var(--color-success-100);
+  color: var(--color-success-700);
+  border-radius: var(--border-4-radius-base);
+  font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-3);
+}
+.PDProductAddToCartEffect .icon { color: var(--color-success-600); }
+.PDProductAddToCartEffect .goToBasketOverlay { margin-left: auto; display: inline-flex; align-items: center; gap: var(--spacer-4); font-weight: var(--font-weight-bold); }
+.PDProductAddToCartEffect.active { animation: tpDropIn .32s ease both; }
+@keyframes tpDropIn {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--spacer-12))); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,102 @@
+/* TonerPrint — komponentové tokeny — tlačítka, produkt, vlajky, hodnocení
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     14. TLAČÍTKA
+     ====================================================================== */
+  --btn-p: var(--btn-p-t) calc(var(--btn-p-r) + var(--btn-gap)) var(--btn-p-b) calc(var(--btn-p-l) + var(--btn-gap));
+  --btn-p-x: var(--p-3-x);  --btn-p-y: var(--p-2-y);
+  --btn-p-r: var(--btn-p-x); --btn-p-l: var(--btn-p-x);
+  --btn-p-t: var(--btn-p-y); --btn-p-b: var(--btn-p-y);
+
+  --btn-bg: var(--btn-bg-repeat) var(--btn-bg-color) var(--btn-bg-position) / var(--btn-bg-size) var(--btn-bg-image);
+  --btn-bg-repeat: no-repeat;
+  --btn-bg-color: var(--color-main);
+  --btn-bg-image: none;
+  --btn-bg-size: auto;
+  --btn-bg-position: 0;
+
+  --btn-text-color: var(--color-on-main-500);
+  --btn-text-color-on-dark:  var(--text-color-on-dark);
+  --btn-text-color-on-light: var(--text-color-on-light);
+  --btn-text-transform: none;
+  --btn-text-decoration: none; /* @kind other */
+
+  --btn-font: var(--btn-font-style) var(--btn-font-weight) var(--btn-font-size) var(--btn-font-family);
+  --btn-font-style: normal; /* @kind other */
+  --btn-font-size: var(--font-size);
+  --btn-font-family: var(--font-family);
+  --btn-font-weight: var(--font-weight-bold);
+
+  --btn-border: var(--btn-border-width) var(--btn-border-style) var(--btn-border-color);
+  --btn-border-width: 0; /* @kind spacing */
+  --btn-border-style: var(--border-style); /* @kind other */
+  --btn-border-color: var(--btn-bg-color);
+  --btn-border-radius: var(--border-3-radius-base);
+
+  --btn-ico-size: var(--ico-size);
+  --btn-gap: var(--spacer-6);
+  --btn-min-height: 44px;       /* dotykový cíl */
+
+  --btn-bg-hover: var(--btn-bg-repeat-hover) var(--btn-bg-color-hover) var(--btn-bg-position-hover) / var(--btn-bg-size-hover) var(--btn-bg-image-hover);
+  --btn-bg-color-hover: var(--color-main-600);
+  --btn-bg-image-hover: var(--btn-bg-image);
+  --btn-bg-size-hover: var(--btn-bg-size);
+  --btn-bg-position-hover: var(--btn-bg-position);
+  --btn-bg-repeat-hover: var(--btn-bg-repeat);
+  --btn-text-color-hover: var(--color-on-main-600);
+  --btn-border-hover: var(--btn-border-width) var(--btn-border-style) var(--btn-border-color-hover);
+  --btn-border-color-hover: var(--btn-bg-color-hover);
+
+  --focus-ring: 0 0 0 3px var(--color-main-200);
+
+
+  /* ======================================================================
+     15. PRODUKT
+     ====================================================================== */
+  --product-desc-font-size: var(--font-size);
+  --product-desc-line-height: calc(var(--font-size) * 1.2);
+  --product-gap: var(--spacer-16);
+  --product-gap-row: var(--product-gap);
+  --product-gap-column: var(--product-gap);
+  --product-thumbnail-width: 220; /* @kind spacing */
+  --product-thumbnail-height: 220; /* @kind spacing */
+  --product-thumbnail-ratio: calc(var(--product-thumbnail-width) / var(--product-thumbnail-height));
+  --products-separator: var(--spacer);
+
+
+  /* ======================================================================
+     16. VLAJKY (ActionIconsView)
+     ====================================================================== */
+  --flag-p: var(--flag-p-y) var(--flag-p-x);
+  --flag-p-x: var(--p-2-x);
+  --flag-p-y: var(--p-1-y);
+  --flag-font-size: var(--font-size-12);
+  --flag-font-weight: var(--font-weight-bold);
+  --flag-text-transform: uppercase;
+  --flag-border-radius: var(--border-2-radius-base);
+  --flag-gap: var(--spacer-6);
+  --flag-pointer-events: none; /* @kind other */
+  --flag-icon-size: var(--ico-2-size);
+
+  /* paleta vlajek 01–08 — BS Shop je může přepsat inline */
+  --flag-01-bg-color: var(--color-primary-500);   --flag-01-text-color: var(--color-on-primary-500);
+  --flag-02-bg-color: var(--color-success-500);   --flag-02-text-color: var(--color-on-success-500);
+  --flag-03-bg-color: var(--color-main-500);      --flag-03-text-color: var(--color-on-main-500);
+  --flag-04-bg-color: var(--color-warning-500);   --flag-04-text-color: var(--color-on-warning-500);
+  --flag-05-bg-color: var(--color-secondary-500); --flag-05-text-color: var(--color-on-secondary-500);
+  --flag-06-bg-color: var(--color-neutral-700);   --flag-06-text-color: var(--color-on-neutral-700);
+  --flag-07-bg-color: var(--color-main-100);      --flag-07-text-color: var(--color-main-700);
+  --flag-08-bg-color: var(--color-warning-100);   --flag-08-text-color: var(--color-warning-700);
+
+
+  /* ======================================================================
+     17. HODNOCENÍ
+     ====================================================================== */
+  --review-star-color: #F2C348;
+  --review-star-color-disabled: var(--color-neutral-200);
+
+}

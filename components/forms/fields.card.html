@@ -1,0 +1,54 @@
+<!-- @dsCard group="Components" viewport="700x300" name="TextField · Select · Checkbox · Quantity" subtitle="Pole se všemi stavy, výběry a číselník." -->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; padding: 16px; background: var(--color-white); }
+  
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stack { display: flex; flex-direction: column; gap: 4px; }
+</style>
+</head>
+<body>
+<div class="grid">
+    <div class="formRow">
+      <label class="label" for="a">Jméno <span class="value">*</span></label>
+      <input class="textBox" type="text" id="a" placeholder="Jan Novák">
+    </div>
+    <div class="formRow empty">
+      <label class="label" for="b">IČO <span class="value">*</span></label>
+      <input class="textBox" type="text" id="b" value="1234">
+      <span class="shortDescription"><svg class="icon ico2"><use href="#tp-alert-circle"></use></svg>IČO musí mít 8 číslic.</span>
+    </div>
+    <div class="formRow disabled">
+      <label class="label" for="c">Zákaznické číslo</label>
+      <input class="textBox" type="text" id="c" value="ZK-004821" disabled>
+    </div>
+    <div class="formRow">
+      <label class="label" for="d">Doprava</label>
+      <select class="select" id="d"><option>PPL — do 2 dnů</option><option>Zásilkovna</option></select>
+    </div>
+    <div class="stack">
+      <label class="formRow inline"><input class="checkBox" type="checkbox" checked><span class="label">Skladem</span><span class="value">1 204</span></label>
+      <label class="formRow inline"><input class="checkBox" type="checkbox"><span class="label">Doprava zdarma</span><span class="value">318</span></label>
+      <label class="formRow inline"><input class="radio" type="radio" name="p" checked><span class="label">Kartou online</span></label>
+      <label class="formRow inline"><input class="radio" type="radio" name="p"><span class="label">Na fakturu</span></label>
+    </div>
+    <div>
+      <div class="AddToCartView v1a v1 bs-view">
+        <div class="quantity">
+          <button type="button" class="button decrease" aria-label="Snížit"><svg class="icon ico2"><use href="#tp-minus"></use></svg></button>
+          <input class="real" type="number" value="3" aria-label="Počet">
+          <span class="ghost">3</span>
+          <button type="button" class="button increase" aria-label="Zvýšit"><svg class="icon ico2"><use href="#tp-plus"></use></svg></button>
+        </div>
+        <span class="unitsDescription">ks</span>
+      </div>
+    </div>
+  </div>
+<script src="../../assets/icons/sprite.js"></script>
+</body>
+</html>

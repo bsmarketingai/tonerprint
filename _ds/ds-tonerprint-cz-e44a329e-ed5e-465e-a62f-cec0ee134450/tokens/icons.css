@@ -1,0 +1,17 @@
+/* TonerPrint — velikosti ikon
+   Generováno z produkčního variables.css (BS Shop).
+   NÁZVY PROMĚNNÝCH JSOU ZÁVAZNÉ. Neměnit, nepřejmenovávat. */
+
+:root {
+
+  /* ======================================================================
+     11. IKONY
+     ====================================================================== */
+  --ico-0-size: var(--spacer-0);
+  --ico-1-size: var(--spacer-8);
+  --ico-2-size: var(--spacer-16);
+  --ico-3-size: var(--spacer-24);
+  --ico-4-size: var(--spacer-32);
+  --ico-size: var(--ico-3-size);
+
+}
