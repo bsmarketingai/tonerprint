@@ -189,3 +189,22 @@ ať se to nepřepisuje na každé stránce.
 
 `components/product/ProductCard.jsx` renderuje `shortDescription` jen pro `layout === 'row'`,
 přitom `css/product.css` má pro mřížku clamp na dva řádky. Opravit kontrakt komponenty.
+
+
+## Doplněno 2026-08-26 (převod na komponenty)
+
+- **`.ProductsMasterView`** — má jen `max-width`, ale jako flex položka v `.CategoryView`
+  se scvrkne na obsah. V DS chce `width: 100 %` (nebo `align-self: stretch`), jinak výpis
+  nedrží šířku obsahu (na 2200 px okně byl 1097 px místo 1560).
+- **`.ProductView.big` (řádková karta)** — DS řeší jen mřížku sloupců. Chybí:
+  cenový blok na celý řádek do pásma m (`grid-column: 1 / -1`), ceny do krajů na
+  jednosloupcové kartě a pod sebou od pásma l, vlajky v řádku pod nadpisem (v DS jsou
+  absolutně nad fotkou, kde překrývají a vejde se jich pár), poloviční fotka (48 px) do
+  pásma s, čtvercové ikonové CTA i mimo `dc-con.dcContent`.
+- **`.SearchWhispererView`** — panel má být vycentrovaný v obsahu hlavičky a strop šířky
+  má růst s pásmem (760 px → tři čtvrtiny šířky obsahu od xl → celá šířka od xxxl).
+  DS ho přilepuje na levou hranu pole hledání s fixním stropem.
+- **Spodní pruh patičky** — DS zná jen `.copyright`, `.paymentLogos` a `.claim`; chybí
+  `.madeBy` (dodavatel řešení + odkaz na cookies) a rozvržení „texty vlevo, loga vpravo“.
+  Zároveň pruh míchá metadata s větami na 12 px — `.claim` je věta a podle content
+  fundamentals nemá být pod 13 px.

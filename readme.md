@@ -136,7 +136,10 @@ fotky s ilustračními v interiéru. Poměr stran vždy 1 : 1, `object-fit: cont
 
 ### Layout
 
-Obsah je vycentrovaný na **1260 px** (`--eshop-width`), plocha okolo jde do 1920 px.
+Obsah je vycentrovaný na **1560 px** (`--eshop-width`), plocha okolo jde do 1920 px.
+Mřížka výpisu: 2 sloupce na xs/s, 3 od m, 4 od xl, 5 od xxl — počet rozhoduje pásmo,
+ne volba na stránce. Kontejner výpisu potřebuje kromě `max-width` i `width: 100 %`,
+jinak se jako flex položka scvrkne na obsah.
 Breakpointy jsou dané BS Shopem a **vlastní se nezavádějí**:
 
 `xs 0–419 · s 420–549 · m 550–819 · l 820–999 · xl 1000–1149 · xxl 1150–1439 · xxxl 1440+`
@@ -185,7 +188,7 @@ nedávají do koleček ani na barevný podklad, drží původní proporce.
 | --- | --- |
 | `global` | `HeaderView` (hledání, našeptávač, „Rychlý nákup“, košík, panely), `UserContentPanelView`, `FooterView` |
 | `navigation` | `MenuView` (+ mega-menu), `BreadcrumbView`, `SimpleFilterView`, `CompoundPagingView`, `CategoryTextView` |
-| `product` | `ProductView` |
+| `product` | `ProductView` (dlaždice), `ProductViewBig` (řádek = `ProductView.big` v `.ProductsView.custom1`) |
 | `overlay` | `FilterView` |
 | `home` | `HeroBannerView`, `PromoTilesView`, `SituationsView`, `StatsBarView`, `HomeAsideView` |
 | `detail` | `ProductDetailImageView`, `ProductDescriptionView`, `ProductDetailTableView`, `AddToCartView`, `AvailabilityPanelView`, `ProductIdentityView`, `ProductActionPanelView`, `TabsProductDetailMasterView` |

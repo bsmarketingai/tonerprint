@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* Obchází runtime, ne DS: obal importu by v seznamu stál na místě karty, ale
+       pravidla DS míří na .ProductView.big — obal se proto z layoutu vyřazuje. */
+    .sc-host:has(> .ProductView) { display: contents; }
+    /* Samostatně otevřená řádková karta nemá seznam, který by jí dal šířku. */
+    body > #dc-root > .sc-host > .ProductView.big { max-width: 900px; }
+    /* CHYBÍ V DS: původní cena před slevou — přeškrtnutí má v DS jen detail.
+       Rozhodnuto: přeškrtnutá a červená (role primary = slevy). */
+    .ProductView .priceParts .value.ghost { text-decoration: line-through; color: var(--color-primary-600); font-size: var(--font-size-13); }
+    /* CHYBÍ V DS (rozhodnuto): vlajky mají větnou velikost písmen a menší text.
+       Nesmí to jít přes token v :root — styly DS se u samostatně otevřené komponenty
+       linkují až po mountu, takže by přepis přebily. Proto přímo na vlajce. */
+    .ProductView .productFlag {
+      text-transform: none;
+      font-size: var(--font-size-12);
+      font-weight: var(--font-weight-semibold);
+    }
+    /* Ceny v řádkové kartě stojí na jednom řádku: hlavní na levé hraně cenového
+       sloupce, cena bez DPH na pravé. Číslo a popisek („s DPH“) se nelámou. */
+    /* CHYBÍ V DS: vlajky sedí v DS absolutně nad fotkou, kde se jich vejde jen pár
+       a překrývají ji. V řádkové kartě patří do řádku pod nadpis. */
+    .ProductView.big > dc-con.dcHeader .ActionIconsView {
+      position: static; flex-direction: row; flex-wrap: wrap;
+      gap: var(--flag-gap); margin-top: var(--spacer-6);
+    }
+    /* CHYBÍ V DS: řádková karta má v DS na ceny sloupec 220 px, do kterého se dvojice
+       cen vejde jen natěsno vedle sebe. Ceny mají držet celý řádek — hlavní na jeho
+       levé hraně, cena bez DPH na pravé — proto je sloupec širší. */
+    @media (min-width: 820px) {
+      .ProductView.big.v1a { grid-template-columns: 140px minmax(0, 1fr) 340px; }
+    }
+    .ProductView.big > dc-con.dcPrice { align-items: stretch; }
+    .ProductView.big > dc-con.dcPrice .priceParts {
+      flex-direction: row; flex-wrap: nowrap; align-items: baseline;
+      justify-content: space-between; column-gap: var(--spacer-16);
+      width: 100%; text-align: left;
+    }
+    .ProductView.big > dc-con.dcPrice .priceParts > .price {
+      flex: 0 0 auto; flex-direction: row; align-items: baseline; gap: var(--spacer-4);
+      white-space: nowrap; text-align: left;
+    }
+    .ProductView.big > dc-con.dcPrice .priceParts > .price.secondary .value { font-size: var(--font-size-13); }
+    .ProductView.big > dc-con.dcPrice .priceParts > .price .vatText { font-size: var(--font-size-12); }
+    .ProductView.big > dc-con.dcPrice .priceParts > .value.ghost { flex: 1 1 100%; text-align: left; }
+    /* Do pásma m je řádková karta jednosloupcová a cenový blok stojí pod textem
+       přes celou šířku — dvojice cen proto drží krajní hrany karty a nákup pod nimi
+       taky: číselník vlevo, tlačítko vpravo. */
+    /* Do pásma s je na řádku málo místa a fotka ubírá text — stačí polovina
+       (DS: 96 px pod 820 px). */
+    @media (max-width: 549px) {
+      /* Vyšší specificita než pravidlo DS: styly DS se u samostatně otevřené
+         komponenty linkují až po mountu, takže by jinak přebily sloupec fotky
+         a vpravo od zmenšené fotky by zbylo prázdné místo. */
+      .ProductView.big.v1a { grid-template-columns: 48px minmax(0, 1fr); }
+      .ProductView.big.v1a > .image { width: 48px; min-width: 0; }
+      .ProductView.big.v1a > .image img { width: 100%; height: auto; }
+    }
+    @media (max-width: 819px) {
+      /* Cenový blok padá pod fotku, ale v mřížce DS by zůstal v úzkém sloupci fotky
+         a přetékal — musí zabrat celý řádek, aby se ceny mohly rozejít do krajů. */
+      .ProductView.big > dc-con.dcPrice { grid-column: 1 / -1; width: 100%; align-items: stretch; }
+      /* Základní pravidlo řádkové karty má nowrap, jinak by původní cena zůstala
+         na stejném řádku jako dvojice cen — tady se zalomení naopak vyžaduje. */
+      .ProductView.big > dc-con.dcPrice .priceParts { width: 100%; justify-content: space-between; flex-wrap: wrap; }
+      /* Původní cena stojí nad hlavní cenou na svém řádku, obě u levé hrany karty —
+         cena bez DPH zůstává vpravo na řádku s hlavní cenou. */
+      .ProductView.big > dc-con.dcPrice .priceParts > .value.ghost { flex: 1 1 100%; text-align: left; }
+      .ProductView.big > dc-con.dcPrice .priceParts > .price.primary { text-align: left; }
+      .ProductView.big > dc-con.dcPrice .AddToCartView { width: 100%; justify-content: space-between; }
+    }
+    /* Jakmile má karta cenový sloupec (od l), patří ceny pod sebe u jeho pravé hrany
+       a nákup pod ně. Rozhození do krajů má smysl jen na jednosloupcové kartě do m,
+       kde cenový blok drží celou šířku — nic mezi tím. */
+    @media (min-width: 820px) {
+      /* Nákup stojí u pravé hrany cenového sloupce, pod cenami — bez toho zůstane
+         číselník i tlačítko na levé hraně sloupce. */
+      .ProductView.big > dc-con.dcPrice .AddToCartView { justify-content: flex-end; }
+      .ProductView.big > dc-con.dcPrice .priceParts {
+        flex-direction: column; align-items: flex-end; justify-content: flex-start;
+        column-gap: 0; row-gap: var(--spacer-2); text-align: right;
+      }
+      .ProductView.big > dc-con.dcPrice .priceParts > .price { text-align: right; }
+      /* Původní cena stojí nad hlavní, u stejné (pravé) hrany. */
+      .ProductView.big > dc-con.dcPrice .priceParts > .value.ghost { text-align: right; }
+    }
+    /* Nákup v řádkové kartě: čtvercové ikonové tlačítko jako u dlaždice — pravidlo DS
+       pro čtverec míří na dc-con.dcContent, tady je nákup v dc-con.dcPrice. */
+    .ProductView.big > dc-con.dcPrice .AddToCartView .button.buy {
+      flex: none; width: var(--spacer-40); min-width: var(--spacer-40); min-height: var(--spacer-40);
+      padding: 0; border-radius: var(--border-3-radius-base);
+    }
+    /* CHYBA V DS: vlajky se násobí s fotkou — chybí z-index + isolation. */
+    .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
+  </style>
+</helmet>
+
+<div class="ProductView v1a v1 bs-view dcon dc000 big {{ stateClass }}" data-name="Product">
+  <a class="image" href="{{ href }}">
+    <img class="mainImage" src="{{ image }}" alt="{{ name }}" loading="lazy">
+  </a>
+  <dc-con class="dcHeader">
+    <span class="code">{{ code }}</span>
+    <a class="name" href="{{ href }}">{{ name }}</a>
+    <sc-if value="{{ flag }}">
+      <div class="ActionIconsView v1a v1 bs-view count1"><div class="productFlag icon {{ flagClass }}"><span>{{ flag }}</span></div></div>
+    </sc-if>
+    <sc-if value="{{ desc }}">
+      <p class="shortDescription">{{ desc }}</p>
+    </sc-if>
+    <div class="AvailabilityView v1a v1 bs-view {{ availabilityClass }}"><span class="label">{{ availability }}</span></div>
+  </dc-con>
+  <dc-con class="dcPrice">
+    <div class="priceParts">
+      <sc-if value="{{ oldPrice }}">
+        <span class="value ghost">{{ oldPrice }}</span>
+      </sc-if>
+      <span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ priceVat }}</span><span class="vatText">s DPH</span></span>
+      <span class="price bs-priceLayout notranslate novat secondary"><span class="value">{{ priceNoVat }}</span><span class="vatText">bez DPH</span></span>
+    </div>
+    <div class="AddToCartView v1a v1 bs-view dcon dc000">
+      <div class="quantity">
+        <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ onDecrease }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
+        <span class="value"><input class="real" type="number" aria-label="Počet" min="1" max="999" value="{{ quantity }}" onChange="{{ onQuantity }}" disabled="{{ soldOut }}" style="width: {{ quantityWidth }}"><span class="unitsDescription">{{ unit }}</span></span>
+        <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ onIncrease }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
+      </div>
+      <button type="button" class="button buy" aria-label="Vložit do košíku" onClick="{{ onBuy }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
+    </div>
+  </dc-con>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:180},&quot;code&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AT-13C&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;productName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Skartovačka AT-13C, 13 listů, křížový řez&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;desc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Pro kancelář se dvěma až pěti lidmi. Koš 23 l, skartuje i sponky a platební karty.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;image&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ds/assets/produkty/skartovacka-at-13c.jpg&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;href&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;detail-produktu.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;priceVat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2 490 Kč&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;priceNoVat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2 058 Kč&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;oldPrice&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;availability&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Skladem 8 ks&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;availabilityClass&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cs_zelena&quot;,&quot;cs_zluta&quot;,&quot;cs_cervena&quot;,&quot;cs_seda&quot;,&quot;cs_storage&quot;],&quot;default&quot;:&quot;cs_zelena&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;flag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Doporučujeme&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;flagClass&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;flag01&quot;,&quot;flag02&quot;,&quot;flag03&quot;,&quot;flag04&quot;,&quot;flag05&quot;,&quot;flag06&quot;,&quot;flag07&quot;,&quot;flag08&quot;],&quot;default&quot;:&quot;flag02&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;canBuy&quot;,&quot;empty&quot;,&quot;inactive&quot;],&quot;default&quot;:&quot;canBuy&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;unit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ks&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;quantity&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:999,&quot;tsType&quot;:&quot;number&quot;},&quot;onIncrease&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onDecrease&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onQuantity&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;onBuy&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  /* Řádková podoba karty. V BS Shopu to není samostatné view: je to stejný
+     `ProductView` s modifikátorem `big`, který se sází do seznamu
+     `.ProductsView.custom1` (přepínač `ViewTypeSelectorView`, volba custom1).
+     Struktura řádku se ale liší od dlaždice — dostupnost patří k názvu, ceny
+     a nákup do pravého sloupce — proto má vlastní soubor, aby se dala upravovat
+     samostatně. Data i akce dodává stránka, stejně jako u dlaždice. */
+  renderVals() {
+    const p = this.props;
+    const qty = p.quantity ?? 1;
+    const state = p.state || 'canBuy';
+    return {
+      href: p.href ?? 'detail-produktu.dc.html',
+      code: p.code ?? '',
+      name: p.productName ?? '',
+      desc: p.desc ?? '',
+      image: p.image ?? '',
+      flag: p.flag ?? '',
+      flagClass: p.flagClass ?? 'flag01',
+      oldPrice: p.oldPrice ?? '',
+      priceVat: p.priceVat ?? '',
+      priceNoVat: p.priceNoVat ?? '',
+      availability: p.availability ?? '',
+      availabilityClass: p.availabilityClass ?? 'cs_zelena',
+      stateClass: state,
+      unit: p.unit ?? 'ks',
+      quantity: qty,
+      quantityWidth: (String(qty).length * 9 + 8) + 'px',
+      soldOut: state === 'empty' ? true : undefined,
+      onIncrease: p.onIncrease,
+      onDecrease: p.onDecrease,
+      onQuantity: p.onQuantity,
+      onBuy: p.onBuy,
+    };
+  }
+
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+
+</script>
+</body>
+</html>

@@ -43,6 +43,37 @@ Tři technická omezení runtime, která tvar určila:
 **Page-level náplast s `>` kombinátorem proti bloku, který je dnes komponenta,
 je mrtvá.** Náplast patří do komponenty a bez `>`.
 
+4. **Otevřená stránka si drží styl komponenty z předchozího mountu.** Po úpravě
+   `<style>` v komponentě je potřeba stránce dát hard reload, jinak platí staré
+   pravidlo — měření v běžícím náhledu může lhát.
+5. **Media query v helmetu komponenty se přebíjí pořadím.** Když má jedno pravidlo
+   platit napříč pásmy, je bezpečnější jeden strop přes `min()`/`max()`/`clamp()`
+   než sada media queries.
+6. **Flex položka s pouhým `max-width` se scvrkne na obsah.** Kontejnery jako
+   `.ProductsMasterView` potřebují i `width: 100 %`, jinak výpis nedrží šířku obsahu.
+
+## C-edit
+Zkratka: **úpravu proveď v komponentě, ne na stránce.** Platí i bez ní — komponenty
+jsou zdroj pravdy — ale když ji napíšeš, znamená to „tohle nesmí skončit jako
+page-level override“.
+
+## Karta produktu má dvě podoby
+- `komponenty/product/ProductView` — dlaždice do mřížky (`.ProductsView.columns5`).
+- `komponenty/product/ProductViewBig` — řádková karta: v BS Shopu to není samostatné
+  view, je to `ProductView` s modifikátorem `big` v seznamu `.ProductsView.custom1`
+  (přepínač `ViewTypeSelectorView`, volba `custom1`). Vlastní soubor má proto, že
+  struktura řádku je jiná — vlajky v řádku pod nadpisem, dostupnost u názvu, ceny
+  a nákup v pravém sloupci. Výpis přepíná mezi nimi `sc-if` podle `isRows`.
+
+Rozvržení řádkové karty má jen dvě podoby, nic mezi tím: **do m** je karta
+jednosloupcová, cenový blok drží celý řádek (`grid-column: 1 / -1`), ceny jdou do
+krajů a nákup pod nimi taky; **od l** má cenový sloupec, ceny stojí pod sebou u jeho
+pravé hrany a nákup pod nimi. Fotka je do pásma s poloviční (48 px).
+
+## Mřížka výpisu
+Počet sloupců rozhoduje pásmo, ne tweak: 2 na xs/s, 3 od m, **4 od xl**, **5 od xxl**.
+Výpis je natvrdo `columns5`. Obsah je široký **1560 px** (`--eshop-width`).
+
 ## Názvosloví BS Shopu je závazné
 Struktura a názvy tříd i views generuje BS Shop serverově — `ProductView`,
 `dc-con.dcPrice`, `cs_zelena`, `bs-priceLayout` se nepřejmenovávají, nepřidávají se

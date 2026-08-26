@@ -161,18 +161,20 @@
   .ProductsView.columns5 .productHolder,
   .ProductsView.columns6 .productHolder { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-/* ===== BP: L (820–999) ===== */
-@media (min-width: 820px) {
+/* Obsah je široký 1560 px, takže sloupce nastupují o pásmo později: na l zůstávají
+   tři, čtvrtý přijde na xl, pátý na xxl. Karta si tak drží čitelnou šířku. */
+/* ===== BP: XL (1000–1149) ===== */
+@media (min-width: 1000px) {
   .ProductsView.columns4 .productHolder,
   .ProductsView.columns5 .productHolder,
   .ProductsView.columns6 .productHolder { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-/* ===== BP: XL (1000–1149) ===== */
-@media (min-width: 1000px) {
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) {
   .ProductsView.columns5 .productHolder { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .ProductsView.columns6 .productHolder { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
-.ProductsView.custom1 .productHolder { grid-template-columns: minmax(0, 1fr); gap: var(--spacer-2); }
+.ProductsView.custom1 .productHolder { grid-template-columns: minmax(0, 1fr); gap: var(--spacer-12); }
 bs-separator-vertical { display: block; width: var(--spacer-1); background: var(--border-color); align-self: stretch; }
 bs-separator-horizontal { display: block; height: var(--spacer-1); background: var(--border-color); }
 

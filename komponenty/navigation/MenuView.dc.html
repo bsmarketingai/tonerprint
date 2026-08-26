@@ -21,7 +21,10 @@
     .MenuView .items { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
     .MenuView .items::-webkit-scrollbar { display: none; }
     .MenuView .items > .root { flex: none; }
-    .MenuView ._menuFade { display: none; position: absolute; top: 0; bottom: 0; right: var(--spacer-40); width: var(--spacer-48); pointer-events: none; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-view-color)); }
+    /* Přechod jde až na pravou hranu, tedy i pod šipku — jinak by položka pod šipkou
+       zůstala plná a přetečení by nebylo poznat. Šipka stojí v DOM za přechodem,
+       takže leží nad ním. */
+    .MenuView ._menuFade { display: none; position: absolute; top: 0; bottom: 0; right: 0; width: var(--spacer-80); pointer-events: none; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-view-color) 55%); }
     .MenuView ._menuScrollNext { display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: var(--spacer-32); min-width: var(--spacer-32); min-height: var(--spacer-32); padding: 0; --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100); --btn-text-color: var(--text-color); --btn-text-color-hover: var(--color-main-600); }
     .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuFade { display: block; }
     .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuScrollNext { display: inline-flex; align-items: center; justify-content: center; }

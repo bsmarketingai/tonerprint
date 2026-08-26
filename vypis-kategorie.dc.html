@@ -27,6 +27,10 @@
        řádková v5a, jednotka v číselníku, zlom CTA na kartě 820–999 px, popis 13 px
        i v mřížce a ořez lišty kategorií — to všechno už řeší DS (update 2026-08-25). */
     .CategoryView { padding-top: var(--eshop-gap); }
+    /* CHYBÍ V DS: .ProductsMasterView má jen max-width, a jako flex položka v
+       .CategoryView se scvrkne na obsah — na širokém okně pak výpis nedrží 1560 px
+       jako hlavička. V DS chce width: 100 % (nebo align-self: stretch). */
+    .CategoryView > .ProductsMasterView { width: 100%; }
     /* CHYBÍ V DS: podtitul nad textem kategorie (na webu je to h2 pod H1). DS zná
        jen .title a .shortDescription, pro ._categoryTextBlock .caption pravidlo nemá. */
     ._categoryTextBlock .caption { font-size: var(--font-size-16); font-weight: var(--font-weight-bold); color: var(--text-color); }
@@ -170,15 +174,28 @@
       <div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 {{ listClass }}">
         <div class="productHolder">
           <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
-            <dc-import name="komponenty/product/ProductView"
-              state="{{ p.stateClass }}" modifier="{{ cardMod }}"
-              code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
-              flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
-              old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
-              availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
-              unit="{{ p.unit }}" quantity="{{ p.qty }}"
-              on-increase="{{ p.inc }}" on-decrease="{{ p.dec }}" on-quantity="{{ p.setQty }}" on-buy="{{ p.buy }}"
-              hint-size="100%,470px"></dc-import>
+            <sc-if value="{{ isRows }}">
+              <dc-import name="komponenty/product/ProductViewBig"
+                state="{{ p.stateClass }}"
+                code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
+                flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
+                old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
+                availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
+                unit="{{ p.unit }}" quantity="{{ p.qty }}"
+                on-increase="{{ p.inc }}" on-decrease="{{ p.dec }}" on-quantity="{{ p.setQty }}" on-buy="{{ p.buy }}"
+                hint-size="100%,180px"></dc-import>
+            </sc-if>
+            <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+              <dc-import name="komponenty/product/ProductView"
+                state="{{ p.stateClass }}" modifier="{{ cardMod }}"
+                code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
+                flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
+                old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
+                availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
+                unit="{{ p.unit }}" quantity="{{ p.qty }}"
+                on-increase="{{ p.inc }}" on-decrease="{{ p.dec }}" on-quantity="{{ p.setQty }}" on-buy="{{ p.buy }}"
+                hint-size="100%,470px"></dc-import>
+            </sc-if>
           </sc-for>
         </div>
       </div>
@@ -212,7 +229,7 @@
   hint-size="100%,420px"></dc-import>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;columns3&quot;,&quot;columns4&quot;,&quot;columns5&quot;],&quot;default&quot;:&quot;columns4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Výpis&quot;},&quot;showSubcategories&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Výpis&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;showSubcategories&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Výpis&quot;}}">
 class Component extends DCLogic {
   state = {
     mega: false, usp: 0, sort: 'top', view: 'grid', page: 1, shown: 8,
@@ -558,7 +575,7 @@ class Component extends DCLogic {
     const count = cart.reduce((n, i) => n + i.qty, 0);
     const total = cart.reduce((n, i) => n + i.priceVat * i.qty, 0);
     const rows = this.state.view === 'rows';
-    const cols = this.props.columns ?? 'columns4';
+    const cols = 'columns5';
     const filterCount = Object.values(this.state.checked).filter(Boolean).length;
     const page = this.state.page;
     const shown = Math.min(this.state.shown, this.pool().length);
@@ -645,6 +662,8 @@ class Component extends DCLogic {
       rowsClass: rows ? 'active' : 'inactive',
       setGrid: e => { e.preventDefault(); this.setState({ view: 'grid' }); },
       setRows: e => { e.preventDefault(); this.setState({ view: 'rows' }); },
+      isRows: rows,
+      isGrid: !rows,
       listClass: rows ? 'custom1' : cols,
       cardMod: rows ? 'big' : '',
 
