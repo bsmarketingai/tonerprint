@@ -12,6 +12,20 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: číselník nemá obal pro dvojici číslo + jednotka, takže „1 ks“
+       nejde vycentrovat mezi terči − a +. Obalem je span.value: jedna položka, která
+       dobírá zbytek řádku a obsah centruje. Vyšší specificita než DS (.v1a) proto,
+       že styly DS se u samostatně otevřené komponenty linkují až po mountu.
+       V DS chce .quantity > .value { flex: 1; justify-content: center }. */
+    /* Dvojice číslo + jednotka („1 ks“) stojí uprostřed číselníku mezi terči − a +.
+       Číslo se šířkou přizpůsobí obsahu, aby v poli nezbývalo prázdné místo. */
+    /* Číselník (vystředěná dvojice číslo + jednotka) řeší DS: ds/css/product.css. */
+    .AddToCartView.v1a .quantity > .value .real { flex: none; min-width: 0; text-align: right; padding: 0; margin: 0; border: 0; background: none; }
+    .AddToCartView.v1a .quantity > .value .unitsDescription {
+      flex: none; padding: 0;
+      font: var(--font-weight-bold) var(--font-size-14) var(--font-family);
+      color: var(--text-color);
+    }
   </style>
 </helmet>
 
@@ -19,14 +33,27 @@
 <div class="AddToCartView v1a v1 bs-view dcon dc000">
   <div class="quantity">
     <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ qtyDec }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
-    <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ qty }}" min="1" max="999" onChange="{{ qtySet }}" style="width: {{ qtyWidth }}"><span class="unitsDescription">ks</span></span>
+    <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ qty }}" min="1" max="999" onChange="{{ qtySet }}" style="width: {{ qtyWidth }}"><span class="unitsDescription">{{ unit }}</span></span>
     <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ qtyInc }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
   </div>
   <button type="button" class="button buy" onClick="{{ buy }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg>Koupit</button>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:72},&quot;qty&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:999,&quot;tsType&quot;:&quot;number&quot;},&quot;unit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ks&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;qtyDec&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;qtyInc&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;qtySet&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;buy&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
 class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return {
+      unit: p.unit ?? 'ks',
+      qty: p.qty ?? 1,
+      /* Šířku pole řeší mřížka číselníku, ne inline styl — jinak by dvojice
+         nesedla na osu. */
+      /* Šířka pole přesně na číslice — jinak v něm zbyde prázdné místo
+         a dvojice číslo + jednotka opticky uteče doprava. */
+      qtyWidth: String((p.qty ?? 1)).length + 'ch',
+    };
+  }
+
   /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
      Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
   get standalone() { return location.pathname.includes('/komponenty/'); }

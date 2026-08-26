@@ -102,6 +102,7 @@
       flex: none; width: var(--spacer-40); min-width: var(--spacer-40); min-height: var(--spacer-40);
       padding: 0; border-radius: var(--border-3-radius-base);
     }
+    /* Číselník (vystředěná dvojice číslo + jednotka) řeší DS: ds/css/product.css. */
     /* CHYBA V DS: vlajky se násobí s fotkou — chybí z-index + isolation. */
     .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
   </style>
@@ -170,7 +171,10 @@ class Component extends DCLogic {
       stateClass: state,
       unit: p.unit ?? 'ks',
       quantity: qty,
-      quantityWidth: (String(qty).length * 9 + 8) + 'px',
+      /* Šířku pole řeší mřížka číselníku, ne inline styl — jinak dvojice nesedne na osu. */
+      /* Šířka pole přesně na číslice — jinak v něm zbyde prázdné místo
+         a dvojice číslo + jednotka opticky uteče doprava. */
+      quantityWidth: String(qty).length + 'ch',
       soldOut: state === 'empty' ? true : undefined,
       onIncrease: p.onIncrease,
       onDecrease: p.onDecrease,

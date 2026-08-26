@@ -106,6 +106,8 @@
   empty-text="Zkuste kód produktu, například AT-13C, nebo název zařízení." show-all-href="vypis-kategorie.dc.html"
   aside-categories="{{ asideCategories }}" aside-manufacturers="{{ asideManufacturers }}"
   login-open="{{ loginOpen }}" login-active="{{ loginActive }}" toggle-login="{{ toggleLogin }}" close-popups="{{ closePopups }}"
+  has-basket-popup="{{ true }}" basket-open="{{ basketOpen }}" basket-active="{{ basketActive }}"
+  cart-items="{{ cartItems }}" has-cart="{{ hasCart }}" cart-empty="{{ cartEmpty }}" toggle-basket="{{ toggleBasket }}"
   cart-count="{{ cartCount }}" cart-total="{{ cartTotal }}" cart-items-label="{{ cartItemsLabel }}"
   mega-open="{{ megaOpen }}" toggle-mega="{{ toggleMega }}"
   hint-size="100%,88px"></dc-import>
@@ -246,7 +248,9 @@ class Component extends DCLogic {
       const at = cart.findIndex(i => i.key === key);
       if (at >= 0) cart[at] = { ...cart[at], qty: cart[at].qty + qty };
       else cart.push({ key, qty });
-      return { cart };
+      /* Stejné chování jako na homepage: po vložení se otevře panel košíku,
+         aby zákazník viděl, co přidal, a našeptávač se zavře. */
+      return { cart, basketOpen: true, searchOpen: false };
     });
   }
   itemsLabel(n) { return n === 1 ? '1 produkt' : n < 5 ? n + ' produkty' : n + ' produktů'; }
@@ -321,7 +325,7 @@ class Component extends DCLogic {
       /* Přihlášení: spouští ho ikona v hlavičce, „Rychlý nákup“ i odkaz v horním pruhu.
          Panel žije v .LoginUserView jako ._headerPopup. */
       toggleLogin: e => { e.preventDefault(); this.setState(s => ({ loginOpen: !s.loginOpen })); },
-      closePopups: () => this.setState({ loginOpen: false }),
+      closePopups: () => this.setState({ loginOpen: false , basketOpen: false }),
       uspPrev: () => this.uspStep(-1),
       uspNext: () => this.uspStep(1),
       breadcrumb: [{"label":"Kancelářská technika","href":"vypis-kategorie.dc.html"},{"label":"Skartovačky","href":"vypis-kategorie.dc.html"},{"label":"Skartovačky AT","href":""}],
@@ -334,6 +338,28 @@ class Component extends DCLogic {
       megaOpen: this.state.mega,
       megaDisplay: this.state.mega ? 'block' : 'none',
       toggleMega: () => this.setState(s => ({ mega: !s.mega })),
+
+      basketOpen: this.state.basketOpen,
+
+      basketActive: this.state.basketOpen ? 'active' : '',
+
+      toggleBasket: e => { e.preventDefault(); this.setState(s => ({ basketOpen: !s.basketOpen, searchOpen: false, loginOpen: false })); },
+
+      cartItems: cart.map(it => ({
+
+        ...it,
+
+        quantityLabel: it.qty + ' × ' + this.price(it.priceVat),
+
+        lineTotal: this.price(it.priceVat * it.qty),
+
+        remove: () => this.setState(st => ({ cart: st.cart.filter(i => i.key !== it.key) })),
+
+      })),
+
+      hasCart: cart.length > 0,
+
+      cartEmpty: cart.length === 0,
 
       cartCount: count,
       cartTotal: this.price(total),
