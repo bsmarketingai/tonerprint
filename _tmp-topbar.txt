@@ -1,0 +1,19 @@
+<div class="UserContentPanelView v1a v1 bs-view dcon dc000">
+  <dc-con class="dcContent">
+    <div class="items top">
+      <button type="button" class="button uspNav prev" aria-label="Předchozí výhoda" onClick="{{ uspPrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
+      <span class="{{ usp0 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-building-store"></use></svg>Česká společnost od 90. let</span>
+      <span class="{{ usp1 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-truck-delivery"></use></svg>Doprava zdarma od 1 500 Kč</span>
+      <span class="{{ usp2 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-clock"></use></svg>Odesíláme do 24 h</span>
+      <span class="{{ usp3 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-flag"></use></svg>Více než 30 let zkušeností</span>
+      <button type="button" class="button uspNav next" aria-label="Další výhoda" onClick="{{ uspNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+    </div>
+    <div class="items bottom">
+      <a href="#o-nas">O nás</a>
+      <a href="#poradna">Poradna</a>
+      <a href="#kontakt">Kontakt</a>
+      <a href="#prihlaseni" onClick="{{ toggleLogin }}">Přihlášení</a>
+    </div>
+  </dc-con>
+</div>
+

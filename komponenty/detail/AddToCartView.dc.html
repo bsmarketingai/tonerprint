@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+
+<div class="AddToCartView v1a v1 bs-view dcon dc000">
+  <div class="quantity">
+    <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ qtyDec }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
+    <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ qty }}" min="1" max="999" onChange="{{ qtySet }}" style="width: {{ qtyWidth }}"><span class="unitsDescription">ks</span></span>
+    <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ qtyInc }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
+  </div>
+  <button type="button" class="button buy" onClick="{{ buy }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg>Koupit</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

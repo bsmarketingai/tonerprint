@@ -1,0 +1,130 @@
+<div class="_menuWrap">
+  <nav class="MenuView v1a v1 bs-view dcon dc000" aria-label="Kategorie">
+    <dc-con class="dcContent">
+      <button type="button" class="button toggle" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}">
+        <svg class="icon ico2"><use href="#tp-menu-2"></use></svg>Všechny kategorie
+      </button>
+      <span class="separator" aria-hidden="true"></span>
+      <ul class="items">
+        <li class="root"><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Balicí materiál</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Hygiena a úklid</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Vybavení a nábytek</a></li>
+        <li class="root"><a href="vypis-kategorie.dc.html">Značky</a></li>
+        <li class="root sale"><a href="vypis-kategorie.dc.html">Akce %</a></li>
+      </ul>
+    </dc-con>
+  </nav>
+  <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
+    <dc-con class="dcContent">
+      <ul class="items">
+        <li class="level_0 selected"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-printer"></use></svg>Tonery a náplně<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+          <ul class="_subLevels level_1">
+            <li><a class="name" href="vypis-kategorie.dc.html">Tonery</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kompatibilní tonery</a></li><li><a href="vypis-kategorie.dc.html">Originální tonery</a></li><li><a href="vypis-kategorie.dc.html">Sady tonerů</a></li></ul>
+            </li>
+            <li><a class="name" href="vypis-kategorie.dc.html">Inkoustové náplně</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kompatibilní náplně</a></li><li><a href="vypis-kategorie.dc.html">Originální náplně</a></li><li><a href="vypis-kategorie.dc.html">Sady náplní</a></li></ul>
+            </li>
+            <li><a class="name" href="vypis-kategorie.dc.html">Válce a fotoválce</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Válce Brother</a></li><li><a href="vypis-kategorie.dc.html">Válce HP</a></li><li><a href="vypis-kategorie.dc.html">Odpadní nádobky</a></li></ul>
+            </li>
+            <li><a class="name" href="vypis-kategorie.dc.html">Pásky do tiskáren</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Jehličkové tiskárny</a></li><li><a href="vypis-kategorie.dc.html">Kalkulačky</a></li><li><a href="vypis-kategorie.dc.html">Etiketovací kleště</a></li></ul>
+            </li>
+            <li><a class="name" href="vypis-kategorie.dc.html">Papír do tiskáren</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Kancelářský papír</a></li><li><a href="vypis-kategorie.dc.html">Fotopapír</a></li><li><a href="vypis-kategorie.dc.html">Etikety</a></li></ul>
+            </li>
+            <li><a class="name" href="vypis-kategorie.dc.html">Podle tiskárny</a>
+              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">HP</a></li><li><a href="vypis-kategorie.dc.html">Canon</a></li><li><a href="vypis-kategorie.dc.html">Brother</a></li><li><a href="vypis-kategorie.dc.html">Epson</a></li></ul>
+            </li>
+          </ul>
+        </li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-shopping-bag"></use></svg>Kancelářské potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-book"></use></svg>Papírnictví<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-package"></use></svg>Školní potřeby<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-package-export"></use></svg>Balicí materiál<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-trash"></use></svg>Hygiena a úklid<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-building-store"></use></svg>Vybavení a nábytek<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-tag"></use></svg>Značky<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+        <li class="level_0 sale"><a href="vypis-kategorie.dc.html"><svg class="icon ico2"><use href="#tp-discount"></use></svg>Akce %<svg class="icon ico2 bs-crv"><use href="#tp-chevron-right"></use></svg></a></li>
+      </ul>
+      <bs-lazy-render class="expanded">
+        <span class="caption">Tonery a náplně</span>
+        <ul class="items">
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/toner-hp-cf226x.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Tonery</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">Kompatibilní tonery</a></li>
+                <li><a href="vypis-kategorie.dc.html">Jak vybrat vhodný toner do tiskárny</a></li>
+                <li><a href="vypis-kategorie.dc.html">Originální tonery</a></li>
+              </ul>
+            </span>
+          </li>
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/toner-brother-tn2411.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Inkoustové náplně</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">Kompatibilní náplně</a></li>
+                <li><a href="vypis-kategorie.dc.html">Originální náplně</a></li>
+                <li><a href="vypis-kategorie.dc.html">Sady náplní</a></li>
+              </ul>
+            </span>
+          </li>
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/toner-canon-crg039h.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Válce a fotoválce</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">Válce Brother</a></li>
+                <li><a href="vypis-kategorie.dc.html">Válce HP</a></li>
+                <li><a href="vypis-kategorie.dc.html">Odpadní nádobky</a></li>
+              </ul>
+            </span>
+          </li>
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/paska-tesa-4280.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Pásky do tiskáren</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">Jehličkové tiskárny</a></li>
+                <li><a href="vypis-kategorie.dc.html">Kalkulačky</a></li>
+                <li><a href="vypis-kategorie.dc.html">Etiketovací kleště</a></li>
+              </ul>
+            </span>
+          </li>
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Papír do tiskáren</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">Kancelářský papír</a></li>
+                <li><a href="vypis-kategorie.dc.html">Fotopapír</a></li>
+                <li><a href="vypis-kategorie.dc.html">Etikety</a></li>
+              </ul>
+            </span>
+          </li>
+          <li class="level_1">
+            <span class="image"><img src="ds/assets/produkty/skartovacka-at-13c.jpg" alt="" loading="lazy"></span>
+            <span>
+              <a class="name" href="vypis-kategorie.dc.html">Podle tiskárny</a>
+              <ul class="level_2">
+                <li><a href="vypis-kategorie.dc.html">HP</a></li>
+                <li><a href="vypis-kategorie.dc.html">Canon</a></li>
+                <li><a href="vypis-kategorie.dc.html">Brother</a></li>
+                <li><a href="vypis-kategorie.dc.html">Epson</a></li>
+              </ul>
+            </span>
+          </li>
+        </ul>
+      </bs-lazy-render>
+    </dc-con>
+  </div>
+</div>
+

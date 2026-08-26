@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: spodní pruh patičky nezná řádek s dodavatelem řešení a odkazem na
+       cookies. DS má jen .copyright, .paymentLogos a .claim. Řada drží gap, oddělovač
+       je dekorace (aria-hidden) v barvě rámečku. */
+    .FooterView .madeBy { display: inline-flex; align-items: center; gap: var(--spacer-8); font-size: var(--font-size-13); color: var(--text-color-muted); }
+    .FooterView .madeBy .separator { color: var(--color-neutral-300); }
+    /* CHYBÍ V DS: spodní pruh nemá určené rozvržení — texty patří vlevo v jednom
+       sloupci, platební loga na pravou hranu. DS řadí položky za sebe bez rozdělení. */
+    .FooterView dc-con.bottom > dc-gi { align-items: flex-start; }
+    .FooterView dc-con.bottom .paymentLogos { margin-left: auto; justify-content: flex-end; }
+  </style>
+</helmet>
+
+<footer class="FooterView v1a v1 bs-view dcon dc000">
+  <dc-con class="top">
+    <dc-gi class="about">
+      <span class="caption">{{ aboutCaption }}</span>
+      <p class="shortDescription">{{ aboutText }}</p>
+      <a class="readMore" href="{{ aboutHref }}">Více o nás<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+      <div class="social socials">
+        <a href="#facebook" aria-label="Facebook"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-facebook"></use></svg></a>
+        <a href="#instagram" aria-label="Instagram"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-instagram"></use></svg></a>
+      </div>
+    </dc-gi>
+    <dc-gi class="column expanded">
+      <button type="button" class="caption" aria-expanded="true" onClick="{{ onToggleColumn }}">Zákazník<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+      <ul class="items">
+        <li><a href="#doprava">Doprava a platba</a></li>
+        <li><a href="#reklamace">Reklamace a vrácení</a></li>
+        <li><a href="#faktura">Nákup na fakturu</a></li>
+        <li><a href="#podminky">Obchodní podmínky</a></li>
+        <li><a href="#gdpr">Ochrana osobních údajů</a></li>
+        <li><a href="#vernostni">Věrnostní program</a></li>
+      </ul>
+    </dc-gi>
+    <dc-gi class="column expanded" id="poradna">
+      <button type="button" class="caption" aria-expanded="true" onClick="{{ onToggleColumn }}">Poradna<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+      <ul class="items">
+        <li><a href="#poradna">Nákupní rádci</a></li>
+        <li><a href="#poradna">Články a návody</a></li>
+        <li><a href="#poradna">Nejčastější dotazy</a></li>
+        <li><a href="#ai">AI pomoc s výběrem</a></li>
+        <li><a href="#poradna">Slovník pojmů</a></li>
+      </ul>
+    </dc-gi>
+    <dc-gi class="column expanded">
+      <button type="button" class="caption" aria-expanded="true" onClick="{{ onToggleColumn }}">Kategorie<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+      <ul class="items">
+        <li><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
+        <li><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
+        <li><a href="vypis-kategorie.dc.html">Kancelářská technika</a></li>
+        <li><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
+        <li><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
+        <li><a href="vypis-kategorie.dc.html">Balicí materiál</a></li>
+      </ul>
+    </dc-gi>
+    <dc-gi class="newsletter">
+      <div class="SubscribeToNewsletterView v1a v1 bs-view dcon dc000">
+        <span class="caption">Buďte v obraze</span>
+        <p class="shortDescription">Jednou za měsíc. Odhlásíte se jedním kliknutím.</p>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+          <div class="query">
+            <input class="textBox {{ emailErrorClass }}" type="email" inputmode="email" placeholder="Váš e-mail" aria-label="Váš e-mail" aria-invalid="{{ emailInvalid }}" aria-describedby="{{ emailDescribedBy }}" value="{{ email }}" onChange="{{ onEmailChange }}">
+            <button type="button" class="button" onClick="{{ onSubscribe }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-mail"></use></svg><span class="label">Přihlásit se</span></button>
+            <sc-if value="{{ hasError }}">
+              <span class="errorText" id="newsletter-error" role="alert">{{ error }}</span>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ sent }}">
+          <div class="NotificationView v1a v1 bs-view dcon dc000 cs_zelena">
+            <svg class="icon ico3" aria-hidden="true"><use href="#tp-circle-check"></use></svg><span>Přihlášeno. Novinky posíláme jednou za měsíc.</span>
+          </div>
+        </sc-if>
+        <div class="GdprAgreementView v1a v1 bs-view dcon dc000"><label><input class="checkBox" type="checkbox"><span>Souhlasím se zpracováním e-mailu pro zasílání novinek.</span></label></div>
+      </div>
+    </dc-gi>
+  </dc-con>
+  <dc-con class="bottom">
+    <dc-gi>
+      <span class="copyright">{{ copyright }}</span>
+      <span class="claim">{{ claim }}</span>
+      <span class="madeBy"><a href="#bsshop">BSSHOP</a>: e-shop napojený na Pohodu<span class="separator" aria-hidden="true">|</span><a href="#cookies">Cookies</a></span>
+      <div class="paymentLogos">
+        <img data-src="ds/assets/platby/visa-mastercard.svg" alt="Visa a Mastercard">
+        <img data-src="ds/assets/platby/maestro.svg" alt="Maestro">
+        <img data-src="ds/assets/platby/googlepay.svg" alt="Google Pay">
+        <img data-src="ds/assets/platby/applepay.svg" alt="Apple Pay">
+        <img data-src="ds/assets/platby/twisto.svg" alt="Twisto">
+        <img data-src="ds/assets/platby/comgate.svg" alt="ComGate">
+      </div>
+    </dc-gi>
+  </dc-con>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:420},&quot;aboutCaption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;TonerPrint&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;aboutText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;aboutHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;#o-nas&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;copyright&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;© 2026 Tonerprint.cz&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;claim&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Tvoříme dobré pracovní prostředí&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;email&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;error&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;sent&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onEmailChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;onSubscribe&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onToggleColumn&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;}}">
+class Component extends DCLogic {
+  /* Patička s newsletterem. Odkazy, platební loga i stav odběru dodává stránka. */
+  renderVals() {
+    const p = this.props;
+    return {
+      aboutCaption: p.aboutCaption ?? 'TonerPrint',
+      aboutText: p.aboutText ?? 'Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji.',
+      aboutHref: p.aboutHref ?? '#o-nas',
+      copyright: p.copyright ?? '© 2026 Tonerprint.cz',
+      claim: p.claim ?? 'Tvoříme dobré pracovní prostředí',
+      email: p.email ?? '',
+      error: p.error ?? '',
+      sent: p.sent ?? false,
+      notSent: !(p.sent ?? false),
+      hasError: !!p.error,
+      emailErrorClass: p.error ? 'error' : '',
+      emailInvalid: p.error ? 'true' : undefined,
+      emailDescribedBy: p.error ? 'newsletter-error' : undefined,
+      onEmailChange: p.onEmailChange,
+      onSubscribe: p.onSubscribe,
+      onToggleColumn: p.onToggleColumn ?? (e => {
+        const col = e.currentTarget.parentElement;
+        const open = col.classList.toggle('expanded');
+        e.currentTarget.setAttribute('aria-expanded', String(open));
+      }),
+    };
+  }
+
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
+     se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
+     je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  /* Fotky se do šablony píšou jako data-src: kdyby v atributu src stála šablonová
+     hole, prohlížeč by si během streamu vyžádal literální URL a v konzoli by zůstala
+     chyba. Skutečné src se doplní po mountu podle hloubky dokumentu. */
+  hydrateImages() {
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      const src = this.dsPrefix() + img.getAttribute('data-src');
+      if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+  }
+
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+  componentDidUpdate() {
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+}
+
+</script>
+</body>
+</html>

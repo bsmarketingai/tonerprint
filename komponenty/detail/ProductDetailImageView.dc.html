@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+
+<div class="ProductDetailImageView v1a v1 bs-view dcon dc000" id="galerie">
+  <div class="mainImage">
+    <div class="ActionIconsView v1a v1 bs-view count2" data-look="B">
+      <div class="productFlag icon flag02"><span>Doporučujeme</span></div>
+      <div class="productFlag icon flag05"><span>Doprava zdarma</span></div>
+    </div>
+    <img class="mainImg {{ shown0 }}" src="assets/at13c/1.jpg" alt="Skartovačka AT-13C zepředu">
+    <img class="mainImg {{ shown1 }}" src="assets/at13c/2.jpg" alt="AT-13C v kanceláři u pracovního stolu">
+    <img class="mainImg {{ shown2 }}" src="assets/at13c/3.jpg" alt="Vysunutý koš na odpad">
+    <img class="mainImg {{ shown3 }}" src="assets/at13c/4.jpg" alt="Čelní pohled s okénkem koše">
+    <img class="mainImg {{ shown4 }}" src="assets/at13c/5.jpg" alt="Ovládací panel shora">
+    <img class="mainImg {{ shown5 }}" src="assets/at13c/6.jpg" alt="Vstup pro karty a CD">
+    <img class="mainImg {{ shown6 }}" src="assets/at13c/7.jpg" alt="Chlazení motoru">
+    <img class="mainImg {{ shown7 }}" src="assets/at13c/8.jpg" alt="Skartování u domácího stolu">
+    <img class="mainImg {{ shown8 }}" src="assets/at13c/9.jpg" alt="Skartování CD a DVD">
+    <button type="button" class="button previousMainImage" aria-label="Předchozí fotka" onClick="{{ galleryPrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
+    <button type="button" class="button nextMainImage" aria-label="Další fotka" onClick="{{ galleryNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+    <span class="icons">
+      <button type="button" aria-label="Zvětšit"><svg class="icon ico2" aria-hidden="true"><use href="#tp-zoom-in"></use></svg></button>
+    </span>
+  </div>
+  <div class="itemsOuter">
+    <button type="button" class="button previousImage" aria-label="Předchozí náhledy" onClick="{{ galleryPrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
+    <div class="images">
+      <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="9">
+        <a href="#galerie" class="thumbnail {{ g.cls }}" onClick="{{ g.select }}"><img src="{{ g.src }}" alt="{{ g.alt }}" loading="lazy"></a>
+      </sc-for>
+    </div>
+    <button type="button" class="button nextImage" aria-label="Další náhledy" onClick="{{ galleryNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

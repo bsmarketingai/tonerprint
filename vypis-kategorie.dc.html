@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="ds/styles.css">
   <script src="ds/assets/icons/sprite.js"></script>
   <style>
+    /* Náplasti hlavičky nese komponenta komponenty/global/HeaderView.dc.html. */
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
@@ -21,64 +22,7 @@
     /* CHYBÍ V DS: přilepená má zůstat hlavička i lišta kategorií — menu musí být
        na dosah i uprostřed dlouhého výpisu. Výšku hlavičky měří logika
        do --tp-header-h (na mobilu má hlavička dva řádky). */
-    /* CHYBA V DS: .SearchWhispererView má min-width: min(560px, 100vw − 32), aby se
-       vešly názvy, ale panel (.SimpleSearchView > dc-con.pivot) je přilepený na šířku
-       pole hledání (left/right: 0) a má overflow: hidden — obsah se vpravo ořeže.
-       Panel proto smí přerůst pole doprava; minimum obsahu z DS zůstává platit. */
-    /* Panel je ukotvený k obsahu hlavičky, ne k poli hledání: musí být širší než pole
-       (DS zapíná dvousloupcové rozvržení container query na 620 px), a ukotvení k poli
-       ho při 760 px vytlačí z okna — vlevo nebo vpravo podle hrany. */
-    .HeaderView > dc-con.dcContent { position: relative; }
-    /* DS dává .SimpleSearchView position: relative — to je bližší containing block
-       a panel by se zas ukotvil k poli. Pro našeptávač ji proto vypínáme. */
-    .HeaderView .SimpleSearchView:has(.SearchWhispererView) { position: static; }
-    .SimpleSearchView > dc-con.pivot:has(.SearchWhispererView) {
-      /* Levá hrana sedí na poli hledání (offset měří logika do --tp-search-left),
-         pravá na hraně obsahu hlavičky — panel je tak zarovnaný s polem, může být
-         širší než ono a nikdy nevyleze z okna. */
-      position: absolute; left: var(--tp-search-left, 0px); right: 0;
-      width: auto; max-width: 760px; min-width: 0;
-    }
-    /* DS dává obsahu min-width 560 px, aby se vešly názvy; panel ho ale nesmí přerůst,
-       jinak ho overflow: hidden ořeže. Šířku drží panel, obsah se do něj vejde. */
-    .SimpleSearchView > dc-con.pivot .SearchWhispererView { min-width: 0; }
     ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
-    /* CHYBÍ V DS: přihlášení nemá v hlavičce vlastní spouštěč — overlay otevírá
-       „Rychlý nákup“ a odkaz v horním pruhu. .LoginUserView tu tedy slouží jen jako
-       nositel panelu (DS ji navíc pod 820 px skrývá, což by panel na mobilu vypnulo). */
-    /* align-self: stretch dá nositeli výšku řádku hlavičky, aby panel spadl pod
-       tlačítka jako košík — nulová výška by ho posadila přes ně. */
-    /* Nositel nemá vlastní spouštěč, takže by měl nulovou výšku a DS pravidlo
-       ._headerPopup { top: calc(100% + 8px) } by panel posadilo přes tlačítka.
-       display: contents nositele vyřadí z layoutu a panel se ukotví k liště nástrojů. */
-    .HeaderView dc-con.dcHeader { position: relative; }
-    .HeaderView .LoginUserView { display: contents; }
-    /* CHYBÍ V DS: na displeji pod 550 px má být přihlášení přes celou obrazovku,
-       stejně jako .BasketProductsPopupView (css/global.css @media max-width 549). */
-    @media (max-width: 549px) {
-      .LoginPopupView {
-        position: fixed; inset: 0; top: 0; width: 100%;
-        border-radius: 0; box-shadow: none;
-        display: none; flex-direction: column;
-        z-index: var(--z-overlay);
-      }
-      .active > .LoginPopupView, .LoginPopupView.active { display: flex; }
-      .LoginPopupView > dc-con.dcContent { flex: 1 1 auto; max-height: none; }
-      /* Nadpis na samostatném řádku pod lištou tlačítek — na mobilu je vedle
-         „Zpět do obchodu“ a křížku moc těsno. */
-      .LoginPopupView > dc-con.dcHeader { flex-wrap: wrap; }
-      .LoginPopupView > dc-con.dcHeader .caption { order: 2; flex: 1 1 100%; margin-top: var(--spacer-8); }
-      .LoginPopupView .button.back {
-        display: inline-flex; order: -1; margin-right: auto;
-        --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100);
-        --btn-text-color: var(--color-main-600); --btn-text-color-hover: var(--color-main-700);
-        padding: 0 var(--spacer-8);
-      }
-    }
-    /* CHYBA V DS: .fixed dává hlavičce --z-header (100) a zakládá stacking kontext,
-       takže panel našeptávače (250 uvnitř) skončí pod lištou kategorií. Přilepená
-       hlavička musí být nad ní. */
-    .HeaderView.isFixedHeaderAware.fixed { z-index: var(--z-header-popup); }
     /* CategoryView, ._eshopWidth, rytmus dcQuery, ._categoryText, ._expandButton,
        řádková v5a, jednotka v číselníku, zlom CTA na kartě 820–999 px, popis 13 px
        i v mřížce a ořez lišty kategorií — to všechno už řeší DS (update 2026-08-25). */
@@ -146,230 +90,39 @@
   </style>
 </helmet>
 
-<div class="UserContentPanelView v1a v1 bs-view dcon dc000">
-  <dc-con class="dcContent">
-    <div class="items top">
-      <button type="button" class="button uspNav prev" aria-label="Předchozí výhoda" onClick="{{ uspPrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
-      <span class="{{ usp0 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-building-store"></use></svg>Česká společnost od 90. let</span>
-      <span class="{{ usp1 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-truck-delivery"></use></svg>Doprava zdarma od 1 500 Kč</span>
-      <span class="{{ usp2 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-clock"></use></svg>Odesíláme do 24 h</span>
-      <span class="{{ usp3 }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-coins"></use></svg>Na fakturu pro školy a instituce</span>
-      <button type="button" class="button uspNav next" aria-label="Další výhoda" onClick="{{ uspNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
-    </div>
-    <div class="items bottom">
-      <a href="#o-nas">O nás</a>
-      <a href="#poradna">Poradna</a>
-      <a href="#kontakt">Kontakt</a>
-      <a href="#prihlaseni" onClick="{{ toggleLogin }}">Přihlášení</a>
-    </div>
-  </dc-con>
-</div>
+<dc-import name="komponenty/global/UserContentPanelView"
+  usp="{{ topbarUsp }}" links="{{ topbarLinks }}" current="{{ uspCurrent }}"
+  on-prev="{{ uspPrev }}" on-next="{{ uspNext }}" on-login="{{ toggleLogin }}"
+  hint-size="100%,72px"></dc-import>
 
-<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
-  <dc-gi class="headerFixPivot"></dc-gi>
-  <dc-con class="dcContent">
-    <div class="LogoView v1a v1 bs-view dcon dc000">
-      <a class="image" href="index.dc.html" aria-label="TonerPrint — domovská stránka"><img src="ds/assets/brand/logo-tonerprint.png" alt="TonerPrint" width="180"></a>
-    </div>
-    <div class="SimpleSearchView v2a v2 bs-view dcon dc000 {{ searchActive }}">
-      <dc-con class="dcQuery">
-        <svg class="icon ico3 query" aria-hidden="true"><use href="#tp-search"></use></svg>
-        <input class="textBox" type="search" placeholder="Hledejte podle názvu nebo kódu náplně…" aria-label="Hledat" value="{{ q }}" onChange="{{ onQuery }}" onFocus="{{ openSearch }}">
-        <button type="button" class="button clear" aria-label="Vymazat hledání" onClick="{{ clearQuery }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
-        <button type="button" class="button search">Hledat</button>
-      </dc-con>
-      <dc-con class="pivot">
-        <div class="SearchWhispererView v1a v1 bs-view dcon dc000">
-          <dc-con class="dcContent">
-            <div class="products">
-              <span class="caption">Vybrané produkty</span>
-              <sc-if value="{{ hasWhisper }}" hint-placeholder-val="{{ true }}">
-                <ul class="items">
-                  <sc-for list="{{ whisper }}" as="w" hint-placeholder-count="3">
-                    <li>
-                      <a class="item" href="detail-produktu.dc.html">
-                        <span class="image"><img src="{{ w.image }}" alt="" loading="lazy"></span>
-                        <span class="text">
-                          <span class="code">{{ w.code }}</span>
-                          <span class="name">{{ w.pre }}<mark>{{ w.hit }}</mark>{{ w.post }}</span>
-                          <span class="AvailabilityView v1a v1 bs-view {{ w.availClass }}"><span class="label">{{ w.availability }}</span></span>
-                        </span>
-                        <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ w.priceVat }}</span><span class="vatText">s DPH</span></span></span>
-                      </a>
-                      <button type="button" class="button buy" aria-label="Do košíku" onClick="{{ w.buy }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
-                    </li>
-                  </sc-for>
-                </ul>
-                <a class="button a2 showAll" href="vypis-kategorie.dc.html">Zobrazit všechny produkty ({{ whisperCount }})</a>
-              </sc-if>
-              <sc-if value="{{ noWhisper }}">
-                <div class="EmptyView v1a v1 bs-view dcon dc000 empty">
-                  <svg class="icon ico4" aria-hidden="true"><use href="#tp-package-off"></use></svg>
-                  <span class="caption">Nic jsme nenašli</span>
-                  <p class="shortDescription">Zkuste kód produktu, například AT-13C, nebo název zařízení.</p>
-                </div>
-              </sc-if>
-            </div>
-            <dc-gi class="aside">
-              <div class="group categories">
-                <span class="caption">Kategorie</span>
-                <ul class="items">
-                  <li><a href="vypis-kategorie.dc.html">Kancelářská technika<span class="value">212</span></a></li>
-                  <li><a href="vypis-kategorie.dc.html">Skartovačky<span class="value">48</span></a></li>
-                  <li><a href="vypis-kategorie.dc.html">Laminace<span class="value">112</span></a></li>
-                </ul>
-              </div>
-              <div class="group manufacturers">
-                <span class="caption">Výrobci</span>
-                <ul class="items">
-                  <li><a href="vypis-kategorie.dc.html">AT<span class="value">61</span></a></li>
-                  <li><a href="vypis-kategorie.dc.html">Argo<span class="value">54</span></a></li>
-                  <li><a href="vypis-kategorie.dc.html">tesa<span class="value">38</span></a></li>
-                </ul>
-              </div>
-            </dc-gi>
-          </dc-con>
-        </div>
-      </dc-con>
-    </div>
-    <div class="AiAssistantView v1a v1 bs-view dcon dc000">
-      <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
-    </div>
-    <dc-con class="dcHeader">
-      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
-      <div class="LoginUserView v1a v1 bs-view dcon dc000 {{ loginActive }}" id="prihlaseni">
-        <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ loginActive }}" role="dialog" aria-label="Přihlášení">
-          <dc-con class="dcHeader">
-            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
-            <span class="caption">Přihlášení</span>
-            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
-          </dc-con>
-          <dc-con class="dcContent">
-            <div class="formRow">
-              <label class="label" for="loginEmail">E-mail</label>
-              <input id="loginEmail" class="textBox" type="email" autocomplete="email" placeholder="vas@email.cz">
-            </div>
-            <div class="formRow">
-              <label class="label" for="loginPassword">Heslo</label>
-              <input id="loginPassword" class="textBox" type="password" autocomplete="current-password" placeholder="Vaše heslo">
-              <a class="forgot" href="#heslo">Zapomenuté heslo</a>
-            </div>
-            <button type="button" class="button login">Přihlásit se</button>
-            <a class="button register a5" href="#registrace">Registrace</a>
-            <div class="formRow inline">
-              <input id="loginPersist" class="checkBox" type="checkbox">
-              <label class="label" for="loginPersist">Zůstat přihlášen</label>
-            </div>
-          </dc-con>
-        </div>
-      </div>
+<dc-import name="komponenty/global/HeaderView"
+  logo="ds/assets/brand/logo-tonerprint.png" logo-href="index.dc.html"
+  q="{{ q }}" search-active="{{ searchActive }}" on-query="{{ onQuery }}" open-search="{{ openSearch }}" clear-query="{{ clearQuery }}"
+  whisper="{{ whisper }}" whisper-count="{{ whisperCount }}" has-whisper="{{ hasWhisper }}" no-whisper="{{ noWhisper }}"
+  empty-text="Zkuste kód produktu, například AT-13C, nebo název zařízení." show-all-href="vypis-kategorie.dc.html"
+  aside-categories="{{ asideCategories }}" aside-manufacturers="{{ asideManufacturers }}"
+  login-open="{{ loginOpen }}" login-active="{{ loginActive }}" toggle-login="{{ toggleLogin }}" close-popups="{{ closePopups }}"
+  cart-count="{{ cartCount }}" cart-total="{{ cartTotal }}" cart-items-label="{{ cartItemsLabel }}"
+  mega-open="{{ megaOpen }}" toggle-mega="{{ toggleMega }}"
+  hint-size="100%,88px"></dc-import>
 
-      <div class="SimpleBasketView v1a v1 bs-view dcon dc000 {{ basketEmptyClass }}">
-        <a href="#kosik">
-          <span class="icons"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">{{ cartCount }}</span></span>
-          <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ cartTotal }}</span></span><span class="totalItemsParts">{{ cartItemsLabel }}</span></span>
-        </a>
-      </div>
-    </dc-con>
-    <button type="button" class="button menuButton" aria-label="Menu" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-menu-2"></use></svg></button>
-  </dc-con>
-  <dc-gi class="headerUnfixPivot"></dc-gi>
-</header>
-
-<div class="_menuWrap">
-  <nav class="MenuView v1a v1 bs-view dcon dc000" aria-label="Kategorie">
-    <dc-con class="dcContent">
-      <button type="button" class="button toggle" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}">
-        <svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie
-      </button>
-      <span class="separator" aria-hidden="true"></span>
-      <ul class="items">
-        <li class="root"><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Kancelářská technika</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Balicí materiál</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Hygiena a úklid</a></li>
-        <li class="root"><a href="vypis-kategorie.dc.html">Značky</a></li>
-        <li class="root sale"><a href="vypis-kategorie.dc.html">Akce %</a></li>
-      </ul>
-    </dc-con>
-  </nav>
-  <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
-    <dc-con class="dcContent">
-      <ul class="items">
-        <li class="level_0 selected"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-printer"></use></svg>Kancelářská technika<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
-          <ul class="_subLevels level_1">
-            <li><a class="name" href="vypis-kategorie.dc.html">Skartovačky</a>
-              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Skartovačky AT</a></li><li><a href="vypis-kategorie.dc.html">Olejové papíry</a></li></ul>
-            </li>
-            <li><a class="name" href="vypis-kategorie.dc.html">Laminace</a>
-              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Laminovací fólie</a></li><li><a href="vypis-kategorie.dc.html">Laminátory</a></li></ul>
-            </li>
-            <li><a class="name" href="vypis-kategorie.dc.html">Řezačky</a></li>
-            <li><a class="name" href="vypis-kategorie.dc.html">Vazba</a></li>
-          </ul>
-        </li>
-        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-printer"></use></svg>Tonery a náplně<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-bag"></use></svg>Kancelářské potřeby<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-book"></use></svg>Papírnictví<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-package"></use></svg>Školní potřeby<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-package-export"></use></svg>Balicí materiál<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-        <li class="level_0 sale"><a href="vypis-kategorie.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-discount"></use></svg>Akce %<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
-      </ul>
-      <bs-lazy-render class="expanded">
-        <span class="caption">Kancelářská technika</span>
-        <ul class="items">
-          <li class="level_1">
-            <span class="image"><img src="ds/assets/produkty/skartovacka-at-13c.jpg" alt="" loading="lazy"></span>
-            <span>
-              <a class="name" href="vypis-kategorie.dc.html">Skartovačky</a>
-              <ul class="level_2"><li><a href="detail-produktu.dc.html">Skartovačky AT</a></li><li><a href="vypis-kategorie.dc.html">Olejové papíry</a></li></ul>
-            </span>
-          </li>
-          <li class="level_1">
-            <span class="image"><img src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="" loading="lazy"></span>
-            <span>
-              <a class="name" href="vypis-kategorie.dc.html">Laminace</a>
-              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Laminovací fólie</a></li><li><a href="vypis-kategorie.dc.html">Laminátory</a></li></ul>
-            </span>
-          </li>
-          <li class="level_1">
-            <span class="image"><img src="ds/assets/produkty/rezacka-argo-a4.jpg" alt="" loading="lazy"></span>
-            <span>
-              <a class="name" href="vypis-kategorie.dc.html">Řezačky</a>
-              <ul class="level_2"><li><a href="vypis-kategorie.dc.html">Pákové řezačky</a></li><li><a href="vypis-kategorie.dc.html">Kotoučové řezačky</a></li></ul>
-            </span>
-          </li>
-        </ul>
-      </bs-lazy-render>
-    </dc-con>
-  </div>
-</div>
+<dc-import name="komponenty/navigation/MenuView"
+  items="{{ menuItems }}" mega-items="{{ megaItems }}"
+  featured="{{ megaFeatured }}" featured-caption="Kancelářská technika"
+  mega-open="{{ megaOpen }}" on-toggle-mega="{{ toggleMega }}"
+  hint-size="100%,56px"></dc-import>
 
 <main class="CategoryView _eshopWidth" id="technika">
-  <nav class="BreadcrumbView v1a v1 bs-view dcon dc000" aria-label="Drobečková navigace">
-    <ul class="path">
-      <li><a href="index.dc.html">Úvod</a></li>
-      <li class="separator" aria-hidden="true"><svg class="icon"><use href="#tp-chevron-right"></use></svg></li>
-      <li class="last">Kancelářská technika</li>
-    </ul>
-  </nav>
+  <dc-import name="komponenty/navigation/BreadcrumbView" path="{{ breadcrumb }}" hint-size="100%,44px"></dc-import>
 
   <div class="ProductsMasterView ProductsMasterViewBase v1a v1 bs-view dcon dc000 firstPage">
     <dc-con class="dcQuery">
       <h1 class="title">Kancelářská technika</h1>
 
-      <div class="_categoryTextBlock">
-        <span class="caption">Technika pro kancelář, školu i domácí pracovnu</span>
-        <div class="_categoryText {{ textCollapsed }}">
-          <p>Tiskárny, skenery, skartovačky, laminátory, řezačky, vazače i štítkovače na jednom místě. Podle členění podkategorií vyberete zařízení pro domácnost, malou kancelář i větší firmu.</p>
-          <p>Objednáte-li do 14:00, odesíláme ještě dnes. Školám, úřadům a firmám umožňujeme nákup na fakturu se splatností 14 dní.</p>
-          <p>Nevíte, jaký výkon potřebujete? U skartovaček se řídíme počtem listů na jeden průchod, u laminátorů šířkou fólie — poradíme na <a href="#kontakt">541 123 456</a>.</p>
-        </div>
-        <button type="button" class="_expandButton" aria-expanded="{{ textExpanded }}" onClick="{{ toggleText }}">{{ textToggleLabel }}<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
-      </div>
+      <dc-import name="komponenty/navigation/CategoryTextView"
+        text-collapsed="{{ textCollapsed }}"
+        text-expanded="{{ textExpanded }}" toggle-text="{{ toggleText }}" text-toggle-label="{{ textToggleLabel }}"
+        hint-size="100%,180px"></dc-import>
 
       <sc-if value="{{ showSubcategories }}" hint-placeholder-val="{{ true }}">
         <div class="FlatCategoriesRwdView v5a v5 bs-view dcon dc000 columns5">
@@ -388,30 +141,20 @@
         </div>
       </sc-if>
 
-      <div class="SimpleFilterView v1a v1 bs-view dcon dc000">
-        <button type="button" class="button _filterButton" onClick="{{ openFilter }}">
-          <svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtrovat
-        </button>
-        <select class="select sortOrder" aria-label="Řazení" value="{{ sort }}" onChange="{{ onSortSelect }}">
-          <option value="top">Nejprodávanější</option>
-          <option value="asc">Od nejlevnějšího</option>
-          <option value="desc">Od nejdražšího</option>
-          <option value="new">Nejnovější</option>
-        </select>
-        <div class="sortingBox" role="radiogroup" aria-label="Řazení">
-          <input class="radio" type="radio" name="sort" id="sortTop" checked="{{ sortTop }}" onChange="{{ setSortTop }}"><label for="sortTop">Nejprodávanější</label>
-          <input class="radio" type="radio" name="sort" id="sortAsc" checked="{{ sortAsc }}" onChange="{{ setSortAsc }}"><label for="sortAsc">Od nejlevnějšího</label>
-          <input class="radio" type="radio" name="sort" id="sortDesc" checked="{{ sortDesc }}" onChange="{{ setSortDesc }}"><label for="sortDesc">Od nejdražšího</label>
-          <input class="radio" type="radio" name="sort" id="sortNew" checked="{{ sortNew }}" onChange="{{ setSortNew }}"><label for="sortNew">Nejnovější</label>
-        </div>
-        <span class="totalItems"><strong>{{ totalItems }}</strong> produktů</span>
-        <div class="viewTypeButtons">
-          <div class="ViewTypeSelectorView v1a v1 bs-view dcon dc000">
-            <a href="vypis-kategorie.dc.html" class="page default {{ gridClass }}" aria-label="Dlaždice" onClick="{{ setGrid }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-layout-grid"></use></svg></a>
-            <a href="vypis-kategorie.dc.html" class="page custom1 {{ rowsClass }}" aria-label="Řádky" onClick="{{ setRows }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-layout-list"></use></svg></a>
-          </div>
-        </div>
-      </div>
+      <dc-import name="komponenty/navigation/SimpleFilterView"
+        open-filter="{{ openFilter }}"
+  sort="{{ sort }}"
+  on-sort-select="{{ onSortSelect }}"
+  sort-top="{{ sortTop }}"
+  set-sort-top="{{ setSortTop }}"
+  sort-asc="{{ sortAsc }}"
+  set-sort-asc="{{ setSortAsc }}"
+  sort-desc="{{ sortDesc }}"
+  set-sort-desc="{{ setSortDesc }}"
+  sort-new="{{ sortNew }}"
+  set-sort-new="{{ setSortNew }}"
+        total-items="{{ totalItems }}" grid-class="{{ gridClass }}" rows-class="{{ rowsClass }}" set-grid="{{ setGrid }}" set-rows="{{ setRows }}"
+        hint-size="100%,56px"></dc-import>
       <sc-if value="{{ hasActiveFilters }}">
         <div class="_activeFilters">
           <span class="caption">Aktivní filtry</span>
@@ -427,176 +170,281 @@
       <div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 {{ listClass }}">
         <div class="productHolder">
           <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
-            <div class="ProductView v1a v1 bs-view dcon dc000 {{ p.stateClass }} {{ cardMod }}" data-name="Product">
-              <a class="image" href="detail-produktu.dc.html">
-                <sc-if value="{{ p.hasFlag }}">
-                  <div class="ActionIconsView v1a v1 bs-view count1"><div class="productFlag icon {{ p.flagClass }}"><span>{{ p.flag }}</span></div></div>
-                </sc-if>
-                <img class="mainImage" src="{{ p.image }}" alt="{{ p.name }}" loading="lazy">
-              </a>
-              <dc-con class="dcHeader">
-                <span class="code">{{ p.code }}</span>
-                <a class="name" href="detail-produktu.dc.html">{{ p.name }}</a>
-                <p class="shortDescription">{{ p.desc }}</p>
-              </dc-con>
-              <dc-con class="dcPrice">
-                <div class="priceParts">
-                  <sc-if value="{{ p.hasOld }}">
-                    <span class="value ghost">{{ p.oldPrice }}</span>
-                  </sc-if>
-                  <span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ p.priceVat }}</span><span class="vatText">s DPH</span></span>
-                  <span class="price bs-priceLayout notranslate novat secondary"><span class="value">{{ p.priceNoVat }}</span><span class="vatText">bez DPH</span></span>
-                </div>
-                <div class="AvailabilityView v1a v1 bs-view {{ p.availClass }}"><span class="label">{{ p.availability }}</span></div>
-              </dc-con>
-              <dc-con class="dcContent">
-                <div class="AddToCartView v1a v1 bs-view dcon dc000">
-                  <div class="quantity">
-                    <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ p.dec }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
-                    <span class="value"><input class="real" type="number" aria-label="Počet" value="{{ p.qty }}" min="1" max="999" onChange="{{ p.setQty }}" style="width: {{ p.qtyWidth }}"><span class="unitsDescription">{{ p.unit }}</span></span>
-                    <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ p.inc }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
-                  </div>
-                  <button type="button" class="button buy" aria-label="Vložit do košíku" onClick="{{ p.buy }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
-                </div>
-              </dc-con>
-            </div>
+            <dc-import name="komponenty/product/ProductView"
+              state="{{ p.stateClass }}" modifier="{{ cardMod }}"
+              code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
+              flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
+              old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
+              availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
+              unit="{{ p.unit }}" quantity="{{ p.qty }}"
+              on-increase="{{ p.inc }}" on-decrease="{{ p.dec }}" on-quantity="{{ p.setQty }}" on-buy="{{ p.buy }}"
+              hint-size="100%,470px"></dc-import>
           </sc-for>
         </div>
       </div>
 
-      <div class="CompoundPagingView v1a v1 bs-view dcon dc000 bottom">
-        <dc-con class="dcHeader">
-          <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ true }}">
-            <button type="button" class="button nextProducts" onClick="{{ loadMore }}">{{ loadMoreLabel }}</button>
-          </sc-if>
-          <span class="totalItems">{{ shownLabel }}</span>
-        </dc-con>
-        <div class="pages">
-          <button type="button" class="button page previous" aria-label="Předchozí stránka" disabled="{{ prevDisabled }}" onClick="{{ pagePrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
-          <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="6">
-            <button type="button" class="button page {{ pg.cls }}" onClick="{{ pg.go }}">{{ pg.label }}</button>
-          </sc-for>
-          <span class="separator">…</span>
-          <button type="button" class="button page {{ lastCls }}" onClick="{{ goLast }}">24</button>
-          <button type="button" class="button page next" aria-label="Další stránka" onClick="{{ pageNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
-        </div>
-      </div>
-    </dc-con>
+      <dc-import name="komponenty/navigation/CompoundPagingView"
+        has-more="{{ hasMore }}"
+  load-more="{{ loadMore }}"
+  load-more-label="{{ loadMoreLabel }}"
+  shown-label="{{ shownLabel }}"
+  prev-disabled="{{ prevDisabled }}"
+  page-prev="{{ pagePrev }}"
+  pages="{{ pages }}"
+  last-cls="{{ lastCls }}"
+  go-last="{{ goLast }}"
+  page-next="{{ pageNext }}"
+        hint-size="100%,120px"></dc-import>    </dc-con>
   </div>
 </main>
 
-<div class="FilterView v1a v1 bs-view dcon dc000 {{ filterActive }}" role="dialog" aria-modal="true" aria-label="Filtry">
-  <div class="overlay" onClick="{{ closeFilter }}"></div>
-  <dc-con class="wrap">
-    <dc-con class="dcHeader">
-      <span class="caption"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtry<span class="value">{{ filterCount }}</span></span>
-      <button type="button" class="button toggle" aria-label="Zavřít filtry" onClick="{{ closeFilter }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-x"></use></svg></button>
-    </dc-con>
-    <dc-con class="dcContent">
-      <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="4">
-        <div class="group {{ g.cls }}">
-          <button type="button" class="label" aria-expanded="{{ g.expanded }}" onClick="{{ g.toggle }}">{{ g.name }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
-          <div class="items">
-            <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="4">
-              <label class="{{ o.cls }}"><input class="checkBox" type="checkbox" checked="{{ o.checked }}" disabled="{{ o.disabled }}" onChange="{{ o.toggle }}">{{ o.name }}<span class="value">{{ o.count }}</span></label>
-            </sc-for>
-          </div>
-        </div>
-      </sc-for>
-      <div class="group">
-        <button type="button" class="label">Cena<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
-        <div class="items">
-          <div class="query">
-            <input class="textBox" type="number" value="0" aria-label="Cena od">
-            <span class="separator">–</span>
-            <input class="textBox" type="number" value="9000" aria-label="Cena do">
-            <span class="unitsDescription">Kč</span>
-          </div>
-        </div>
-      </div>
-    </dc-con>
-    <dc-con class="bottom">
-      <button type="button" class="button toggle" onClick="{{ clearFilters }}">Zrušit filtry</button>
-      <button type="button" class="button buy" onClick="{{ closeFilter }}">Zobrazit {{ totalItems }} produktů</button>
-    </dc-con>
-  </dc-con>
-</div>
-
-<footer class="FooterView v1a v1 bs-view dcon dc000" id="kontakt">
-  <dc-con class="top">
-    <dc-gi class="about">
-      <span class="caption">TonerPrint</span>
-      <p class="shortDescription">Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji.</p>
-      <a class="readMore" href="#o-nas">Více o nás<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
-      <div class="social socials">
-        <a href="#facebook" aria-label="Facebook"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-facebook"></use></svg></a>
-        <a href="#instagram" aria-label="Instagram"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-instagram"></use></svg></a>
-        <a href="#youtube" aria-label="YouTube"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-youtube"></use></svg></a>
-        <a href="#linkedin" aria-label="LinkedIn"><svg class="icon ico3" aria-hidden="true"><use href="#tp-brand-linkedin"></use></svg></a>
-      </div>
-    </dc-gi>
-    <dc-gi class="column expanded">
-      <button type="button" class="caption" aria-expanded="true" onClick="{{ toggleColumn }}">Zákazník<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
-      <ul class="items">
-        <li><a href="#doprava">Doprava a platba</a></li>
-        <li><a href="#reklamace">Reklamace a vrácení</a></li>
-        <li><a href="#faktura">Nákup na fakturu</a></li>
-        <li><a href="#podminky">Obchodní podmínky</a></li>
-      </ul>
-    </dc-gi>
-    <dc-gi class="column expanded">
-      <button type="button" class="caption" aria-expanded="true" onClick="{{ toggleColumn }}">Kancelářská technika<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
-      <ul class="items">
-        <li><a href="vypis-kategorie.dc.html">Skartovačky</a></li>
-        <li><a href="vypis-kategorie.dc.html">Laminace</a></li>
-        <li><a href="vypis-kategorie.dc.html">Řezačky</a></li>
-        <li><a href="vypis-kategorie.dc.html">Vazba</a></li>
-      </ul>
-    </dc-gi>
-    <dc-gi class="column expanded">
-      <button type="button" class="caption" aria-expanded="true" onClick="{{ toggleColumn }}">Kategorie<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
-      <ul class="items">
-        <li><a href="vypis-kategorie.dc.html">Tonery a náplně</a></li>
-        <li><a href="vypis-kategorie.dc.html">Kancelářské potřeby</a></li>
-        <li><a href="vypis-kategorie.dc.html">Papírnictví</a></li>
-        <li><a href="vypis-kategorie.dc.html">Školní potřeby</a></li>
-      </ul>
-    </dc-gi>
-    <dc-gi class="newsletter">
-      <div class="SubscribeToNewsletterView v1a v1 bs-view dcon dc000">
-        <span class="caption">Buďte v obraze</span>
-        <p class="shortDescription">Jednou za měsíc. Odhlásíte se jedním kliknutím.</p>
-        <div class="query">
-          <input class="textBox" type="email" inputmode="email" placeholder="Váš e-mail" aria-label="Váš e-mail">
-          <button type="button" class="button"><svg class="icon ico2" aria-hidden="true"><use href="#tp-mail"></use></svg><span class="label">Přihlásit se</span></button>
-        </div>
-        <div class="GdprAgreementView v1a v1 bs-view dcon dc000"><label><input class="checkBox" type="checkbox"><span>Souhlasím se zpracováním e-mailu pro zasílání novinek.</span></label></div>
-      </div>
-    </dc-gi>
-  </dc-con>
-  <dc-con class="bottom">
-    <dc-gi>
-      <span class="copyright">© 2026 Tonerprint.cz</span>
-      <div class="paymentLogos">
-        <img src="ds/assets/platby/visa-mastercard.svg" alt="Visa a Mastercard">
-        <img src="ds/assets/platby/maestro.svg" alt="Maestro">
-        <img src="ds/assets/platby/googlepay.svg" alt="Google Pay">
-        <img src="ds/assets/platby/applepay.svg" alt="Apple Pay">
-        <img src="ds/assets/platby/comgate.svg" alt="ComGate">
-      </div>
-      <span class="claim">Tvoříme dobré pracovní prostředí</span>
-    </dc-gi>
-  </dc-con>
-</footer>
+<dc-import name="komponenty/overlay/FilterView"
+  filter-active="{{ filterActive }}"
+  close-filter="{{ closeFilter }}"
+  filter-count="{{ filterCount }}"
+  filter-groups="{{ filterGroups }}"
+  clear-filters="{{ clearFilters }}"
+  total-items="{{ totalItems }}"
+  hint-size="0,0"></dc-import>
+<dc-import name="komponenty/global/FooterView"
+  about-caption="TonerPrint" about-text="Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji."
+  copyright="© 2026 Tonerprint.cz" claim="Tvoříme dobré pracovní prostředí"
+  hint-size="100%,420px"></dc-import>
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;columns3&quot;,&quot;columns4&quot;,&quot;columns5&quot;],&quot;default&quot;:&quot;columns4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Výpis&quot;},&quot;showSubcategories&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Výpis&quot;}}">
 class Component extends DCLogic {
   state = {
     mega: false, usp: 0, sort: 'top', view: 'grid', page: 1, shown: 8,
-    textOpen: false, filterOpen: false, qtys: {}, cart: [], fixed: false, loginOpen: false, q: '', searchOpen: false,
+    textOpen: false, filterOpen: false, qtys: {}, cart: [], loginOpen: false, q: '', searchOpen: false,
     checked: { hp: true, skladem: true }, collapsedGroups: { typ: true },
   };
+
+  /* Servisní pruh — markup drží komponenta UserContentPanelView. */
+  topbar = {
+    "usp": [
+      {
+        "icon": "#tp-building-store",
+        "label": "Česká společnost od 90. let"
+      },
+      {
+        "icon": "#tp-truck-delivery",
+        "label": "Doprava zdarma od 1 500 Kč"
+      },
+      {
+        "icon": "#tp-clock",
+        "label": "Odesíláme do 24 h"
+      },
+      {
+        "icon": "#tp-coins",
+        "label": "Na fakturu pro školy a instituce"
+      }
+    ],
+    "links": [
+      {
+        "label": "O nás",
+        "href": "#o-nas"
+      },
+      {
+        "label": "Poradna",
+        "href": "#poradna"
+      },
+      {
+        "label": "Kontakt",
+        "href": "#kontakt"
+      }
+    ]
+  };
+
+
+  /* Data lišty kategorií a mega-menu — markup drží komponenta MenuView. */
+  menu = {
+    "items": [
+      {
+        "label": "Tonery a náplně",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Kancelářské potřeby",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Kancelářská technika",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Papírnictví",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Školní potřeby",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Balicí materiál",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Hygiena a úklid",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Značky",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": ""
+      },
+      {
+        "label": "Akce %",
+        "href": "vypis-kategorie.dc.html",
+        "modifier": "sale"
+      }
+    ],
+    "mega": [
+      {
+        "label": "Kancelářská technika",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-printer",
+        "modifier": "selected",
+        "subs": [
+          {
+            "label": "Skartovačky",
+            "href": "vypis-kategorie.dc.html",
+            "items": [
+              {
+                "label": "Skartovačky AT",
+                "href": "vypis-kategorie.dc.html"
+              },
+              {
+                "label": "Olejové papíry",
+                "href": "vypis-kategorie.dc.html"
+              }
+            ]
+          },
+          {
+            "label": "Laminace",
+            "href": "vypis-kategorie.dc.html",
+            "items": [
+              {
+                "label": "Laminovací fólie",
+                "href": "vypis-kategorie.dc.html"
+              },
+              {
+                "label": "Laminátory",
+                "href": "vypis-kategorie.dc.html"
+              }
+            ]
+          },
+          {
+            "label": "Řezačky",
+            "href": "vypis-kategorie.dc.html",
+            "items": []
+          },
+          {
+            "label": "Vazba",
+            "href": "vypis-kategorie.dc.html",
+            "items": []
+          }
+        ]
+      },
+      {
+        "label": "Tonery a náplně",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-printer",
+        "modifier": "",
+        "subs": []
+      },
+      {
+        "label": "Kancelářské potřeby",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-shopping-bag",
+        "modifier": "",
+        "subs": []
+      },
+      {
+        "label": "Papírnictví",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-book",
+        "modifier": "",
+        "subs": []
+      },
+      {
+        "label": "Školní potřeby",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-package",
+        "modifier": "",
+        "subs": []
+      },
+      {
+        "label": "Balicí materiál",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-package-export",
+        "modifier": "",
+        "subs": []
+      },
+      {
+        "label": "Akce %",
+        "href": "vypis-kategorie.dc.html",
+        "icon": "#tp-discount",
+        "modifier": "sale",
+        "subs": []
+      }
+    ],
+    "featured": [
+      {
+        "image": "ds/assets/produkty/skartovacka-at-13c.jpg",
+        "label": "Skartovačky",
+        "href": "vypis-kategorie.dc.html",
+        "items": [
+          {
+            "label": "Skartovačky AT",
+            "href": "detail-produktu.dc.html"
+          },
+          {
+            "label": "Olejové papíry",
+            "href": "vypis-kategorie.dc.html"
+          }
+        ]
+      },
+      {
+        "image": "ds/assets/produkty/laminovaci-folie-a4.jpg",
+        "label": "Laminace",
+        "href": "vypis-kategorie.dc.html",
+        "items": [
+          {
+            "label": "Laminovací fólie",
+            "href": "vypis-kategorie.dc.html"
+          },
+          {
+            "label": "Laminátory",
+            "href": "vypis-kategorie.dc.html"
+          }
+        ]
+      },
+      {
+        "image": "ds/assets/produkty/rezacka-argo-a4.jpg",
+        "label": "Řezačky",
+        "href": "vypis-kategorie.dc.html",
+        "items": [
+          {
+            "label": "Pákové řezačky",
+            "href": "vypis-kategorie.dc.html"
+          },
+          {
+            "label": "Kotoučové řezačky",
+            "href": "vypis-kategorie.dc.html"
+          }
+        ]
+      }
+    ]
+  };
+
 
   /* Katalog kategorie Kancelářská technika — prototyp, ne data z BS Shopu. */
   catalog = [
@@ -734,6 +582,16 @@ class Component extends DCLogic {
           buy: () => this.addToCart(p.key),
         };
       }),
+      asideCategories: [
+        { label: 'Kancelářská technika', value: '212', href: 'vypis-kategorie.dc.html' },
+        { label: 'Skartovačky', value: '48', href: 'vypis-kategorie.dc.html' },
+        { label: 'Laminace', value: '112', href: 'vypis-kategorie.dc.html' },
+      ],
+      asideManufacturers: [
+        { label: 'AT', value: '61', href: 'vypis-kategorie.dc.html' },
+        { label: 'Argo', value: '54', href: 'vypis-kategorie.dc.html' },
+        { label: 'tesa', value: '38', href: 'vypis-kategorie.dc.html' },
+      ],
       whisperCount: this.found().length,
       hasWhisper: this.found().length > 0,
       noWhisper: this.state.searchOpen && !!this.state.q.trim() && this.found().length === 0,
@@ -743,13 +601,15 @@ class Component extends DCLogic {
          Panel žije v .LoginUserView jako ._headerPopup. */
       toggleLogin: e => { e.preventDefault(); this.setState(s => ({ loginOpen: !s.loginOpen })); },
       closePopups: () => this.setState({ loginOpen: false }),
-      usp0: this.state.usp === 0 ? 'current' : '',
-      usp1: this.state.usp === 1 ? 'current' : '',
-      usp2: this.state.usp === 2 ? 'current' : '',
-      usp3: this.state.usp === 3 ? 'current' : '',
       uspPrev: () => this.uspStep(-1),
       uspNext: () => this.uspStep(1),
-      headerFixed: this.state.fixed ? 'fixed' : '',
+      breadcrumb: [{"label":"Kancelářská technika","href":""}],
+      topbarUsp: this.topbar.usp,
+      topbarLinks: this.topbar.links,
+      uspCurrent: this.state.usp,
+      menuItems: this.menu.items,
+      megaItems: this.menu.mega,
+      megaFeatured: this.menu.featured,
       megaOpen: this.state.mega,
       megaDisplay: this.state.mega ? 'block' : 'none',
       toggleMega: () => this.setState(s => ({ mega: !s.mega })),
@@ -871,44 +731,7 @@ class Component extends DCLogic {
     });
   }
 
-  /* DS: .HeaderView.isFixedHeaderAware dostane .fixed, jakmile projde pivot nad ní
-     (BS Shop dělá totéž přes headerFixPivot) — sticky hlavička se stínem. */
-  /* Sticky hlavička: měří se scroll proti statickému offsetTop hlavičky (sticky ji
-     z toku nevyjímá, takže offsetTop drží). IntersectionObserver na pivotu uvnitř
-     hlavičky nejde — přilepená hlavička si pivot přitáhne do viewportu a stav
-     se zacyklí. Třída jde do stavu, ne přes classList: className drží šablona. */
-  watchHeader() {
-    const header = document.querySelector('.HeaderView.isFixedHeaderAware');
-    if (!header) return;
-    const measure = () => {
-      if (!this.state.fixed) this.headerTop = header.offsetTop;
-      document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
-      /* Offset pole hledání v obsahu hlavičky — panel našeptávače se na něj zarovná. */
-      const row = header.querySelector('dc-con.dcContent');
-      const field = header.querySelector('.SimpleSearchView');
-      if (row && field) {
-        const left = Math.max(0, Math.round(field.getBoundingClientRect().left - row.getBoundingClientRect().left));
-        document.documentElement.style.setProperty('--tp-search-left', left + 'px');
-      }
-    };
-    measure();
-    this.onScroll = () => {
-      const fixed = window.scrollY > this.headerTop + 4;
-      if (fixed !== this.state.fixed) this.setState({ fixed });
-    };
-    this.onHeaderResize = measure;
-    window.addEventListener('scroll', this.onScroll, { passive: true });
-    window.addEventListener('resize', this.onHeaderResize);
-    /* Styly z helmetu i logo dojdou až po mountu — bez přeměření by se do
-       --tp-header-h zapsala výška nestylované hlavičky. */
-    window.addEventListener('load', this.onHeaderResize);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-    if (window.ResizeObserver) {
-      this.headerRo = new ResizeObserver(measure);
-      this.headerRo.observe(header);
-    }
-    this.onScroll();
-  }
+  /* Přilepení hlavičky a měření --tp-header-h řeší komponenta HeaderView. */
 
   closeOnOutside = e => {
     const inSearch = e.target.closest && e.target.closest('.SimpleSearchView');
@@ -920,7 +743,6 @@ class Component extends DCLogic {
   componentDidMount() {
     document.addEventListener('mousedown', this.closeOnOutside);
     this.syncCustomElementClasses();
-    this.watchHeader();
     this.startUsp();
     this.onKeyDown = e => {
       if (e.key !== 'Escape') return;
@@ -935,10 +757,6 @@ class Component extends DCLogic {
     clearInterval(this.uspTimer);
     document.removeEventListener('keydown', this.onKeyDown);
     document.removeEventListener('mousedown', this.closeOnOutside);
-    window.removeEventListener('scroll', this.onScroll);
-    window.removeEventListener('resize', this.onHeaderResize);
-    window.removeEventListener('load', this.onHeaderResize);
-    if (this.headerRo) this.headerRo.disconnect();
   }
 }
 

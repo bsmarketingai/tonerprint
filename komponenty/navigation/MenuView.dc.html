@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: lišta kategorií dnes scrolluje celý dc-con.dcContent, včetně
+       „Všechny kategorie“, a přetečení není nijak signalizované. Má to být obráceně:
+       tlačítko zůstává na místě, vodorovně se posouvají jen položky, bez scrollbaru,
+       a když se nevejdou (nastane už na pásmu xl), je vpravo bílý přechod a šipka. */
+    .MenuView > dc-con.dcContent { overflow: visible; position: relative; }
+    .MenuView > dc-con.dcContent > .button.toggle, .MenuView > dc-con.dcContent > .separator { flex: none; }
+    .MenuView .items { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
+    .MenuView .items::-webkit-scrollbar { display: none; }
+    .MenuView .items > .root { flex: none; }
+    .MenuView ._menuFade { display: none; position: absolute; top: 0; bottom: 0; right: var(--spacer-40); width: var(--spacer-48); pointer-events: none; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-view-color)); }
+    .MenuView ._menuScrollNext { display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: var(--spacer-32); min-width: var(--spacer-32); min-height: var(--spacer-32); padding: 0; --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100); --btn-text-color: var(--text-color); --btn-text-color-hover: var(--color-main-600); }
+    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuFade { display: block; }
+    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuScrollNext { display: inline-flex; align-items: center; justify-content: center; }
+    .MenuView > dc-con.dcContent[data-overflow="1"] .items { padding-right: var(--spacer-72); }
+    /* CHYBÍ V DS: lišta kategorií zůstává na dosah i uprostřed dlouhé stránky.
+       Odsazuje se o výšku hlavičky, kterou měří stránka do --tp-header-h. */
+    /* Obchází runtime, ne DS: obal importované komponenty má výšku lišty, takže by
+       přilepená lišta neměla kam odjet — display: contents ho vyřadí z layoutu. */
+    .sc-host:has(> ._menuWrap) { display: contents; }
+    ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+  </style>
+</helmet>
+
+<div class="_menuWrap">
+  <nav class="MenuView v1a v1 bs-view dcon dc000" aria-label="Kategorie">
+    <dc-con class="dcContent">
+      <button type="button" class="button toggle" onClick="{{ onToggleMega }}" aria-expanded="{{ megaOpen }}">
+        <svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie
+      </button>
+      <span class="separator" aria-hidden="true"></span>
+      <ul class="items">
+        <sc-for list="{{ items }}" as="i" hint-placeholder-count="9">
+          <li class="root {{ i.modifier }}"><a href="{{ i.href }}">{{ i.label }}</a></li>
+        </sc-for>
+      </ul>
+      <span class="_menuFade" aria-hidden="true"></span>
+      <button type="button" class="button _menuScrollNext" aria-label="Další kategorie" onClick="{{ onScrollNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+    </dc-con>
+  </nav>
+  <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
+    <dc-con class="dcContent">
+      <ul class="items">
+        <sc-for list="{{ megaItems }}" as="g" hint-placeholder-count="9">
+          <li class="level_0 {{ g.modifier }}">
+            <a href="{{ g.href }}"><svg class="icon ico2" aria-hidden="true"><use href="{{ g.icon }}"></use></svg>{{ g.label }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+            <sc-if value="{{ g.hasSubs }}">
+              <ul class="_subLevels level_1">
+                <sc-for list="{{ g.subs }}" as="s" hint-placeholder-count="4">
+                  <li>
+                    <a class="name" href="{{ s.href }}">{{ s.label }}</a>
+                    <ul class="level_2">
+                      <sc-for list="{{ s.items }}" as="l" hint-placeholder-count="3">
+                        <li><a href="{{ l.href }}">{{ l.label }}</a></li>
+                      </sc-for>
+                    </ul>
+                  </li>
+                </sc-for>
+              </ul>
+            </sc-if>
+          </li>
+        </sc-for>
+      </ul>
+      <sc-if value="{{ hasFeatured }}">
+        <bs-lazy-render class="expanded">
+          <span class="caption">{{ featuredCaption }}</span>
+          <ul class="items">
+            <sc-for list="{{ featured }}" as="f" hint-placeholder-count="6">
+              <li class="level_1">
+                <span class="image"><img src="{{ f.image }}" alt="" loading="lazy"></span>
+                <span>
+                  <a class="name" href="{{ f.href }}">{{ f.label }}</a>
+                  <ul class="level_2">
+                    <sc-for list="{{ f.items }}" as="l" hint-placeholder-count="3">
+                      <li><a href="{{ l.href }}">{{ l.label }}</a></li>
+                    </sc-for>
+                  </ul>
+                </span>
+              </li>
+            </sc-for>
+          </ul>
+        </bs-lazy-render>
+      </sc-if>
+    </dc-con>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:56},&quot;items&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,modifier}&gt;&quot;},&quot;megaItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,icon,modifier,subs}&gt;&quot;},&quot;featured&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,image,items}&gt;&quot;},&quot;featuredCaption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;megaOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onToggleMega&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  /* Lišta kategorií a mega-menu. Data i přepínání drží stránka; komponenta si řeší
+     jen vodorovný posun položek a signalizaci přetečení. */
+  renderVals() {
+    const p = this.props;
+    const megaItems = (p.megaItems ?? []).map(g => ({ ...g, hasSubs: !!(g.subs && g.subs.length) }));
+    const featured = p.featured ?? [];
+    return {
+      items: p.items ?? [],
+      megaItems,
+      megaDisplay: p.megaOpen ? 'block' : 'none',
+      megaOpen: p.megaOpen ?? false,
+      onToggleMega: p.onToggleMega,
+      featured,
+      hasFeatured: featured.length > 0,
+      featuredCaption: p.featuredCaption ?? '',
+      onScrollNext: e => {
+        const items = e.currentTarget.parentElement.querySelector('.items');
+        if (items) items.scrollBy({ left: Math.round(items.clientWidth * 0.6) });
+      },
+    };
+  }
+
+  /* Přetečení položek se hlásí atributem data-overflow — CSS na něj váže bílý
+     přechod a šipku. Měří se po scrollu, resize i doměření fontů. */
+  watchMenu() {
+    this.menuSync = () => {
+      document.querySelectorAll('.MenuView > dc-con.dcContent').forEach(row => {
+        const items = row.querySelector('.items');
+        if (!items) return;
+        const more = items.scrollWidth - items.clientWidth - items.scrollLeft > 8;
+        row.setAttribute('data-overflow', more ? '1' : '0');
+      });
+    };
+    this.menuSync();
+    window.addEventListener('resize', this.menuSync);
+    window.addEventListener('load', this.menuSync);
+    document.querySelectorAll('.MenuView .items').forEach(items => {
+      items.addEventListener('scroll', this.menuSync, { passive: true });
+      if (window.ResizeObserver) {
+        this.ro = this.ro || new ResizeObserver(() => this.menuSync());
+        this.ro.observe(items);
+      }
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.menuSync);
+  }
+
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-lazy-render').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
+     se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
+     je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+    this.watchMenu();
+  }
+  componentDidUpdate() {
+    this.syncCustomElementClasses();
+    if (this.menuSync) this.menuSync();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.menuSync);
+    window.removeEventListener('load', this.menuSync);
+    if (this.ro) this.ro.disconnect();
+  }
+}
+
+</script>
+</body>
+</html>

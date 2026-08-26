@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    .sc-host:has(> .SituationsView) { display: contents; }
+  </style>
+</helmet>
+
+<section class="SituationsView v1a v1 bs-view dcon dc000 columns5 swipe">
+  <div class="_sectionHeader center _eshopWidth">
+    <h2 class="title">Co právě potřebujete?</h2>
+    <p class="shortDescription">Vyberte situaci, zbytek dohledáme za vás.</p>
+  </div>
+  <dc-con class="dcContent">
+    <div class="SituationView v1a v1 bs-view success">
+      <p class="name">Zařizujete kancelář?</p>
+      <p class="shortDescription">Kompletní vybavení pro moderní kancelář.</p>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+      <span class="image"><img data-src="ds/assets/kategorie/kancelar.png" alt="Kancelářské vybavení" loading="lazy"></span>
+    </div>
+    <div class="SituationView v1a v1 bs-view warning">
+      <p class="name">Připravujete školní rok?</p>
+      <p class="shortDescription">Vše pro školy, učitele i studenty.</p>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+      <span class="image"><img data-src="ds/assets/kategorie/skola.png" alt="Školní potřeby" loading="lazy"></span>
+    </div>
+    <div class="SituationView v1a v1 bs-view main">
+      <p class="name">Balíte zásilky?</p>
+      <p class="shortDescription">Obaly, krabice, pásky a vše pro bezpečné balení.</p>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+      <span class="image"><img data-src="ds/assets/kategorie/baleni.png" alt="Balicí materiál" loading="lazy"></span>
+    </div>
+    <div class="SituationView v1a v1 bs-view storage">
+      <p class="name">Potřebujete tisknout?</p>
+      <p class="shortDescription">Tonery, náplně, papíry a tiskové příslušenství.</p>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+      <span class="image"><img data-src="ds/assets/kategorie/tisk.png" alt="Tonery a papíry" loading="lazy"></span>
+    </div>
+    <div class="SituationView v1a v1 bs-view neutral">
+      <p class="name">Vybavujete sklad?</p>
+      <p class="shortDescription">Praktické vybavení pro sklad a provoz.</p>
+      <a class="readMore" href="#sklad">Zobrazit<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+      <span class="image"><img data-src="ds/assets/kategorie/sklad.png" alt="Vybavení skladu" loading="lazy"></span>
+    </div>
+  </dc-con>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — úpravy textů se dějí tady, ne na stránce. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+
+  /* Fotky se do šablony píšou jako data-src: kdyby v atributu src stála šablonová
+     hole, prohlížeč by si během streamu vyžádal literální URL a v konzoli by zůstala
+     chyba. Skutečné src se doplní po mountu podle hloubky dokumentu. */
+  hydrateImages() {
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      const src = this.dsPrefix() + img.getAttribute('data-src');
+      if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+  }
+
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+  componentDidUpdate() {
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+}
+</script>
+</body>
+</html>

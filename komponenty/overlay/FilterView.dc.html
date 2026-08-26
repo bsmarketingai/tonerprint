@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+<div class="FilterView v1a v1 bs-view dcon dc000 {{ filterActive }}" role="dialog" aria-modal="true" aria-label="Filtry">
+  <div class="overlay" onClick="{{ closeFilter }}"></div>
+  <dc-con class="wrap">
+    <dc-con class="dcHeader">
+      <span class="caption"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtry<span class="value">{{ filterCount }}</span></span>
+      <button type="button" class="button toggle" aria-label="Zavřít filtry" onClick="{{ closeFilter }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+    </dc-con>
+    <dc-con class="dcContent">
+      <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="4">
+        <div class="group {{ g.cls }}">
+          <button type="button" class="label" aria-expanded="{{ g.expanded }}" onClick="{{ g.toggle }}">{{ g.name }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="4">
+              <label class="{{ o.cls }}"><input class="checkBox" type="checkbox" checked="{{ o.checked }}" disabled="{{ o.disabled }}" onChange="{{ o.toggle }}">{{ o.name }}<span class="value">{{ o.count }}</span></label>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div class="group">
+        <button type="button" class="label">Cena<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
+        <div class="items">
+          <div class="query">
+            <input class="textBox" type="number" value="0" aria-label="Cena od">
+            <span class="separator">–</span>
+            <input class="textBox" type="number" value="9000" aria-label="Cena do">
+            <span class="unitsDescription">Kč</span>
+          </div>
+        </div>
+      </div>
+    </dc-con>
+    <dc-con class="bottom">
+      <button type="button" class="button toggle" onClick="{{ clearFilters }}">Zrušit filtry</button>
+      <button type="button" class="button buy" onClick="{{ closeFilter }}">Zobrazit {{ totalItems }} produktů</button>
+    </dc-con>
+  </dc-con>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

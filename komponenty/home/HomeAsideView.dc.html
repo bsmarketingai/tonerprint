@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    .sc-host:has(> ._homeAside) { display: contents; }
+  </style>
+</helmet>
+
+<section class="_homeAside">
+  <div class="ArticleListView v1a v1 bs-view dcon dc000">
+    <dc-con class="dcHeader"><span class="caption"><svg class="icon ico3" aria-hidden="true"><use href="#tp-book-2"></use></svg>Nejčtenější rady a návody</span></dc-con>
+    <ul class="items">
+      <li><a href="#poradna"><span class="image"><img data-src="ds/assets/kategorie/tisk.png" alt="" loading="lazy"></span><span><span class="name">Jak poznat, jaký toner tiskárna bere</span><span class="note">Podle kódu na kazetě, ne podle názvu tiskárny</span></span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna"><span class="image"><img data-src="ds/assets/produkty/skartovacka-at-13c.jpg" alt="" loading="lazy"></span><span><span class="name">Skartovačka do kanceláře: který stupeň stačí</span><span class="note">P4 pro běžné doklady, P5 pro osobní údaje</span></span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna"><span class="image"><img data-src="ds/assets/kategorie/baleni.png" alt="" loading="lazy"></span><span><span class="name">Kolik pásky spotřebujete na 100 balíků</span><span class="note">Spočítáno na krabici 400 × 300 mm</span></span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna"><span class="image"><img data-src="ds/assets/kategorie/skola.png" alt="" loading="lazy"></span><span><span class="name">Batoh pro prvňáka: na co se dívat</span><span class="note">Váha, zádový systém, reflexní prvky</span></span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna"><span class="image"><img data-src="ds/assets/produkty/laminovaci-folie-a4.jpg" alt="" loading="lazy"></span><span><span class="name">Laminovací fólie: 80, nebo 100 mikronů</span><span class="note">Podle toho, jak dlouho má dokument vydržet</span></span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+    </ul>
+    <dc-con class="dcFooter"><a class="readMore" href="#poradna">Zobrazit všechny rady<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></dc-con>
+  </div>
+
+  <div class="FaqListView v1a v1 bs-view dcon dc000 links">
+    <dc-con class="dcHeader"><span class="caption"><svg class="icon ico3" aria-hidden="true"><use href="#tp-message-question"></use></svg>Nejčastější otázky</span></dc-con>
+    <ul class="items">
+      <li><a href="#poradna">Prodáváte i školám a institucím?<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna">Kdy zboží odesíláte?<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna">Sedne kompatibilní toner do mé tiskárny?<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna">Můžu platit na fakturu?<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+      <li><a href="#poradna">Jak vrátím zboží?<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></li>
+    </ul>
+    <dc-con class="dcFooter"><a class="readMore" href="#poradna">Zobrazit všechny otázky<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></dc-con>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — úpravy textů se dějí tady, ne na stránce. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+
+  /* Fotky se do šablony píšou jako data-src: kdyby v atributu src stála šablonová
+     hole, prohlížeč by si během streamu vyžádal literální URL a v konzoli by zůstala
+     chyba. Skutečné src se doplní po mountu podle hloubky dokumentu. */
+  hydrateImages() {
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      const src = this.dsPrefix() + img.getAttribute('data-src');
+      if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+  }
+
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+  componentDidUpdate() {
+    this.syncCustomElementClasses();
+    this.hydrateImages();
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+<div class="_categoryTextBlock">
+  <span class="caption">Technika pro kancelář, školu i domácí pracovnu</span>
+  <div class="_categoryText {{ textCollapsed }}">
+    <p>Tiskárny, skenery, skartovačky, laminátory, řezačky, vazače i štítkovače na jednom místě. Podle členění podkategorií vyberete zařízení pro domácnost, malou kancelář i větší firmu.</p>
+    <p>Objednáte-li do 14:00, odesíláme ještě dnes. Školám, úřadům a firmám umožňujeme nákup na fakturu se splatností 14 dní.</p>
+    <p>Nevíte, jaký výkon potřebujete? U skartovaček se řídíme počtem listů na jeden průchod, u laminátorů šířkou fólie — poradíme na <a href="#kontakt">541 123 456</a>.</p>
+  </div>
+  <button type="button" class="_expandButton" aria-expanded="{{ textExpanded }}" onClick="{{ toggleText }}">{{ textToggleLabel }}<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+<div class="UserContentPanelView v1a v1 bs-view dcon dc000">
+  <dc-con class="dcContent">
+    <div class="items top">
+      <button type="button" class="button uspNav prev" aria-label="Předchozí výhoda" onClick="{{ onPrev }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
+      <sc-for list="{{ usp }}" as="u" hint-placeholder-count="4">
+        <span class="{{ u.modifier }}"><svg class="icon ico2" aria-hidden="true"><use href="{{ u.icon }}"></use></svg>{{ u.label }}</span>
+      </sc-for>
+      <button type="button" class="button uspNav next" aria-label="Další výhoda" onClick="{{ onNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+    </div>
+    <div class="items bottom">
+      <sc-for list="{{ links }}" as="l" hint-placeholder-count="4">
+        <a href="{{ l.href }}">{{ l.label }}</a>
+      </sc-for>
+      <a href="#prihlaseni" onClick="{{ onLogin }}">Přihlášení</a>
+    </div>
+  </dc-con>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:80},&quot;usp&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{icon,label}&gt;&quot;},&quot;links&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href}&gt;&quot;},&quot;current&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:3,&quot;tsType&quot;:&quot;number&quot;},&quot;onPrev&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onNext&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onLogin&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;}}">
+class Component extends DCLogic {
+  /* Servisní pruh nad hlavičkou. Pod 820 px se výhody střídají — index střídání
+     drží stránka, komponenta jen označí tu aktuální třídou current. */
+  renderVals() {
+    const p = this.props;
+    const usp = p.usp ?? [
+      { icon: '#tp-building-store', label: 'Česká společnost od 90. let' },
+      { icon: '#tp-truck-delivery', label: 'Doprava zdarma od 1 500 Kč' },
+      { icon: '#tp-clock', label: 'Odesíláme do 24 h' },
+      { icon: '#tp-flag', label: 'Více než 30 let zkušeností' },
+    ];
+    const current = p.current ?? 0;
+    return {
+      usp: usp.map((u, i) => ({ ...u, modifier: i === current ? 'current' : '' })),
+      links: p.links ?? [
+        { label: 'O nás', href: '#o-nas' },
+        { label: 'Poradna', href: '#poradna' },
+        { label: 'Kontakt', href: '#kontakt' },
+      ],
+      onPrev: p.onPrev,
+      onNext: p.onNext,
+      onLogin: p.onLogin,
+    };
+  }
+
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
+     se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
+     je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+
+</script>
+</body>
+</html>

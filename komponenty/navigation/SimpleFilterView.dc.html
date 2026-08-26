@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+<div class="SimpleFilterView v1a v1 bs-view dcon dc000">
+  <button type="button" class="button _filterButton" onClick="{{ openFilter }}">
+    <svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtrovat
+  </button>
+  <select class="select sortOrder" aria-label="Řazení" value="{{ sort }}" onChange="{{ onSortSelect }}">
+    <option value="top">Nejprodávanější</option>
+    <option value="asc">Od nejlevnějšího</option>
+    <option value="desc">Od nejdražšího</option>
+    <option value="new">Nejnovější</option>
+  </select>
+  <div class="sortingBox" role="radiogroup" aria-label="Řazení">
+    <input class="radio" type="radio" name="sort" id="sortTop" checked="{{ sortTop }}" onChange="{{ setSortTop }}"><label for="sortTop">Nejprodávanější</label>
+    <input class="radio" type="radio" name="sort" id="sortAsc" checked="{{ sortAsc }}" onChange="{{ setSortAsc }}"><label for="sortAsc">Od nejlevnějšího</label>
+    <input class="radio" type="radio" name="sort" id="sortDesc" checked="{{ sortDesc }}" onChange="{{ setSortDesc }}"><label for="sortDesc">Od nejdražšího</label>
+    <input class="radio" type="radio" name="sort" id="sortNew" checked="{{ sortNew }}" onChange="{{ setSortNew }}"><label for="sortNew">Nejnovější</label>
+  </div>
+  <span class="totalItems"><strong>{{ totalItems }}</strong> produktů</span>
+  <div class="viewTypeButtons">
+    <div class="ViewTypeSelectorView v1a v1 bs-view dcon dc000">
+      <a href="vypis-kategorie.dc.html" class="page default {{ gridClass }}" aria-label="Dlaždice" onClick="{{ setGrid }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-layout-grid"></use></svg></a>
+      <a href="vypis-kategorie.dc.html" class="page custom1 {{ rowsClass }}" aria-label="Řádky" onClick="{{ setRows }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-layout-list"></use></svg></a>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

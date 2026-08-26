@@ -1,0 +1,149 @@
+<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
+  <dc-gi class="headerFixPivot"></dc-gi>
+  <dc-con class="dcContent">
+    <div class="LogoView v1a v1 bs-view dcon dc000">
+      <a class="image" href="{{ logoHref }}" aria-label="TonerPrint — domovská stránka"><img src="{{ logo }}" alt="TonerPrint" width="180"></a>
+    </div>
+    <div class="SimpleSearchView v2a v2 bs-view dcon dc000 {{ searchActive }}">
+      <dc-con class="dcQuery">
+        <svg class="icon ico3 query" aria-hidden="true"><use href="#tp-search"></use></svg>
+        <input class="textBox" type="search" placeholder="Hledejte podle názvu nebo kódu náplně…" aria-label="Hledat" value="{{ q }}" onChange="{{ onQuery }}" onFocus="{{ openSearch }}">
+        <button type="button" class="button clear" aria-label="Vymazat hledání" onClick="{{ clearQuery }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+        <button type="button" class="button search">Hledat</button>
+      </dc-con>
+      <dc-con class="pivot">
+        <div class="SearchWhispererView v1a v1 bs-view dcon dc000">
+          <dc-con class="dcContent">
+            <div class="products">
+              <span class="caption">Vybrané produkty</span>
+              <sc-if value="{{ hasWhisper }}" hint-placeholder-val="{{ true }}">
+                <ul class="items">
+                  <sc-for list="{{ whisper }}" as="w" hint-placeholder-count="3">
+                    <li>
+                      <a class="item" href="detail-produktu.dc.html">
+                        <span class="image"><img src="{{ w.image }}" alt="" loading="lazy"></span>
+                        <span class="text">
+                          <span class="code">{{ w.code }}</span>
+                          <span class="name">{{ w.pre }}<mark>{{ w.hit }}</mark>{{ w.post }}</span>
+                          <span class="AvailabilityView v1a v1 bs-view {{ w.availClass }}"><span class="label">{{ w.availability }}</span></span>
+                        </span>
+                        <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ w.price }}</span><span class="vatText">s DPH</span></span></span>
+                      </a>
+                      <button type="button" class="button buy" aria-label="Do košíku" onClick="{{ w.buy }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
+                    </li>
+                  </sc-for>
+                </ul>
+                <a class="button a2 showAll" href="{{ showAllHref }}">Zobrazit všechny produkty ({{ whisperCount }})</a>
+              </sc-if>
+              <sc-if value="{{ noWhisper }}">
+                <div class="EmptyView v1a v1 bs-view dcon dc000 empty">
+                  <svg class="icon ico4" aria-hidden="true"><use href="#tp-package-off"></use></svg>
+                  <span class="caption">Nic jsme nenašli</span>
+                  <p class="shortDescription">{{ emptyText }}</p>
+                </div>
+              </sc-if>
+            </div>
+            <dc-gi class="aside">
+              <div class="group categories">
+                <span class="caption">Kategorie</span>
+                <ul class="items">
+                  <sc-for list="{{ asideCategories }}" as="c" hint-placeholder-count="3">
+                    <li><a href="{{ c.href }}">{{ c.label }}<span class="value">{{ c.value }}</span></a></li>
+                  </sc-for>
+                </ul>
+              </div>
+              <div class="group manufacturers">
+                <span class="caption">Výrobci</span>
+                <ul class="items">
+                  <sc-for list="{{ asideManufacturers }}" as="m" hint-placeholder-count="3">
+                    <li><a href="{{ m.href }}">{{ m.label }}<span class="value">{{ m.value }}</span></a></li>
+                  </sc-for>
+                </ul>
+              </div>
+            </dc-gi>
+          </dc-con>
+        </div>
+      </dc-con>
+    </div>
+    <div class="AiAssistantView v1a v1 bs-view dcon dc000">
+      <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
+    </div>
+    <dc-con class="dcHeader">
+      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
+      <div class="LoginUserView v1a v1 bs-view dcon dc000 {{ loginActive }}" id="prihlaseni">
+        <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ loginActive }}" role="dialog" aria-label="Přihlášení">
+          <dc-con class="dcHeader">
+            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
+            <span class="caption">Přihlášení</span>
+            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="formRow">
+              <label class="label" for="loginEmail">E-mail</label>
+              <input id="loginEmail" class="textBox" type="email" autocomplete="email" placeholder="vas@email.cz">
+            </div>
+            <div class="formRow">
+              <label class="label" for="loginPassword">Heslo</label>
+              <input id="loginPassword" class="textBox" type="password" autocomplete="current-password" placeholder="Vaše heslo">
+              <a class="forgot" href="#heslo">Zapomenuté heslo</a>
+            </div>
+            <button type="button" class="button login">Přihlásit se</button>
+            <a class="button register a5" href="#registrace">Registrace</a>
+            <div class="formRow inline">
+              <input id="loginPersist" class="checkBox" type="checkbox">
+              <label class="label" for="loginPersist">Zůstat přihlášen</label>
+            </div>
+          </dc-con>
+        </div>
+      </div>
+      <div class="SimpleBasketView v1a v1 bs-view dcon dc000 {{ basketEmptyClass }}">
+        <a href="#kosik" onClick="{{ toggleBasket }}" aria-expanded="{{ basketOpen }}">
+          <span class="icons"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">{{ cartCount }}</span></span>
+          <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ cartTotal }}</span></span><span class="totalItemsParts">{{ cartItemsLabel }}</span></span>
+        </a>
+        <sc-if value="{{ hasBasketPopup }}">
+        <div class="BasketProductsPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ basketActive }}" role="dialog" aria-label="Obsah košíku">
+          <dc-con class="dcHeader">
+            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
+            <span class="caption">Váš košík</span>
+            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+          </dc-con>
+          <dc-con class="dcContent">
+            <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}">
+              <ul class="items">
+                <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+                  <li>
+                    <span class="image"><img src="{{ it.image }}" alt="" loading="lazy"></span>
+                    <span class="text">
+                      <a class="name" href="detail-produktu.dc.html">{{ it.name }}</a>
+                      <span class="unitsDescription">{{ it.quantityLabel }}</span>
+                    </span>
+                    <span class="actions">
+                      <button type="button" class="button remove" aria-label="Odebrat z košíku" onClick="{{ it.remove }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-trash"></use></svg></button>
+                      <span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ it.lineTotal }}</span></span>
+                    </span>
+                  </li>
+                </sc-for>
+              </ul>
+            </sc-if>
+            <sc-if value="{{ cartEmpty }}">
+              <div class="EmptyView v1a v1 bs-view dcon dc000 empty">
+                <svg class="icon ico4" aria-hidden="true"><use href="#tp-package-off"></use></svg>
+                <span class="caption">Košík je prázdný</span>
+                <p class="shortDescription">Přidejte náplň podle kódu na kazetě, nebo si vyberte z doporučených produktů.</p>
+              </div>
+            </sc-if>
+          </dc-con>
+          <dc-con class="bottom">
+            <span class="totalItems">Celkem s DPH<span class="value">{{ cartTotal }}</span></span>
+            <a class="button checkout" href="#kosik"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg>Přejít do košíku</a>
+          </dc-con>
+        </div>
+        </sc-if>
+
+      </div>
+    </dc-con>
+    <button type="button" class="button menuButton" aria-label="Menu" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-menu-2"></use></svg></button>
+  </dc-con>
+  <dc-gi class="headerUnfixPivot"></dc-gi>
+</header>

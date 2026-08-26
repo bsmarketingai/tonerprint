@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+
+<div class="TabsProductDetailMasterView v1a v1 bs-view dcon dc000" id="popis">
+  <div class="tabpages">
+    <div class="tabs" role="tablist">
+      <button type="button" class="page {{ tab0 }}" onClick="{{ setTab0 }}">Popis</button>
+      <button type="button" class="page {{ tab1 }}" onClick="{{ setTab1 }}">Parametry</button>
+    </div>
+    <div class="pages">
+      <div class="page {{ tab0 }}">
+        <div class="ProductDescriptionView v1a v1 bs-view dcon dc000">
+          <a href="#poradna">Jak vybrat vhodnou skartovačku</a>
+          <p class="shortDescription" style="margin-top: var(--spacer-12)">Skartovací stroj atraktivního designu pro malé kanceláře, vhodný pro skartaci dokumentů o šířce 230 mm. Stroj je standardně vybaven automatickým systémem start/stop, zpětným chodem, tepelnou pojistkou motoru proti přehřátí a signalizací přeplněného koše.</p>
+          <p class="shortDescription" style="margin-top: var(--spacer-12)">Lze skartovat sešívací sponky a kreditní karty i CD a DVD. Vestavěný chladicí ventilátor umožňuje nepřetržitý provoz po dobu 15 minut. Koš o objemu 21 l stojí na kolečkách a vyjíždí dopředu, průhledné okénko ukazuje míru naplnění.</p>
+          <p class="shortDescription" style="margin-top: var(--spacer-12)">Křížový řez 4 × 35 mm odpovídá bezpečnostnímu stupni P-4 podle DIN 66399 — z listu A4 vznikne přes 400 nečitelných útržků. Certifikát NBÚ pro stupeň Vyhrazené.</p>
+        </div>
+      </div>
+      <div class="page {{ tab1 }}">
+        <div class="ProductDetailTableView v2a v2 bs-view dcon dc000 alignLeft">
+          <bs-grid-cont>
+            <bs-grid-item><span class="caption">Typ řezu</span><span class="value">Křížový 4 × 35 mm</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Bezpečnostní stupeň</span><span class="value">P-4 (DIN 66399)</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Počet listů najednou</span><span class="value">13</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Šířka vstupu</span><span class="value">230 mm</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Objem koše</span><span class="value">21 l</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Doba nepřetržitého provozu</span><span class="value">15 minut</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Skartuje</span><span class="value">Papír, sponky, karty, CD/DVD</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Certifikace</span><span class="value">NBÚ — Vyhrazené</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Záruka</span><span class="value">24 měsíců</span></bs-grid-item>
+            <bs-grid-item><span class="caption">Výrobce</span><span class="value">AT</span></bs-grid-item>
+          </bs-grid-cont>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — texty se upravují tady, ne na stránce.
+     Data a akce přicházejí z props stránky pod stejnými názvy jako v šabloně. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

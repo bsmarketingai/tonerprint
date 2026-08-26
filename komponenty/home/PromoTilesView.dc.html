@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    .sc-host:has(> .PromoTilesView) { display: contents; }
+  </style>
+</helmet>
+
+<section class="PromoTilesView v1a v1 bs-view dcon dc000 columns4">
+  <dc-con class="dcContent">
+    <div class="PromoTileView v1a v1 bs-view success">
+      <svg class="icon ico4" aria-hidden="true"><use href="#tp-star"></use></svg>
+      <p class="name">Vybíráme pro kancelář</p>
+      <p class="shortDescription">Produkty, které dlouhodobě doporučujeme zákazníkům.</p>
+      <a class="readMore" href="vypis-kategorie.dc.html">Zobrazit výběr<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+    </div>
+    <div class="PromoTileView v1a v1 bs-view warning">
+      <svg class="icon ico4"><use href="#tp-book"></use></svg>
+      <p class="name">Nákupní rádci</p>
+      <p class="shortDescription">Praktické návody a tipy pro každodenní rozhodování.</p>
+      <a class="readMore" href="#poradna">Zobrazit rádce<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+    </div>
+    <div class="PromoTileView v1a v1 bs-view main">
+      <svg class="icon ico4"><use href="#tp-robot"></use></svg>
+      <p class="name">AI pomoc s výběrem</p>
+      <p class="shortDescription">Zadejte model tiskárny, dohledáme kód kazety.</p>
+      <a class="readMore" href="#ai">Vyzkoušet AI poradce<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+    </div>
+    <div class="PromoTileView v1a v1 bs-view neutral">
+      <svg class="icon ico4"><use href="#tp-flag"></use></svg>
+      <p class="name">Česká společnost od 90. let</p>
+      <p class="shortDescription">Zkušenosti, kterým můžete důvěřovat.</p>
+      <a class="readMore" href="#o-nas">Více o nás<svg class="icon ico2"><use href="#tp-chevron-right"></use></svg></a>
+    </div>
+  </dc-con>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  /* Obsah bloku drží komponenta — úpravy textů se dějí tady, ne na stránce. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>

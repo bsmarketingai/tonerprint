@@ -3,6 +3,13 @@
 Design systém pro eshop **TonerPrint** — tonery, náplně a kancelářská technika.
 Postavený nad platformou **BS Shop**, jejíž názvosloví tříd je závazné.
 
+**Zdroj pravdy je tento projekt.** Tokeny, CSS a komponenty žijí tady — v `ds/`
+a `komponenty/`. Žádný jiný, napojený ani externí design systém se nehledá,
+nekontroluje se proti němu a nic se z něj nepřebírá; neexistuje nadřazený zdroj,
+ke kterému by se cokoli dorovnávalo nebo synchronizovalo. Co chybí nebo je nejasné,
+se rozhodne tady, nebo zůstane v **Otevřených bodech** — nikdy se to nedoplní
+odkazem či kopií odjinud.
+
 Zákazníci jsou ze dvou světů: domácnost, která jednou za rok shání náplň do
 tiskárny podle kódu na kazetě, a firma, škola nebo úřad, které objednávají
 pravidelně, na fakturu a potřebují ceny bez DPH. Systém obsluhuje oba, aniž by
@@ -14,14 +21,13 @@ jeden z nich obtěžoval.
 
 | Kde | Co tam je |
 | --- | --- |
-| `styles.css` | **Vstupní bod.** Konzumenti linkují jen tenhle soubor. Obsahuje pouze `@import`. |
-| `tokens/` | Proměnné — barvy, typografie, spacing, radiusy, bordery, stíny, ikony, layout, komponentové tokeny |
-| `css/` | Styly komponent podle názvosloví BS Shopu — reset, primitiva, globální, produktové, kategorie, detail, formuláře |
-| `components/` | React primitiva — `core`, `forms`, `product`, `feedback`, `navigation`, `overlay`, `global` |
-| `ui_kits/eshop/` | Klikací rekonstrukce dvou obrazovek: výpis kategorie a detail produktu |
-| `guidelines/` | Specimen karty pro záložku Design System |
-| `assets/` | Ikonový sprite, loga dopravců a plateb, produktové a kategoriové fotky |
-| `Design systém TonerPrint.dc.html` | Původní prohlížecí styleguide — dokumentace pro lidi, kompletní přehled všech šesti bloků |
+| `ds/styles.css` | **Vstupní bod.** Stránky i komponenty linkují jen tenhle soubor. Obsahuje pouze `@import`. |
+| `ds/tokens/` | Proměnné — barvy, typografie, spacing, radiusy, bordery, stíny, ikony, layout, komponentové tokeny |
+| `ds/css/` | Styly komponent podle názvosloví BS Shopu — reset, primitiva, globální, produktové, kategorie, detail, formuláře, homepage |
+| `ds/assets/` | Ikonový sprite, logo, loga dopravců a plateb, produktové a kategoriové fotky |
+| `komponenty/` | Komponenty stránek ve skupinách `global`, `navigation`, `product`, `overlay`, `home`, `detail` |
+| `design-system.dc.html` | Přehled: tokeny, komponenty a jejich stavy, stažení tokenů jako CSS, stažení ikon jako ZIP, Otevřené body |
+| `index.dc.html` · `vypis-kategorie.dc.html` · `detail-produktu.dc.html` | Tři obrazovky eshopu — skládají se z komponent |
 
 ---
 
@@ -31,8 +37,9 @@ jeden z nich obtěžoval.
   funkce (`AdjustLigtnessHex`, `HighestLightnessDistance`, `GetLabL`, `IfGe`) jsou
   rozpuštěné do statických hodnot, protože v prohlížeči nefungují. U každé odvozené
   barvy je v komentáři původní výraz.
-- **Značka:** logo TonerPrint (čtyři tečky + wordmark). Originální SVG zatím nemáme —
-  wordmark je pracovně vysazený z Figtree ExtraBold.
+- **Značka:** logo TonerPrint (čtyři tečky + wordmark) jako PNG na bílém podkladu —
+  `ds/assets/brand/logo-tonerprint.png`. Jiná varianta neexistuje; logo se nepřekresluje
+  do SVG ani nesází z písma. Na tmavém podkladu jde na bílou plotnu se zaoblením.
 - **Ikony:** kurátorská sada z knihovny Tabler dodaná zadavatelem, doplněná o vlastní
   `ai-search`.
 - **Fotografie:** 59 produktových fotek + 9 detailních fotek referenčního produktu
@@ -176,17 +183,19 @@ nedávají do koleček ani na barevný podklad, drží původní proporce.
 
 | Skupina | Komponenty |
 | --- | --- |
-| `core` | `Icon` |
-| `forms` | `Button`, `TextField`, `Select`, `Checkbox`, `Quantity` |
-| `product` | `ProductCard`, `ProductGrid`, `Price`, `AvailabilityBadge`, `Rating`, `ProductFlags` |
-| `feedback` | `Notification`, `EmptyState`, `Skeleton` |
-| `navigation` | `Tabs`, `Pagination` |
-| `overlay` | `FilterDrawer`, `Popup` |
-| `global` | `Header` |
+| `global` | `HeaderView` (hledání, našeptávač, „Rychlý nákup“, košík, panely), `UserContentPanelView`, `FooterView` |
+| `navigation` | `MenuView` (+ mega-menu), `BreadcrumbView`, `SimpleFilterView`, `CompoundPagingView`, `CategoryTextView` |
+| `product` | `ProductView` |
+| `overlay` | `FilterView` |
+| `home` | `HeroBannerView`, `PromoTilesView`, `SituationsView`, `StatsBarView`, `HomeAsideView` |
+| `detail` | `ProductDetailImageView`, `ProductDescriptionView`, `ProductDetailTableView`, `AddToCartView`, `AvailabilityPanelView`, `ProductIdentityView`, `ProductActionPanelView`, `TabsProductDetailMasterView` |
 
-Každá má vedle sebe `.d.ts` s kontraktem props a `.prompt.md` s tím, kdy ji
-použít. Komponenty **nenesou vlastní styly** — jen skládají třídy BS Shopu,
-které definuje `css/`.
+Komponenty **nenesou vlastní vizuál** — skládají třídy BS Shopu, které definuje `ds/css/`.
+Vlastní `<style>` v komponentě je vždy jen náplast s komentářem `CHYBÍ V DS` /
+`CHYBA V DS`, nebo obcházení runtime (obal importu, cesty k assetům).
+
+Markup i texty jsou v komponentách, aby úprava přes komentář padla do komponenty,
+ne na stránku. Stránka předává jen data, která se mezi stránkami liší, a callbacky.
 
 ### Co je závazné a co ne
 

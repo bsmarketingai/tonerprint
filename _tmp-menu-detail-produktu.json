@@ -1,0 +1,187 @@
+{
+ "items": [
+  {
+   "label": "Tonery a náplně",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Kancelářské potřeby",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Kancelářská technika",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Papírnictví",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Školní potřeby",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Balicí materiál",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Hygiena a úklid",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Značky",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": ""
+  },
+  {
+   "label": "Akce %",
+   "href": "vypis-kategorie.dc.html",
+   "modifier": "sale"
+  }
+ ],
+ "mega": [
+  {
+   "label": "Kancelářská technika",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-printer",
+   "modifier": "selected",
+   "subs": [
+    {
+     "label": "Skartovačky",
+     "href": "vypis-kategorie.dc.html",
+     "items": [
+      {
+       "label": "Skartovačky AT",
+       "href": "detail-produktu.dc.html"
+      },
+      {
+       "label": "Olejové papíry",
+       "href": "vypis-kategorie.dc.html"
+      }
+     ]
+    },
+    {
+     "label": "Laminace",
+     "href": "vypis-kategorie.dc.html",
+     "items": [
+      {
+       "label": "Laminovací fólie",
+       "href": "vypis-kategorie.dc.html"
+      },
+      {
+       "label": "Laminátory",
+       "href": "vypis-kategorie.dc.html"
+      }
+     ]
+    },
+    {
+     "label": "Řezačky",
+     "href": "vypis-kategorie.dc.html",
+     "items": []
+    },
+    {
+     "label": "Vazba",
+     "href": "vypis-kategorie.dc.html",
+     "items": []
+    }
+   ]
+  },
+  {
+   "label": "Tonery a náplně",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-printer",
+   "modifier": "",
+   "subs": []
+  },
+  {
+   "label": "Kancelářské potřeby",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-shopping-bag",
+   "modifier": "",
+   "subs": []
+  },
+  {
+   "label": "Papírnictví",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-book",
+   "modifier": "",
+   "subs": []
+  },
+  {
+   "label": "Školní potřeby",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-package",
+   "modifier": "",
+   "subs": []
+  },
+  {
+   "label": "Balicí materiál",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-package-export",
+   "modifier": "",
+   "subs": []
+  },
+  {
+   "label": "Akce %",
+   "href": "vypis-kategorie.dc.html",
+   "icon": "#tp-discount",
+   "modifier": "sale",
+   "subs": []
+  }
+ ],
+ "featured": [
+  {
+   "image": "ds/assets/produkty/skartovacka-at-13c.jpg",
+   "label": "Skartovačky",
+   "href": "vypis-kategorie.dc.html",
+   "items": [
+    {
+     "label": "Skartovačky AT",
+     "href": "detail-produktu.dc.html"
+    },
+    {
+     "label": "Olejové papíry",
+     "href": "vypis-kategorie.dc.html"
+    }
+   ]
+  },
+  {
+   "image": "ds/assets/produkty/laminovaci-folie-a4.jpg",
+   "label": "Laminace",
+   "href": "vypis-kategorie.dc.html",
+   "items": [
+    {
+     "label": "Laminovací fólie",
+     "href": "vypis-kategorie.dc.html"
+    },
+    {
+     "label": "Laminátory",
+     "href": "vypis-kategorie.dc.html"
+    }
+   ]
+  },
+  {
+   "image": "ds/assets/produkty/rezacka-argo-a4.jpg",
+   "label": "Řezačky",
+   "href": "vypis-kategorie.dc.html",
+   "items": [
+    {
+     "label": "Pákové řezačky",
+     "href": "vypis-kategorie.dc.html"
+    },
+    {
+     "label": "Kotoučové řezačky",
+     "href": "vypis-kategorie.dc.html"
+    }
+   ]
+  }
+ ],
+ "caption": "Kancelářská technika"
+}

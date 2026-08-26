@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBA V DS: .SearchWhispererView má vlastní minimum šířky, ale panel je přilepený
+       na šířku pole hledání a má overflow: hidden — obsah se vpravo ořeže. Panel proto
+       smí přerůst pole doprava; ukotvení nese obsah hlavičky, ne pole. */
+    /* Obchází runtime, ne DS: importovaná komponenta se mountuje do obalu, který má
+       výšku hlavičky — přilepená hlavička by v něm neměla kam odjet. display: contents
+       obal vyřadí z layoutu, takže sticky platí proti stránce. */
+    .sc-host:has(> .HeaderView) { display: contents; }
+    .HeaderView > dc-con.dcContent { position: relative; }
+    .HeaderView .SimpleSearchView:has(.SearchWhispererView) { position: static; }
+    .SimpleSearchView > dc-con.pivot:has(.SearchWhispererView) {
+      position: absolute; left: var(--tp-search-left, 0px); right: 0;
+      width: auto; max-width: 760px; min-width: 0;
+    }
+    .SimpleSearchView > dc-con.pivot .SearchWhispererView { min-width: 0; }
+    /* CHYBÍ V DS: přihlášení nemá v hlavičce vlastní spouštěč — overlay otevírá
+       „Rychlý nákup“ a odkaz v horním pruhu. .LoginUserView je jen nositel panelu;
+       display: contents ji vyřadí z layoutu, aby se panel ukotvil k liště nástrojů. */
+    .HeaderView dc-con.dcHeader { position: relative; }
+    .HeaderView .LoginUserView { display: contents; }
+    /* CHYBA V DS: .fixed zakládá stacking kontext s --z-header (100), takže panel
+       našeptávače skončí pod lištou kategorií. Přilepená hlavička musí být nad ní. */
+    .HeaderView.isFixedHeaderAware.fixed { z-index: var(--z-header-popup); }
+    /* CHYBÍ V DS: pod 550 px má být přihlášení přes celou obrazovku, stejně jako košík. */
+    @media (max-width: 549px) {
+      .LoginPopupView {
+        position: fixed; inset: 0; top: 0; width: 100%;
+        border-radius: 0; box-shadow: none;
+        display: none; flex-direction: column;
+        z-index: var(--z-overlay);
+      }
+      .active > .LoginPopupView, .LoginPopupView.active { display: flex; }
+      .LoginPopupView > dc-con.dcContent { flex: 1 1 auto; max-height: none; }
+      .LoginPopupView > dc-con.dcHeader { flex-wrap: wrap; }
+      .LoginPopupView > dc-con.dcHeader .caption { order: 2; flex: 1 1 100%; margin-top: var(--spacer-8); }
+      .LoginPopupView .button.back {
+        display: inline-flex; order: -1; margin-right: auto;
+        --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100);
+        --btn-text-color: var(--color-main-600); --btn-text-color-hover: var(--color-main-700);
+        padding: 0 var(--spacer-8);
+      }
+    }
+  </style>
+</helmet>
+
+<header class="HeaderView v1a v1 bs-view dcon dc000 isFixedHeaderAware {{ headerFixed }}">
+  <dc-gi class="headerFixPivot"></dc-gi>
+  <dc-con class="dcContent">
+    <div class="LogoView v1a v1 bs-view dcon dc000">
+      <a class="image" href="{{ logoHref }}" aria-label="TonerPrint — domovská stránka"><img src="{{ logo }}" alt="TonerPrint" width="180"></a>
+    </div>
+    <div class="SimpleSearchView v2a v2 bs-view dcon dc000 {{ searchActive }}">
+      <dc-con class="dcQuery">
+        <svg class="icon ico3 query" aria-hidden="true"><use href="#tp-search"></use></svg>
+        <input class="textBox" type="search" placeholder="Hledejte podle názvu nebo kódu náplně…" aria-label="Hledat" value="{{ q }}" onChange="{{ onQuery }}" onFocus="{{ openSearch }}">
+        <button type="button" class="button clear" aria-label="Vymazat hledání" onClick="{{ clearQuery }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+        <button type="button" class="button search">Hledat</button>
+      </dc-con>
+      <dc-con class="pivot">
+        <div class="SearchWhispererView v1a v1 bs-view dcon dc000">
+          <dc-con class="dcContent">
+            <div class="products">
+              <span class="caption">Vybrané produkty</span>
+              <sc-if value="{{ hasWhisper }}" hint-placeholder-val="{{ true }}">
+                <ul class="items">
+                  <sc-for list="{{ whisper }}" as="w" hint-placeholder-count="3">
+                    <li>
+                      <a class="item" href="detail-produktu.dc.html">
+                        <span class="image"><img src="{{ w.image }}" alt="" loading="lazy"></span>
+                        <span class="text">
+                          <span class="code">{{ w.code }}</span>
+                          <span class="name">{{ w.pre }}<mark>{{ w.hit }}</mark>{{ w.post }}</span>
+                          <span class="AvailabilityView v1a v1 bs-view {{ w.availClass }}"><span class="label">{{ w.availability }}</span></span>
+                        </span>
+                        <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ w.price }}</span><span class="vatText">s DPH</span></span></span>
+                      </a>
+                      <button type="button" class="button buy" aria-label="Do košíku" onClick="{{ w.buy }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
+                    </li>
+                  </sc-for>
+                </ul>
+                <a class="button a2 showAll" href="{{ showAllHref }}">Zobrazit všechny produkty ({{ whisperCount }})</a>
+              </sc-if>
+              <sc-if value="{{ noWhisper }}">
+                <div class="EmptyView v1a v1 bs-view dcon dc000 empty">
+                  <svg class="icon ico4" aria-hidden="true"><use href="#tp-package-off"></use></svg>
+                  <span class="caption">Nic jsme nenašli</span>
+                  <p class="shortDescription">{{ emptyText }}</p>
+                </div>
+              </sc-if>
+            </div>
+            <dc-gi class="aside">
+              <div class="group categories">
+                <span class="caption">Kategorie</span>
+                <ul class="items">
+                  <sc-for list="{{ asideCategories }}" as="c" hint-placeholder-count="3">
+                    <li><a href="{{ c.href }}">{{ c.label }}<span class="value">{{ c.value }}</span></a></li>
+                  </sc-for>
+                </ul>
+              </div>
+              <div class="group manufacturers">
+                <span class="caption">Výrobci</span>
+                <ul class="items">
+                  <sc-for list="{{ asideManufacturers }}" as="m" hint-placeholder-count="3">
+                    <li><a href="{{ m.href }}">{{ m.label }}<span class="value">{{ m.value }}</span></a></li>
+                  </sc-for>
+                </ul>
+              </div>
+            </dc-gi>
+          </dc-con>
+        </div>
+      </dc-con>
+    </div>
+    <div class="AiAssistantView v1a v1 bs-view dcon dc000">
+      <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
+    </div>
+    <dc-con class="dcHeader">
+      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
+      <div class="LoginUserView v1a v1 bs-view dcon dc000 {{ loginActive }}" id="prihlaseni">
+        <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ loginActive }}" role="dialog" aria-label="Přihlášení">
+          <dc-con class="dcHeader">
+            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
+            <span class="caption">Přihlášení</span>
+            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+          </dc-con>
+          <dc-con class="dcContent">
+            <div class="formRow">
+              <label class="label" for="loginEmail">E-mail</label>
+              <input id="loginEmail" class="textBox" type="email" autocomplete="email" placeholder="vas@email.cz">
+            </div>
+            <div class="formRow">
+              <label class="label" for="loginPassword">Heslo</label>
+              <input id="loginPassword" class="textBox" type="password" autocomplete="current-password" placeholder="Vaše heslo">
+              <a class="forgot" href="#heslo">Zapomenuté heslo</a>
+            </div>
+            <button type="button" class="button login">Přihlásit se</button>
+            <a class="button register a5" href="#registrace">Registrace</a>
+            <div class="formRow inline">
+              <input id="loginPersist" class="checkBox" type="checkbox">
+              <label class="label" for="loginPersist">Zůstat přihlášen</label>
+            </div>
+          </dc-con>
+        </div>
+      </div>
+      <div class="SimpleBasketView v1a v1 bs-view dcon dc000 {{ basketEmptyClass }}">
+        <a href="#kosik" onClick="{{ toggleBasket }}" aria-expanded="{{ basketOpen }}">
+          <span class="icons"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><span class="basketCount">{{ cartCount }}</span></span>
+          <span class="priceParts"><span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ cartTotal }}</span></span><span class="totalItemsParts">{{ cartItemsLabel }}</span></span>
+        </a>
+        <sc-if value="{{ hasBasketPopup }}">
+        <div class="BasketProductsPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ basketActive }}" role="dialog" aria-label="Obsah košíku">
+          <dc-con class="dcHeader">
+            <button type="button" class="button back" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg>Zpět do obchodu</button>
+            <span class="caption">Váš košík</span>
+            <button type="button" class="button toggle" aria-label="Zavřít" onClick="{{ closePopups }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
+          </dc-con>
+          <dc-con class="dcContent">
+            <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}">
+              <ul class="items">
+                <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+                  <li>
+                    <span class="image"><img src="{{ it.image }}" alt="" loading="lazy"></span>
+                    <span class="text">
+                      <a class="name" href="detail-produktu.dc.html">{{ it.name }}</a>
+                      <span class="unitsDescription">{{ it.quantityLabel }}</span>
+                    </span>
+                    <span class="actions">
+                      <button type="button" class="button remove" aria-label="Odebrat z košíku" onClick="{{ it.remove }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-trash"></use></svg></button>
+                      <span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ it.lineTotal }}</span></span>
+                    </span>
+                  </li>
+                </sc-for>
+              </ul>
+            </sc-if>
+            <sc-if value="{{ cartEmpty }}">
+              <div class="EmptyView v1a v1 bs-view dcon dc000 empty">
+                <svg class="icon ico4" aria-hidden="true"><use href="#tp-package-off"></use></svg>
+                <span class="caption">Košík je prázdný</span>
+                <p class="shortDescription">Přidejte náplň podle kódu na kazetě, nebo si vyberte z doporučených produktů.</p>
+              </div>
+            </sc-if>
+          </dc-con>
+          <dc-con class="bottom">
+            <span class="totalItems">Celkem s DPH<span class="value">{{ cartTotal }}</span></span>
+            <a class="button checkout" href="#kosik"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg>Přejít do košíku</a>
+          </dc-con>
+        </div>
+        </sc-if>
+
+      </div>
+    </dc-con>
+    <button type="button" class="button menuButton" aria-label="Menu" onClick="{{ toggleMega }}" aria-expanded="{{ megaOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-menu-2"></use></svg></button>
+  </dc-con>
+  <dc-gi class="headerUnfixPivot"></dc-gi>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:120},&quot;logo&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;../../ds/assets/brand/logo-tonerprint.png&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;logoHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;index.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headerFixed&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;fixed&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;q&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;searchActive&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;active&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;emptyText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Zkuste kód produktu, nebo název zařízení.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showAllHref&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;vypis-kategorie.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;hasBasketPopup&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;loginActive&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;active&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;basketActive&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;active&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cartCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:99,&quot;tsType&quot;:&quot;number&quot;},&quot;cartTotal&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;0 Kč&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;cartItemsLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;prázdný&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;whisper&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array<{image,code,pre,hit,post,availability,availClass,price,buy}>&quot;},&quot;whisperCount&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;},&quot;hasWhisper&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;noWhisper&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;asideCategories&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array<{label,href,value}>&quot;},&quot;asideManufacturers&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array<{label,href,value}>&quot;},&quot;cartItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array<{image,name,quantityLabel,lineTotal,remove}>&quot;},&quot;hasCart&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;cartEmpty&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onQuery&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) => void&quot;},&quot;openSearch&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() => void&quot;},&quot;clearQuery&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() => void&quot;},&quot;toggleLogin&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) => void&quot;},&quot;toggleBasket&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) => void&quot;},&quot;closePopups&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() => void&quot;},&quot;toggleMega&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() => void&quot;},&quot;megaOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;loginOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;basketOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { fixed: false };
+
+  /* Přilepení hlavičky si řeší komponenta sama — ona je vlastníkem .HeaderView.
+     Měří se scroll proti statickému offsetTop (sticky prvek z toku nevypadne).
+     Výška jde do --tp-header-h (o ni se odsazuje lišta kategorií) a offset pole
+     hledání do --tp-search-left (na něj se zarovná panel našeptávače). */
+  watchHeader() {
+    const header = this.base && this.base.querySelector
+      ? this.base.querySelector('.HeaderView.isFixedHeaderAware')
+      : document.querySelector('.HeaderView.isFixedHeaderAware');
+    if (!header) return;
+    this.header = header;
+    const measure = () => {
+      if (!this.state.fixed) this.headerTop = header.offsetTop;
+      document.documentElement.style.setProperty('--tp-header-h', header.offsetHeight + 'px');
+      const row = header.querySelector('dc-con.dcContent');
+      const field = header.querySelector('.SimpleSearchView');
+      if (row && field) {
+        const left = Math.max(0, Math.round(field.getBoundingClientRect().left - row.getBoundingClientRect().left));
+        document.documentElement.style.setProperty('--tp-search-left', left + 'px');
+      }
+    };
+    measure();
+    this.onScroll = () => {
+      const fixed = window.scrollY > this.headerTop + 4;
+      if (fixed !== this.state.fixed) this.setState({ fixed });
+    };
+    this.onResize = measure;
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('load', this.onResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    if (window.ResizeObserver) {
+      this.ro = new ResizeObserver(measure);
+      this.ro.observe(header);
+    }
+    this.onScroll();
+  }
+
+  /* Hlavička eshopu: logo, hledání s našeptávačem, AI poradce, „Rychlý nákup“
+     (= spouštěč přihlášení) a košík. Stav i data drží stránka, komponenta je
+     bez vlastního stavu — jen dorovnává class na custom elementech. */
+  renderVals() {
+    const p = this.props;
+    return {
+      headerFixed: this.state.fixed ? 'fixed' : '',
+      logo: p.logo ?? this.dsPrefix() + 'ds/assets/brand/logo-tonerprint.png',
+      logoHref: p.logoHref ?? 'index.dc.html',
+      emptyText: p.emptyText ?? 'Zkuste kód produktu, nebo název zařízení.',
+      showAllHref: p.showAllHref ?? 'vypis-kategorie.dc.html',
+      asideCategories: p.asideCategories ?? [],
+      asideManufacturers: p.asideManufacturers ?? [],
+      hasBasketPopup: p.hasBasketPopup ?? false,
+      cartCount: p.cartCount ?? 0,
+      cartTotal: p.cartTotal ?? '0 Kč',
+      cartItemsLabel: p.cartItemsLabel ?? 'prázdný',
+      basketEmptyClass: p.cartCount ? '' : 'empty',
+    };
+  }
+
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
+     se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
+     je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+    this.watchHeader();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('load', this.onResize);
+    if (this.ro) this.ro.disconnect();
+  }
+}
+</script>
+</body>
+</html>

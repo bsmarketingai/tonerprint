@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <script src="../ds/assets/icons/sprite.js"></script>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    html, body { height: auto; min-height: 100%; }
+    /* CHYBÍ V DS: lišta kategorií dnes scrolluje celý dc-con.dcContent, včetně
+       „Všechny kategorie“, a přetečení není nijak signalizované. Má to být obráceně:
+       tlačítko zůstává na místě, vodorovně se posouvají jen položky, bez scrollbaru,
+       a když se nevejdou (nastane už na pásmu xl), je vpravo bílý přechod a šipka. */
+    .MenuView > dc-con.dcContent { overflow: visible; position: relative; }
+    .MenuView > dc-con.dcContent > .button.toggle, .MenuView > dc-con.dcContent > .separator { flex: none; }
+    .MenuView .items { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
+    .MenuView .items::-webkit-scrollbar { display: none; }
+    .MenuView .items > .root { flex: none; }
+    .MenuView ._menuFade { display: none; position: absolute; top: 0; bottom: 0; right: var(--spacer-40); width: var(--spacer-48); pointer-events: none; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-view-color)); }
+    .MenuView ._menuScrollNext { display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: var(--spacer-32); min-width: var(--spacer-32); min-height: var(--spacer-32); padding: 0; --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100); --btn-text-color: var(--text-color); --btn-text-color-hover: var(--color-main-600); }
+    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuFade,
+    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuScrollNext { display: block; }
+    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuScrollNext { display: inline-flex; align-items: center; justify-content: center; }
+    .MenuView > dc-con.dcContent[data-overflow="1"] .items { padding-right: var(--spacer-72); }
+    /* CHYBÍ V DS: pás aktivních filtrů. DS umí u ._filterButton jen číselnou pilulku,
+       zákazník ale nevidí, co je zapnuté, dokud neotevře drawer. Stejná náplast je
+       zatím i na vypis-kategorie.dc.html — do DS patří blok ._activeFilters: popisek,
+       chips s hodnotou a křížkem a červený chip pro reset všech. */
+    ._activeFilters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacer-8); }
+    ._activeFilters .caption { font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); }
+    ._activeFilters .chip {
+      display: inline-flex; align-items: center; gap: var(--spacer-6);
+      min-height: var(--spacer-32); padding: var(--spacer-4) var(--spacer-10);
+      border: 0; border-radius: var(--radius-pill); cursor: pointer;
+      background: var(--color-main-100); color: var(--color-main-700);
+      font: var(--font-weight-semibold) var(--font-size-13) var(--font-family);
+    }
+    ._activeFilters .chip:hover { background: var(--color-main-200); }
+    ._activeFilters .chip:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    ._activeFilters .chip.reset { background: var(--color-primary-100); color: var(--color-primary-700); }
+    ._activeFilters .chip.reset:hover { background: var(--color-primary-200); }
+    /* CHYBÍ V DS: v drobečkové navigaci má být první úroveň ikona domečku, ne slovo
+       „Úvod“. Do sady byly doplněny Tabler `home`, `home-2` a šest ikon staveb
+       (#tp-home … #tp-building-warehouse) — zatím jen v lokální kopii ds/, patří
+       do zdrojového DS projektu. */
+    .BreadcrumbView .path > li > a > .icon { display: block; }
+    /* CHYBÍ V DS: původní cena před slevou na kartě. Přeškrtnutí má v DS jen detail
+       (.ProductDetailTableView .value.ghost), karta pro .priceParts .value.ghost pravidlo
+       nemá. Rozhodnuto: přeškrtnutá a červená (role primary = slevy). Stejná náplast
+       je i na vypis-kategorie.dc.html. */
+    .ProductView .priceParts .value.ghost, .priceParts .value.ghost { text-decoration: line-through; color: var(--color-primary-600); font-size: var(--font-size-13); }
+    /* Detail má v DS vlastní ghost (muted, 14 px) — původní cena je ale jeden druh ceny
+       napříč kartou i detailem, takže platí totéž pravidlo, jen o stupeň větší. */
+    .ProductDetailTableView.v1a .value.ghost { text-decoration: line-through; color: var(--color-primary-600); font-size: var(--font-size-16); }
+    /* CHYBÍ V DS (rozhodnuto): vlajky mají větnou velikost písmen a menší text —
+       --flag-text-transform: uppercase dělá z krátkých textů hlasitý blok. */
+    :root { --flag-text-transform: none; --flag-font-size: var(--font-size-12); --flag-font-weight: var(--font-weight-semibold); }
+    /* CHYBA V DS: vlajky se násobí s fotkou karty — .mainImage má mix-blend-mode: multiply
+       a .ActionIconsView je v DOM před obrázkem. V DS chce z-index + isolation. */
+    .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
+    /* CHYBA V DS: `.ProductDetailTableView.v2a .caption { 18px bold }` je pravidlo pro
+       nadpis bloku, ale trefuje i popisky řádků `bs-grid-item .caption` (nižší specificita).
+       CHYBÍ V DS: identifikační pás (v2a.identity) má být tichý — 12 px, bez separátorů;
+       tabulka parametrů 13 px. Stejná náplast je i na detail-produktu.dc.html. */
+    .ProductDetailTableView.v2a bs-grid-item .caption { font-size: var(--font-size-13); font-weight: var(--font-weight-regular); color: var(--text-color-muted); margin: 0; }
+    .ProductDetailTableView.v2a bs-grid-item .value { font-size: var(--font-size-13); }
+    .ProductDetailTableView.v2a.identity { padding: var(--spacer-12) var(--spacer-16); }
+    .ProductDetailTableView.v2a.identity bs-grid-item { padding: var(--spacer-2) 0; border-bottom: 0; line-height: var(--line-height-tight); }
+    .ProductDetailTableView.v2a.identity bs-grid-item .caption,
+    .ProductDetailTableView.v2a.identity bs-grid-item .value { font-size: var(--font-size-12); }
+    .ProductDetailTableView.v2a.identity bs-grid-item .value { font-weight: var(--font-weight-semibold); }
+    .TabsProductDetailMasterView .tabs > .page { font-size: var(--font-size-16); font-weight: var(--font-weight-bold); padding: var(--spacer-10) var(--spacer-16); }
+    .TabsProductDetailMasterView bs-grid-item { padding: var(--spacer-8) 0; font-size: var(--font-size-13); }
+    #dc-root, #dc-root > .sc-host { height: auto; min-height: 100%; }
+  </style>
+</helmet>
+<div style="max-width: 1400px; margin: 0 auto; padding: var(--spacer-24) var(--spacer-24) var(--spacer-64); display: flex; flex-direction: column; gap: var(--spacer-20)">
+  <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--spacer-12)">
+    <a href="../design-system.dc.html" style="font-size: var(--font-size-13)">← Design systém</a>
+    <span style="font-size: var(--font-size-12); color: var(--text-color-muted)">samostatná komponenta</span>
+  </div>
+  <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
+
+          <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Číselník <code>.quantity</code></span>
+          <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-24); align-items: flex-start">
+            <div class="AddToCartView v1a v1 bs-view dcon dc000">
+              <div class="quantity">
+                <button type="button" class="button decrease" aria-label="Snížit počet"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
+                <span class="value"><input class="real" type="number" aria-label="Počet" value="2" min="1" max="999" style="width: 26px"><span class="unitsDescription">ks</span></span>
+                <button type="button" class="button increase" aria-label="Zvýšit počet"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
+              </div>
+              <button type="button" class="button buy" aria-label="Vložit do košíku"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg></button>
+            </div>
+            <div class="AddToCartView v1a v1 bs-view dcon dc000">
+              <div class="quantity">
+                <button type="button" class="button decrease" aria-label="Snížit počet"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
+                <span class="value"><input class="real" type="number" aria-label="Počet" value="1" min="1" max="999" style="width: 20px"><span class="unitsDescription">bal</span></span>
+                <button type="button" class="button increase" aria-label="Zvýšit počet"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
+              </div>
+              <button type="button" class="button buy"><svg class="icon ico3" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg>Koupit</button>
+            </div>
+          </div>
+          <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Jednotka je součástí hodnoty (<code>.value</code> nese <code>input.real</code> i <code>.unitsDescription</code>), aby zůstala u čísla. Šířku inputu dopočítává stránka podle počtu číslic. Na kartě je vpravo ikonové tlačítko, na detailu textové „Koupit“.</p>
+        
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { icons: [], iconQuery: '' };
+
+  /* Sada ikon se čte ze spritu, ne z ručního seznamu — jediný zdroj pravdy je
+     ds/assets/icons/tp-icons.svg. Sprite se vkládá skriptem z helmetu, takže se
+     po mountu ještě jednou dočte na load. */
+  collectIcons() {
+    const symbols = [...document.querySelectorAll('#tpSprite symbol')];
+    if (!symbols.length) return;
+    /* Sprite se do stránky vloží dvakrát (streamovaný helmet + mount), symboly
+       se proto sjednocují podle id. */
+    const seen = new Set();
+    const icons = symbols.filter(s => !seen.has(s.id) && seen.add(s.id)).map(s => ({ id: s.id, href: '#' + s.id }));
+    if (icons.length !== this.state.icons.length) this.setState({ icons });
+  }
+
+  /* --- ZIP bez knihovny: uložené (nekomprimované) položky ------------------ */
+  crcTable() {
+    if (this._crc) return this._crc;
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+      t[n] = c >>> 0;
+    }
+    return (this._crc = t);
+  }
+  crc32(bytes) {
+    const t = this.crcTable();
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) c = t[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  zip(files) {
+    const enc = new TextEncoder();
+    const chunks = [], central = [];
+    let offset = 0;
+    const u16 = n => [n & 255, (n >> 8) & 255];
+    const u32 = n => [n & 255, (n >> 8) & 255, (n >> 16) & 255, (n >>> 24) & 255];
+    files.forEach(f => {
+      const name = enc.encode(f.name), data = enc.encode(f.data), crc = this.crc32(data);
+      const local = [...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0),
+        ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(name.length), ...u16(0)];
+      chunks.push(new Uint8Array(local), name, data);
+      central.push([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(0), ...u16(0),
+        ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(name.length),
+        ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset)], name);
+      offset += local.length + name.length + data.length;
+    });
+    const dirParts = [];
+    let dirSize = 0;
+    for (let i = 0; i < central.length; i += 2) {
+      const head = new Uint8Array(central[i]);
+      dirParts.push(head, central[i + 1]);
+      dirSize += head.length + central[i + 1].length;
+    }
+    const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0),
+      ...u16(files.length), ...u16(files.length), ...u32(dirSize), ...u32(offset), ...u16(0)]);
+    return new Blob([...chunks, ...dirParts, end], { type: 'application/zip' });
+  }
+  /* Tokeny pro kodéra BS Shopu: názvy v deklarovaném pořadí ze stylesheetů DS,
+     hodnoty rozpuštěné na to, co reálně platí v prohlížeči (var() řetězy i média). */
+  downloadTokensCss() {
+    const cs = getComputedStyle(document.documentElement);
+    const names = [];
+    const groups = [];
+    [...document.styleSheets].forEach(sheet => {
+      let rules;
+      try { rules = sheet.cssRules; } catch (e) { return; }
+      const file = (sheet.href || '').split('/').pop() || 'inline';
+      [...rules].forEach(rule => {
+        if (!rule.selectorText || !/(^|,)\s*:root\s*(,|$)/.test(rule.selectorText)) return;
+        const own = [...rule.style].filter(p => p.startsWith('--') && !names.includes(p));
+        if (!own.length) return;
+        own.forEach(p => names.push(p));
+        groups.push({ file, props: own });
+      });
+    });
+    const lines = ['/* TonerPrint — tokeny design systému, rozpuštěné hodnoty.',
+      '   Generováno ze stránky design-system.dc.html. Názvy proměnných jsou závazné (BS Shop).',
+      '   Zdroj: ds/tokens/*.css + ds/css/*.css */', '', ':root {'];
+    groups.forEach(g => {
+      lines.push('', '  /* ' + g.file + ' */');
+      g.props.forEach(p => lines.push('  ' + p + ': ' + cs.getPropertyValue(p).trim() + ';'));
+    });
+    lines.push('}', '');
+    /* Stavové třídy dostupnosti nejsou tokeny, ale kodér je potřebuje se stejnými hodnotami. */
+    ['cs_zelena', 'cs_zluta', 'cs_cervena', 'cs_seda', 'cs_storage'].forEach(cls => {
+      const probe = document.querySelector('.' + cls);
+      if (!probe) return;
+      const p = getComputedStyle(probe);
+      lines.push('.' + cls + ' { --bg-color: ' + p.getPropertyValue('--bg-color').trim() +
+        '; --text-color: ' + p.getPropertyValue('--text-color').trim() + '; }');
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/css' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tp-tokens.css';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  downloadIcons() {
+    const seen = new Set();
+    const files = [...document.querySelectorAll('#tpSprite symbol')].filter(s => !seen.has(s.id) && seen.add(s.id)).map(s => {
+      const attrs = [...s.attributes].filter(a => a.name !== 'id')
+        .map(a => a.name + '="' + a.value + '"').join(' ');
+      return {
+        name: s.id + '.svg',
+        data: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" ' + attrs + '>' + s.innerHTML + '</svg>',
+      };
+    });
+    if (!files.length) return;
+    const url = URL.createObjectURL(this.zip(files));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tp-icons.zip';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  /* React zapíše class na custom elementu jako atribut classname, takže selektory
+     BS Shopu .View > dc-con.dcContent nesednou. Přeneseme to jednou po mountu —
+     stejný postup jako na stránkách eshopu. */
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi, bs-grid-cont, bs-grid-item').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  /* Lišta kategorií: jen položky se posouvají vodorovně. Přetečení se hlásí
+     atributem data-overflow na dc-con.dcContent (bílý přechod + šipka vpravo). */
+  watchMenus() {
+    this.menuSync = () => {
+      document.querySelectorAll('.MenuView > dc-con.dcContent').forEach(row => {
+        const items = row.querySelector('.items');
+        if (!items) return;
+        const more = items.scrollWidth - items.clientWidth - items.scrollLeft > 8;
+        row.setAttribute('data-overflow', more ? '1' : '0');
+      });
+    };
+    this.menuSync();
+    window.addEventListener('resize', this.menuSync);
+    window.addEventListener('load', this.menuSync);
+    document.querySelectorAll('.MenuView .items').forEach(items => {
+      items.addEventListener('scroll', this.menuSync, { passive: true });
+      if (window.ResizeObserver) {
+        this.menuRo = this.menuRo || new ResizeObserver(() => this.menuSync());
+        this.menuRo.observe(items);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.syncCustomElementClasses();
+    this.watchMenus();
+    /* Sprite se vkládá skriptem z helmetu — po mountu ještě nemusí být v DOM,
+       proto se sada dočítá i po vykreslení, dokud se nenajde. */
+    let tries = 0;
+    const tick = () => {
+      this.collectIcons();
+      if (!this.state.icons.length && tries++ < 40) this.iconTimer = setTimeout(tick, 100);
+    };
+    tick();
+  }
+  componentWillUnmount() {
+    clearTimeout(this.iconTimer);
+    window.removeEventListener('resize', this.menuSync);
+    window.removeEventListener('load', this.menuSync);
+    if (this.menuRo) this.menuRo.disconnect();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); if (this.menuSync) this.menuSync(); }
+
+  renderVals() {
+    /* Hledá se v názvu symbolu bez prefixu tp- — kodér i designér ho vyslovují
+       oběma způsoby („cart“ i „tp-shopping-cart“). */
+    const q = this.state.iconQuery.trim().toLowerCase();
+    const found = q ? this.state.icons.filter(i => i.id.toLowerCase().includes(q)) : this.state.icons;
+    return {
+      icons: found,
+      iconCount: this.state.icons.length,
+      iconQuery: this.state.iconQuery,
+      iconFoundLabel: q ? found.length + ' z ' + this.state.icons.length + ' symbolů' : this.state.icons.length + ' symbolů',
+      noIcons: !!q && found.length === 0,
+      onIconQuery: e => this.setState({ iconQuery: e.target.value }),
+      clearIconQuery: () => this.setState({ iconQuery: '' }),
+      downloadIcons: () => this.downloadIcons(),
+      downloadTokensCss: () => this.downloadTokensCss(),
+      menuScrollNext: e => {
+        const items = e.currentTarget.parentElement.querySelector('.items');
+        if (items) items.scrollBy({ left: Math.round(items.clientWidth * 0.6) });
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

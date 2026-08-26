@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* Obchází runtime, ne DS: karta se mountuje do obalu, který by v mřížce výpisu
+       i v karuselu stál na místě karty — pravidla DS (šířka v karuselu, scroll-snap)
+       ale míří na .ProductView. display: contents obal z layoutu vyřadí. */
+    .sc-host:has(> .ProductView) { display: contents; }
+    /* Samostatně otevřená karta nemá mřížku ani karusel, které by ji zúžily — bez
+       stropu by se roztáhla na celou stránku. Pravidlo míří jen na kořen dokumentu,
+       takže do stránek, kde karta sedí hlouběji, nezasahuje. */
+    body > #dc-root > .sc-host > .ProductView { max-width: 300px; }
+    /* CHYBÍ V DS: původní cena před slevou na kartě — přeškrtnutí má v DS jen detail.
+       Rozhodnuto: přeškrtnutá a červená (role primary = slevy). */
+    .ProductView .priceParts .value.ghost { text-decoration: line-through; color: var(--color-primary-600); font-size: var(--font-size-13); }
+    /* CHYBÍ V DS (rozhodnuto): vlajky mají větnou velikost písmen a menší text. */
+    :root { --flag-text-transform: none; --flag-font-size: var(--font-size-12); --flag-font-weight: var(--font-weight-semibold); }
+    /* CHYBA V DS: vlajky se násobí s fotkou karty — chybí z-index + isolation. */
+    .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
+  </style>
+</helmet>
+
+<div class="ProductView v1a v1 bs-view dcon dc000 {{ stateClass }} {{ modifier }}" data-name="Product">
+  <a class="image" href="{{ href }}">
+    <sc-if value="{{ flag }}">
+      <div class="ActionIconsView v1a v1 bs-view count1"><div class="productFlag icon {{ flagClass }}"><span>{{ flag }}</span></div></div>
+    </sc-if>
+    <img class="mainImage" src="{{ image }}" alt="{{ name }}" loading="lazy">
+  </a>
+  <dc-con class="dcHeader">
+    <span class="code">{{ code }}</span>
+    <a class="name" href="{{ href }}">{{ name }}</a>
+    <sc-if value="{{ desc }}">
+      <p class="shortDescription">{{ desc }}</p>
+    </sc-if>
+  </dc-con>
+  <dc-con class="dcPrice">
+    <div class="priceParts">
+      <sc-if value="{{ oldPrice }}">
+        <span class="value ghost">{{ oldPrice }}</span>
+      </sc-if>
+      <span class="price bs-priceLayout notranslate vat primary"><span class="value">{{ priceVat }}</span><span class="vatText">s DPH</span></span>
+      <span class="price bs-priceLayout notranslate novat secondary"><span class="value">{{ priceNoVat }}</span><span class="vatText">bez DPH</span></span>
+    </div>
+    <div class="AvailabilityView v1a v1 bs-view {{ availabilityClass }}"><span class="label">{{ availability }}</span></div>
+  </dc-con>
+  <dc-con class="dcContent">
+    <div class="AddToCartView v1a v1 bs-view dcon dc000">
+      <div class="quantity">
+        <button type="button" class="button decrease" aria-label="Snížit počet" onClick="{{ onDecrease }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-minus"></use></svg></button>
+        <span class="value"><input class="real" type="number" aria-label="Počet" min="1" max="999" value="{{ quantity }}" onChange="{{ onQuantity }}" disabled="{{ soldOut }}" style="width: {{ quantityWidth }}"><span class="unitsDescription">{{ unit }}</span></span>
+        <button type="button" class="button increase" aria-label="Zvýšit počet" onClick="{{ onIncrease }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-plus"></use></svg></button>
+      </div>
+      <button type="button" class="button buy" aria-label="Vložit do košíku" onClick="{{ onBuy }}" disabled="{{ soldOut }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><sc-if value="{{ buyLabel }}"><span class="label">{{ buyLabel }}</span></sc-if></button>
+    </div>
+  </dc-con>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:300,&quot;height&quot;:460},&quot;code&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;AT-13C&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;name&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Skartovačka AT-13C, 13 listů, křížový řez&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;desc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;image&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;../../ds/assets/produkty/skartovacka-at-13c.jpg&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;href&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;detail-produktu.dc.html&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;priceVat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2 490 Kč&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;priceNoVat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2 058 Kč&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;oldPrice&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;availability&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Skladem 8 ks&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;availabilityClass&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;cs_zelena&quot;,&quot;cs_zluta&quot;,&quot;cs_cervena&quot;,&quot;cs_seda&quot;,&quot;cs_storage&quot;],&quot;default&quot;:&quot;cs_zelena&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;flag&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;flagClass&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;flag01&quot;,&quot;flag02&quot;,&quot;flag03&quot;,&quot;flag04&quot;,&quot;flag05&quot;,&quot;flag06&quot;,&quot;flag07&quot;,&quot;flag08&quot;],&quot;default&quot;:&quot;flag01&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;canBuy&quot;,&quot;empty&quot;,&quot;inactive&quot;],&quot;default&quot;:&quot;canBuy&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;modifier&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;unit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ks&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;quantity&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1,&quot;min&quot;:1,&quot;max&quot;:999,&quot;tsType&quot;:&quot;number&quot;},&quot;buyLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onIncrease&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onDecrease&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onQuantity&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;onBuy&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  /* Karta produktu. Data i akce dodává stránka — komponenta si nedrží nic než
+     šířku číselníku, která se počítá z počtu číslic. */
+  renderVals() {
+    const p = this.props;
+    const qty = p.quantity ?? 1;
+    const state = p.state || 'canBuy';
+    return {
+      href: p.href ?? 'detail-produktu.dc.html',
+      code: p.code ?? '',
+      name: p.productName ?? '',
+      desc: p.desc ?? '',
+      image: p.image ?? '',
+      flag: p.flag ?? '',
+      flagClass: p.flagClass ?? 'flag01',
+      oldPrice: p.oldPrice ?? '',
+      priceVat: p.priceVat ?? '',
+      priceNoVat: p.priceNoVat ?? '',
+      availability: p.availability ?? '',
+      availabilityClass: p.availabilityClass ?? 'cs_zelena',
+      stateClass: state,
+      modifier: p.modifier ?? '',
+      unit: p.unit ?? 'ks',
+      quantity: qty,
+      quantityWidth: (String(qty).length * 9 + 8) + 'px',
+      soldOut: state === 'empty' ? true : undefined,
+      buyLabel: p.buyLabel ?? '',
+      onIncrease: p.onIncrease,
+      onDecrease: p.onDecrease,
+      onQuantity: p.onQuantity,
+      onBuy: p.onBuy,
+    };
+  }
+
+  /* React zapíše class na custom elementu jako atribut classname — selektory
+     BS Shopu .View > dc-con.dcHeader by tak nesedly. */
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+
+  /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
+     se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
+     je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
+/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
+     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
+     otevřená komponenta si je po mountu přepíše na svou hloubku. */
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  fixStandalonePaths() {
+    if (!this.standalone) return;
+    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
+    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
+      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
+    });
+  }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+    this.fixStandalonePaths();
+  }
+
+  componentDidMount() {
+    this.ensureDsAssets();
+    this.syncCustomElementClasses();
+  }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+
+</script>
+</body>
+</html>

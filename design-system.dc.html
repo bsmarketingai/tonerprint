@@ -132,7 +132,11 @@
 
       <div id="barvy" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-24)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
-          <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Barvy</span>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacer-12)">
+            <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Barvy</span>
+            <a class="button a2 small" href="komponenty/barvy.dc.html"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
+            <button type="button" class="button a2 small" onClick="{{ downloadTokensCss }}" style="margin-left: auto"><svg class="icon ico2" aria-hidden="true"><use href="#tp-download"></use></svg>Stáhnout tokeny jako CSS</button>
+          </div>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Šest rolí po devíti stupních, stupeň 500 je seed. Na obrazovce jsou nejvýš dvě barvy pozadí: <code>--bg-color</code> pro plochu a <code>--bg-view-color</code> pro karty. Barevný podklad má jen horní pruh, patička a stavové panely.</p>
         </div>
 
@@ -262,6 +266,7 @@
       <div id="stavy" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-20)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Stavové třídy a vlajky</span>
+          <a class="button a2 small" href="komponenty/stavove-tridy-a-vlajky.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Stavy dostupnosti mají v BS Shopu české názvy tříd. Nastavují <code>--bg-color</code> a <code>--text-color</code>, takže je nosí <code>AvailabilityView</code>, <code>AvailabilityPanelView</code> i <code>NotificationView</code>.</p>
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: var(--spacer-16)">
@@ -297,6 +302,7 @@
       <div id="typografie" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-20)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Typografie</span>
+          <a class="button a2 small" href="komponenty/typografie.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Figtree, váhy 400–800, subset latin-ext povinný. Základ rozhraní je 14 px. Dvanáctka patří výhradně metadatům (kód produktu, počty, jednotka), věty a popisy začínají na 13 px; jedenáctka je jen pro chrome této stránky.</p>
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-12)">
@@ -324,6 +330,7 @@
       <div id="prostor" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-24)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Spacing, radiusy, stíny</span>
+          <a class="button a2 small" href="komponenty/spacing-radiusy-stiny.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Spacery jsou pojmenované hodnotou v px, mezi 32 a 64 se neinterpoluje. Vodorovné řady sourozenců se skládají flexem s <code>gap</code>, ne marginy jednotlivých položek.</p>
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-6)">
@@ -356,6 +363,7 @@
       <div id="layout" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Layout a breakpointy</span>
+          <a class="button a2 small" href="komponenty/layout-a-breakpointy.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Obsah je vycentrovaný na 1260 px (<code>--eshop-width</code>), plocha okolo jde do 1920 px (<code>--eshop-width-outer</code>). Prahy jsou dané BS Shopem a vlastní se nezavádějí.</p>
         </div>
         <div style="display: grid; grid-template-columns: 88px 132px minmax(0, 1fr); gap: var(--spacer-8) var(--spacer-16); font-size: var(--font-size-13); align-items: center">
@@ -383,6 +391,7 @@
       <div id="ikony" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Ikony</span>
+          <a class="button a2 small" href="komponenty/ikony.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Jeden sprite <code>ds/assets/icons/tp-icons.svg</code>, kresba Tabler stroke 2 na mřížce 24 × 24. Barvu ikona dědí přes <code>currentColor</code>. Dekorativní ikony mají <code>aria-hidden="true"</code>.</p>
         </div>
         <div style="display: flex; align-items: flex-end; gap: var(--spacer-24)">
@@ -428,6 +437,7 @@
         <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Tlačítka</span>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Varianty</span>
+          <a class="button a2 small" href="komponenty/varianty.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-16); align-items: center">
             <button type="button" class="button">Do košíku</button>
             <button type="button" class="button a2">Zobrazit všechny produkty</button>
@@ -440,6 +450,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Velikosti a stavy</span>
+          <a class="button a2 small" href="komponenty/velikosti-a-stavy.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-16); align-items: center">
             <button type="button" class="button big">Začít nakupovat</button>
             <button type="button" class="button">Výchozí 44 px</button>
@@ -452,6 +463,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Účelové třídy z BS Shopu</span>
+          <a class="button a2 small" href="komponenty/ucelove-tridy-z-bs-shopu.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-16); align-items: center">
             <button type="button" class="button buy"><svg class="icon ico2" aria-hidden="true"><use href="#tp-shopping-cart"></use></svg><span class="label">Do košíku</span></button>
             <button type="button" class="button _filterButton"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtrovat</button>
@@ -466,6 +478,7 @@
       <div id="pole" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-20)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Formulářová pole</span>
+          <a class="button a2 small" href="komponenty/formularova-pole.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Rámeček dostávají jen interaktivní pole. Focus je <code>--focus-ring</code>, nikdy <code>outline: none</code> bez náhrady. Chyba říká, co dělat.</p>
         </div>
         <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-20)">
@@ -494,6 +507,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Číselník <code>.quantity</code></span>
+          <a class="button a2 small" href="komponenty/ciselnik-quantity.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-24); align-items: flex-start">
             <div class="AddToCartView v1a v1 bs-view dcon dc000">
               <div class="quantity">
@@ -516,6 +530,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)">Newsletter a souhlas GDPR</span>
+          <a class="button a2 small" href="komponenty/newsletter-a-souhlas-gdpr.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20)">
             <div class="SubscribeToNewsletterView v1a v1 bs-view dcon dc000">
               <span class="caption">Buďte v obraze</span>
@@ -534,6 +549,7 @@
       <div id="cena" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Cena</span>
+          <a class="button a2 small" href="komponenty/cena.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Struktura <code>.price.bs-priceLayout.notranslate</code> plus role: <code>.vat.primary</code> je cena s DPH (hlavní), <code>.novat.secondary</code> bez DPH. Mezera jako oddělovač tisíců, měna za číslem, vždy celé koruny — i u ceny bez DPH, která se zaokrouhluje. Původní cena je <code>.value.ghost</code> nad cenou s DPH.</p>
         </div>
         <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-wrap: wrap; gap: var(--spacer-40)">
@@ -559,6 +575,7 @@
       <div id="karta" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.ProductView</code></span>
+          <a class="button a2 small" href="komponenty/productview.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Kontejnery <code>dc-con.dcHeader</code> (kód, název, popis), <code>dc-con.dcPrice</code> (ceny a dostupnost) a <code>dc-con.dcContent</code> (nákup). Vlajka sedí v <code>.ActionIconsView</code> nad fotkou. Fotka je 1 : 1, <code>object-fit: contain</code>, s <code>mix-blend-mode: multiply</code>, aby se bílý výřez slil s podkladem.</p>
         </div>
         <div style="overflow-x: auto"><div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 columns4" style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); min-width: 1120px">
@@ -681,7 +698,21 @@
 
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
+          <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.rating</code> — hvězdičkové hodnocení</span>
+          <a class="button a2 small" href="komponenty/rating-hvezdickove-hodnoceni.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
+          <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Pět hvězd, vyplněné nesou <code>.selected</code>; počet hodnocení je <code>.value</code> v závorce. Barvy drží tokeny <code>--review-star-color</code> a <code>--review-star-color-disabled</code>. Používá se na kartě a na detailu vedle názvu — na stránkách eshopu zatím nikde.</p>
+        </div>
+        <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-direction: column; gap: var(--spacer-12)">
+          <span class="rating"><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><span class="value">(38 hodnocení)</span></span>
+          <span class="rating"><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon" aria-hidden="true"><use href="#tp-star"></use></svg><span class="value">(12 hodnocení)</span></span>
+          <span class="rating"><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon selected" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon" aria-hidden="true"><use href="#tp-star"></use></svg><svg class="icon" aria-hidden="true"><use href="#tp-star"></use></svg></span>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
+        <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.ProductsView</code> — dlaždice a řádky</span>
+          <a class="button a2 small" href="komponenty/productsview-dlazdice-a-radky.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Výpis přepíná <code>ViewTypeSelectorView</code>: <code>columns3</code>–<code>columns5</code> pro dlaždice, <code>rows</code> pro řádkové zobrazení s popisem vedle fotky.</p>
         </div>
         <div style="overflow-x: auto"><div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 rows" style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); min-width: 860px">
@@ -721,6 +752,7 @@
       <div id="detail" style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-24)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Bloky detailu produktu</span>
+          <a class="button a2 small" href="komponenty/bloky-detailu-produktu.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Pravý sloupec detailu se skládá z těchto bloků v tomto pořadí: cena, nákup, dostupnost s termíny, identifikace produktu, doplňkové akce.</p>
         </div>
         <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); display: flex; flex-direction: column; gap: var(--spacer-16); max-width: 520px">
@@ -757,14 +789,15 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.TabsProductDetailMasterView</code> a <code>.ProductDetailTableView.v2a</code></span>
+          <a class="button a2 small" href="komponenty/tabsproductdetailmasterview-a-productdetailtab.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="TabsProductDetailMasterView v1a v1 bs-view dcon dc000">
             <div class="tabpages">
               <div class="tabs" role="tablist">
-                <button type="button" class="page active">Popis</button>
-                <button type="button" class="page">Parametry</button>
+                <button type="button" class="page selected" role="tab" aria-selected="true">Popis</button>
+                <button type="button" class="page" role="tab" aria-selected="false">Parametry</button>
               </div>
               <div class="pages">
-                <div class="page active">
+                <div class="page selected" role="tabpanel">
                   <div class="ProductDetailTableView v2a v2 bs-view dcon dc000 alignLeft">
                     <bs-grid-cont>
                       <bs-grid-item><span class="caption">Typ řezu</span><span class="value">Křížový 4 × 35 mm</span></bs-grid-item>
@@ -790,6 +823,7 @@
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-24)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.BreadcrumbView</code> — kde v katalogu zákazník je</span>
+          <a class="button a2 small" href="komponenty/breadcrumbview-kde-v-katalogu-zakaznik-je.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <nav class="BreadcrumbView v1a v1 bs-view dcon dc000" aria-label="Drobečková navigace">
             <ul class="path">
               <li><a href="index.dc.html" aria-label="Úvod"><svg class="icon ico2" aria-hidden="true"><use href="#tp-home"></use></svg></a></li>
@@ -803,6 +837,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.MenuView</code> — lišta kategorií pod hlavičkou</span>
+          <a class="button a2 small" href="komponenty/menuview-lista-kategorii-pod-hlavickou.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <nav class="MenuView v1a v1 bs-view dcon dc000" aria-label="Kategorie">
             <dc-con class="dcContent">
               <button type="button" class="button toggle"><svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie</button>
@@ -827,6 +862,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.SimpleFilterView</code> — lišta nad výpisem</span>
+          <a class="button a2 small" href="komponenty/simplefilterview-lista-nad-vypisem.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="SimpleFilterView v1a v1 bs-view dcon dc000">
             <button type="button" class="button _filterButton"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtrovat</button>
             <select class="select sortOrder" aria-label="Řazení">
@@ -854,6 +890,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>._activeFilters</code> — co je právě zapnuté</span>
+          <a class="button a2 small" href="komponenty/activefilters-co-je-prave-zapnute.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="_activeFilters">
             <span class="caption">Aktivní filtry</span>
             <button type="button" class="chip">HP<svg class="icon ico2" aria-hidden="true"><use href="#tp-x"></use></svg></button>
@@ -864,6 +901,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.CompoundPagingView</code> — dobrání i skok na stránku</span>
+          <a class="button a2 small" href="komponenty/compoundpagingview-dobrani-i-skok-na-stranku.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="CompoundPagingView v1a v1 bs-view dcon dc000 bottom">
             <dc-con class="dcHeader">
               <button type="button" class="button nextProducts">Zobrazit dalších 8 produktů</button>
@@ -871,7 +909,7 @@
             </dc-con>
             <div class="pages">
               <button type="button" class="button page previous" aria-label="Předchozí stránka" disabled="true"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-left"></use></svg></button>
-              <button type="button" class="button page active">1</button>
+              <button type="button" class="button page selected">1</button>
               <button type="button" class="button page">2</button>
               <button type="button" class="button page">3</button>
               <span class="separator">…</span>
@@ -883,6 +921,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.FlatCategoriesRwdView.v5a</code> — podkategorie jako rozcestník</span>
+          <a class="button a2 small" href="komponenty/flatcategoriesrwdview-v5a-podkategorie-jako-ro.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="FlatCategoriesRwdView v5a v5 bs-view dcon dc000 columns5">
             <ul class="items">
               <dc-root><a href="vypis-kategorie.dc.html"><span class="image"><img src="ds/assets/produkty/skartovacka-at-13c.jpg" alt="" loading="lazy"></span><span class="name">Skartovačky</span><span class="value">48</span><svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a></dc-root>
@@ -896,6 +935,7 @@
 
         <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
           <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>._categoryText</code> — rozbalovací text kategorie</span>
+          <a class="button a2 small" href="komponenty/categorytext-rozbalovaci-text-kategorie.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <div class="_categoryTextBlock">
             <span class="caption">Technika pro kancelář, školu i domácí pracovnu</span>
             <div class="_categoryText collapsed">
@@ -903,6 +943,28 @@
               <p>Objednáte-li do 14:00, odesíláme ještě dnes. Školám, úřadům a firmám umožňujeme nákup na fakturu se splatností 14 dní.</p>
             </div>
             <button type="button" class="_expandButton" aria-expanded="false">Zobrazit celý text<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--spacer-8)">
+          <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>Tabs</code> — obecné záložky</span>
+          <a class="button a2 small" href="komponenty/tabs-obecne-zalozky.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
+          <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Obecná komponenta <code>Tabs</code> skládá stejné třídy jako <code>TabsProductDetailMasterView</code> na detailu produktu (<code>.tabpages</code>, <code>.tabs</code>, <code>.pages</code>, aktivní záložka <code>.page.selected</code>) — rozdíl je v použití: obecná bere libovolný počet záložek s volitelným počtem v <code>.value</code>, verze na detailu má pevné dvě (Popis, Parametry). Do BS Shopu se posílá pod stejným názvem view, proto se od sebe liší jen obsahem.</p>
+          <div class="TabsProductDetailMasterView v1a v1 bs-view dcon dc000">
+            <div class="tabpages">
+              <div class="tabs" role="tablist">
+                <button type="button" class="page selected" role="tab" aria-selected="true">Hodnocení<span class="value">38</span></button>
+                <button type="button" class="page" role="tab" aria-selected="false">Dotazy<span class="value">4</span></button>
+                <button type="button" class="page" role="tab" aria-selected="false">Ke stažení</button>
+              </div>
+              <div class="pages">
+                <div class="page selected" role="tabpanel">
+                  <div class="ProductDescriptionView v1a v1 bs-view dcon dc000">
+                    <p class="shortDescription">Panel drží stejné odsazení jako na detailu produktu. Neaktivní panely jsou skryté třídou, ne odmountované — obsah tabu si tak drží stav.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -917,6 +979,7 @@
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Sestava hlavičky</span>
+          <a class="button a2 small" href="komponenty/sestava-hlavicky.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch"><code>.UserContentPanelView</code> + <code>.HeaderView</code> (<code>.LogoView</code>, <code>.SimpleSearchView</code>, <code>.AiAssistantView</code>, <code>._quickBuy</code>, <code>.SimpleBasketView</code>) + <code>.MenuView</code>. Na stránkách nese hlavička <code>.isFixedHeaderAware</code> a při odscrollování dostane <code>.fixed</code>.</p>
         </div>
         <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-16); overflow-x: auto">
@@ -991,6 +1054,7 @@
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.SearchWhispererView</code> — hledání se zapnutým našeptávačem</span>
+          <a class="button a2 small" href="komponenty/searchwhispererview-hledani-se-zapnutym-nasept.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Panel se otevře, jakmile je v poli text: vlevo nalezené produkty s kódem, dostupností a cenou, vpravo kategorie a výrobci. Hledaný úsek názvu je v <code>&lt;mark&gt;</code>. Na stránce panel visí pod polem hledání a je širší než ono — tady je vytržený ze hlavičky, aby byl vidět celý.</p>
         </div>
         <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); overflow-x: auto">
@@ -1054,8 +1118,30 @@
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Bloky homepage</span>
+          <a class="button a2 small" href="komponenty/bloky-homepage.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Světlé podklady dlaždic a situačních karet používají stupeň 100. Modifikátory <code>.main</code>, <code>.success</code>, <code>.warning</code>, <code>.neutral</code>, <code>.storage</code> volí roli.</p>
         </div>
+        <div style="overflow-x: auto"><div style="min-width: 1000px">
+          <section class="HeroBannerView v1a v1 bs-view dcon dc000" style="--hero-image: url(../assets/brand/hero-desktop.png); --hero-image-mobile: url(../assets/brand/hero-mobile.png)">
+            <dc-con class="dcContent">
+              <dc-gi class="text">
+                <h1 class="title">Partner pro kanceláře, školy, firmy i domácnosti.</h1>
+                <p class="shortDescription">Tonery, kancelářské potřeby, školní vybavení, papírnictví, balicí materiál i hygiena na jednom místě.</p>
+                <ul class="items">
+                  <li><svg class="icon ico3" aria-hidden="true"><use href="#tp-truck-delivery"></use></svg><span><span class="name">Doprava zdarma</span><span class="note">od 1 500 Kč</span></span></li>
+                  <li><svg class="icon ico3" aria-hidden="true"><use href="#tp-clock"></use></svg><span><span class="name">Odesíláme do 24 h</span><span class="note">objednávky do 14:00 ještě dnes</span></span></li>
+                  <li><svg class="icon ico3" aria-hidden="true"><use href="#tp-package"></use></svg><span><span class="name">23 000 produktů</span><span class="note">skladem</span></span></li>
+                  <li><svg class="icon ico3" aria-hidden="true"><use href="#tp-heart-handshake"></use></svg><span><span class="name">Poradíme s výběrem</span><span class="note">541 123 456</span></span></li>
+                </ul>
+                <dc-con class="dcActions">
+                  <a class="button big" href="vypis-kategorie.dc.html">Začít nakupovat</a>
+                  <a class="button a5 big" href="index.dc.html">Nákupní rádci</a>
+                </dc-con>
+              </dc-gi>
+            </dc-con>
+          </section>
+        </div></div>
+        <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Fotka je pozadí, ne <code>img</code>: nad ní je vždy světlý přechod, aby text držel kontrast. Nad 820 px je přilepená vpravo (<code>--hero-image</code>), pod tím jde nahoru mobilní varianta (<code>--hero-image-mobile</code>) a text pod ni.</p>
         <div style="overflow-x: auto"><div class="PromoTilesView v1a v1 bs-view dcon dc000 columns4" style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); min-width: 1000px">
           <dc-con class="dcContent">
             <div class="PromoTileView v1a v1 bs-view success">
@@ -1175,6 +1261,7 @@
 
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.LoginPopupView</code> a <code>.BasketProductsPopupView</code></span>
+          <a class="button a2 small" href="komponenty/loginpopupview-a-basketproductspopupview.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
         <div style="display: flex; flex-wrap: wrap; gap: var(--spacer-24); align-items: flex-start">
           <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup active" role="dialog" aria-label="Přihlášení" style="position: static; display: block; width: min(360px, 100%)">
             <dc-con class="dcHeader">
@@ -1229,7 +1316,27 @@
 
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
+          <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.CookiesConfirmationView</code></span>
+          <a class="button a2 small" href="komponenty/cookiesconfirmationview.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
+          <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Souhlas s cookies při první návštěvě. Plovoucí panel se <code>--shadow-4</code>, hlavní akce je plná modrá, „Jen nutné“ je <code>.a2</code> a nastavení sedí vpravo jako <code>.toggle</code>. Text říká, co se odesílá, ne že „nám záleží na vašem soukromí“.</p>
+        </div>
+        <div style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20)">
+          <div class="CookiesConfirmationView v1a v1 bs-view dcon dc000" role="dialog" aria-label="Souhlas s cookies">
+            <span class="caption">Cookies</span>
+            <p class="shortDescription">Nutné cookies drží obsah košíku a přihlášení. Volitelné nám ukazují, které produkty zákazníci hledají a nenacházejí — bez nich web funguje stejně.</p>
+            <dc-con class="bottom">
+              <button type="button" class="button">Přijmout vše</button>
+              <button type="button" class="button a2">Jen nutné</button>
+              <button type="button" class="button toggle">Nastavení</button>
+            </dc-con>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
+        <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)"><code>.FilterView</code> — filtry jako drawer</span>
+          <a class="button a2 small" href="komponenty/filterview-filtry-jako-drawer.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Filtry nejsou sloupec, ale drawer — obsah výpisu proto drží plnou šířku na všech pásmech. Skupina se sbalí třídou <code>.noAutoExpand</code>, hodnota bez produktů je <code>label.disabled</code>. Dole zůstává „Zrušit filtry“ a potvrzení s počtem.</p>
         </div>
         <div style="position: relative; height: 560px; border-radius: var(--radius-6); overflow: hidden; transform: translateZ(0); background: var(--bg-color)">
@@ -1280,6 +1387,7 @@
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-16)">
         <div style="display: flex; flex-direction: column; gap: var(--spacer-4)">
           <span style="font-size: var(--font-size-20); font-weight: var(--font-weight-bold)">Notifikace a prázdné stavy</span>
+          <a class="button a2 small" href="komponenty/notifikace-a-prazdne-stavy.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
           <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Barva nikdy nenese sdělení sama — každý stav má i text a ikonu. Prázdný stav nabízí cestu ven.</p>
         </div>
         <div style="display: flex; flex-direction: column; gap: var(--spacer-12)">
@@ -1300,6 +1408,33 @@
             <p class="shortDescription">Přidejte náplň podle kódu na kazetě, nebo si vyberte z doporučených produktů.</p>
           </div>
         </div>
+        <div style="display: flex; flex-direction: column; gap: var(--spacer-8); padding-top: var(--spacer-8); border-top: 1px solid var(--color-neutral-200)">
+          <span style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold)"><code>.skeleton</code> — stav načítání</span>
+          <a class="button a2 small" href="komponenty/skeleton-stav-nacitani.dc.html" style="align-self: flex-start"><svg class="icon ico2" aria-hidden="true"><use href="#tp-arrows-maximize"></use></svg>Otevřít samostatně</a>
+          <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Zástupný obrys místo obsahu, dokud se nedonačte. Varianty <code>image</code>, <code>name</code>, <code>short</code>, <code>price</code> mají rozměry karty; nositelem je <code>.ProductView.inactive</code>, která zároveň vypne interakci. Nikdy se nemíchá se skutečným obsahem — buď je karta celá načtená, nebo celá zástupná.</p>
+          <div style="overflow-x: auto"><div class="ProductsView ProductsViewBase v1a v1 bs-view dcon dc000 columns4" style="background: var(--bg-color); border-radius: var(--radius-6); padding: var(--spacer-20); min-width: 1120px">
+            <div class="productHolder">
+              <div class="ProductView v1a v1 bs-view dcon dc000 inactive">
+                <span class="skeleton image"></span>
+                <span class="skeleton name"></span>
+                <span class="skeleton short"></span>
+                <span class="skeleton price"></span>
+              </div>
+              <div class="ProductView v1a v1 bs-view dcon dc000 inactive">
+                <span class="skeleton image"></span>
+                <span class="skeleton name"></span>
+                <span class="skeleton short"></span>
+                <span class="skeleton price"></span>
+              </div>
+              <div class="ProductView v1a v1 bs-view dcon dc000 inactive">
+                <span class="skeleton image"></span>
+                <span class="skeleton name"></span>
+                <span class="skeleton short"></span>
+                <span class="skeleton price"></span>
+              </div>
+            </div>
+          </div></div>
+        </div>
         <p style="margin: 0; font-size: var(--font-size-13); color: var(--text-color-muted); max-width: 76ch">Na stránkách je <code>NotificationView</code> zatím jen v jediné roli — potvrzení odběru novinek (<code>cs_zelena</code>). Ostatní tři role vycházejí z <code>ds/css/forms.css</code>, texty jsou tady ukázkové.</p>
       </div>
     </section>
@@ -1311,10 +1446,11 @@
       </div>
       <div style="background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-24); display: flex; flex-direction: column; gap: var(--spacer-12); font-size: var(--font-size-14)">
         <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Hover a focus stavy komponent nejsou na této stránce vidět staticky — jsou jen v CSS. Chybí rozhodnutí, jestli je má styleguide ukazovat jako vynucené stavy.</span></div>
+        <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Mobilní hero 750 × 620 px podle DS stále chybí — <code>--hero-image-mobile</code> zatím sází dodanou fotku 950 × 1500.</span></div>
         <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Vlajky <code>flag03</code>, <code>flag04</code>, <code>flag06</code>–<code>flag08</code> mají v tokenech barvu, ale ne obsazení — nevíme, jaké texty jim patří.</span></div>
         <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Stavy <code>cs_seda</code> a <code>cs_storage</code> nejsou na žádné stránce použité — chybí formulace, kdy se hlásí.</span></div>
         <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Tlačítka <code>.a3</code>, <code>.a4</code> a <code>.ghost</code> existují v CSS, ale žádná stránka je nepoužívá — není jasné, kam patří.</span></div>
-        <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Komponenty z indexu DS, které v projektu nemají doklad na stránce: <code>Rating</code>, <code>Skeleton</code>, <code>Tabs</code> (obecné), <code>SituationGrid</code>, <code>SubcategoryTile.v6a</code>, <code>ArticleListCard</code>, <code>CookiesConfirmationView</code>.</span></div>
+        <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Komponenty bez jakéhokoli doloženého zadání — ani starý export DS je nedefinoval: <code>SituationGrid</code>, <code>SubcategoryTile.v6a</code>, <code>ArticleListCard</code>. Buď se navrhnou od nuly, nebo se z indexu smažou jako mrtvé názvy. Nedomýšlí se.</span></div>
         <div style="display: flex; gap: var(--spacer-12)"><svg class="icon ico2" aria-hidden="true" style="flex: none; margin-top: 3px; color: var(--color-warning-700)"><use href="#tp-alert-triangle"></use></svg><span>Názvy k ověření s BS Shopem: <code>FilterView</code>, modifikátor <code>.sale</code> v liště kategorií, <code>.button.a5</code> a všechny homepage views bez ekvivalentu (<code>HeroBannerView</code>, <code>PromoTilesView</code>, <code>SituationsView</code>, <code>StatsBarView</code>, <code>ArticleListView</code>, <code>FaqListView</code>, <code>ProductCarouselView</code>).</span></div>
       </div>
     </section>
@@ -1384,6 +1520,51 @@ class Component extends DCLogic {
       ...u16(files.length), ...u16(files.length), ...u32(dirSize), ...u32(offset), ...u16(0)]);
     return new Blob([...chunks, ...dirParts, end], { type: 'application/zip' });
   }
+  /* Tokeny pro kodéra BS Shopu: názvy v deklarovaném pořadí ze stylesheetů DS,
+     hodnoty rozpuštěné na to, co reálně platí v prohlížeči (var() řetězy i média). */
+  downloadTokensCss() {
+    const cs = getComputedStyle(document.documentElement);
+    const names = [];
+    const groups = [];
+    [...document.styleSheets].forEach(sheet => {
+      let rules;
+      try { rules = sheet.cssRules; } catch (e) { return; }
+      const file = (sheet.href || '').split('/').pop() || 'inline';
+      [...rules].forEach(rule => {
+        if (!rule.selectorText || !/(^|,)\s*:root\s*(,|$)/.test(rule.selectorText)) return;
+        const own = [...rule.style].filter(p => p.startsWith('--') && !names.includes(p));
+        if (!own.length) return;
+        own.forEach(p => names.push(p));
+        groups.push({ file, props: own });
+      });
+    });
+    const lines = ['/* TonerPrint — tokeny design systému, rozpuštěné hodnoty.',
+      '   Generováno ze stránky design-system.dc.html. Názvy proměnných jsou závazné (BS Shop).',
+      '   Zdroj: ds/tokens/*.css + ds/css/*.css */', '', ':root {'];
+    groups.forEach(g => {
+      lines.push('', '  /* ' + g.file + ' */');
+      g.props.forEach(p => lines.push('  ' + p + ': ' + cs.getPropertyValue(p).trim() + ';'));
+    });
+    lines.push('}', '');
+    /* Stavové třídy dostupnosti nejsou tokeny, ale kodér je potřebuje se stejnými hodnotami. */
+    ['cs_zelena', 'cs_zluta', 'cs_cervena', 'cs_seda', 'cs_storage'].forEach(cls => {
+      const probe = document.querySelector('.' + cls);
+      if (!probe) return;
+      const p = getComputedStyle(probe);
+      lines.push('.' + cls + ' { --bg-color: ' + p.getPropertyValue('--bg-color').trim() +
+        '; --text-color: ' + p.getPropertyValue('--text-color').trim() + '; }');
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/css' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tp-tokens.css';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
   downloadIcons() {
     const seen = new Set();
     const files = [...document.querySelectorAll('#tpSprite symbol')].filter(s => !seen.has(s.id) && seen.add(s.id)).map(s => {
@@ -1471,6 +1652,7 @@ class Component extends DCLogic {
       onIconQuery: e => this.setState({ iconQuery: e.target.value }),
       clearIconQuery: () => this.setState({ iconQuery: '' }),
       downloadIcons: () => this.downloadIcons(),
+      downloadTokensCss: () => this.downloadTokensCss(),
       menuScrollNext: e => {
         const items = e.currentTarget.parentElement.querySelector('.items');
         if (items) items.scrollBy({ left: Math.round(items.clientWidth * 0.6) });
