@@ -34,8 +34,8 @@
       .SimpleSearchView > dc-con.pivot:has(.SearchWhispererView) { max-width: none; }
     }
     .SimpleSearchView > dc-con.pivot .SearchWhispererView { min-width: 0; }
-    /* CHYBÍ V DS: přihlášení nemá v hlavičce vlastní spouštěč — overlay otevírá
-       „Rychlý nákup“ a odkaz v horním pruhu. .LoginUserView je jen nositel panelu;
+    /* Přihlášení otevírá `._quickBuy` v liště nástrojů (jediný spouštěč — v horním
+       pruhu už odkaz není). .LoginUserView je jen nositel panelu;
        display: contents ji vyřadí z layoutu, aby se panel ukotvil k liště nástrojů. */
     .HeaderView dc-con.dcHeader { position: relative; }
     .HeaderView .LoginUserView { display: contents; }
@@ -135,7 +135,7 @@
       <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradím s výběrem</span></button>
     </div>
     <dc-con class="dcHeader">
-      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Rychlý nákup</span></a>
+      <a class="_quickBuy" href="#prihlaseni" onClick="{{ toggleLogin }}" aria-expanded="{{ loginOpen }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-user"></use></svg><span class="label">Přihlášení</span></a>
       <div class="LoginUserView v1a v1 bs-view dcon dc000 {{ loginActive }}" id="prihlaseni">
         <div class="LoginPopupView v1a v1 bs-view dcon dc000 _headerPopup {{ loginActive }}" role="dialog" aria-label="Přihlášení">
           <dc-con class="dcHeader">
@@ -255,8 +255,8 @@ class Component extends DCLogic {
     this.onScroll();
   }
 
-  /* Hlavička eshopu: logo, hledání s našeptávačem, AI poradce, „Rychlý nákup“
-     (= spouštěč přihlášení) a košík. Stav i data drží stránka, komponenta je
+  /* Hlavička eshopu: logo, hledání s našeptávačem, AI poradce, „Přihlášení“
+     (`._quickBuy`, jediný spouštěč login panelu) a košík. Stav i data drží stránka, komponenta je
      bez vlastního stavu — jen dorovnává class na custom elementech. */
   renderVals() {
     const p = this.props;

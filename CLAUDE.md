@@ -81,11 +81,11 @@ BEM ani utility prefixy. Breakpointy jsou dané BS Shopem a vlastní se nezavád
 `xs 0–419 · s 420–549 · m 550–819 · l 820–999 · xl 1000–1149 · xxl 1150–1439 · xxxl 1440+`.
 Vizuál (barvy, mezery, radiusy, stíny) je volný a řídí se tokeny.
 
-## Přihlášení: „Rychlý nákup“ JE login
-`._quickBuy` v hlavičce se jmenuje **Rychlý nákup**, ale je to **spouštěč přihlášení**.
-Klik na něj — a stejně tak na odkaz **Přihlášení** v tmavém horním pruhu — otevře
-`LoginPopupView` (`._headerPopup` v nositeli `.LoginUserView`). V hlavičce **není
-žádné další tlačítko „Přihlásit“** a nikdy se tam nepřidává.
+## Přihlášení má jediný spouštěč
+`._quickBuy` v liště nástrojů hlavičky se jmenuje **Přihlášení** a otevírá
+`LoginPopupView` (`._headerPopup` v nositeli `.LoginUserView`). Třída zůstává
+`_quickBuy` (názvosloví BS Shopu). V tmavém horním pruhu **odkaz na přihlášení není**
+a v hlavičce se nepřidává žádné další tlačítko „Přihlásit“.
 
 ## Kde co je
 - `index.dc.html` — homepage, `vypis-kategorie.dc.html` — výpis kategorie,
