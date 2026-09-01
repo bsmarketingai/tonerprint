@@ -19,20 +19,10 @@
   <div class="overlay" onClick="{{ closeFilter }}"></div>
   <dc-con class="wrap">
     <dc-con class="dcHeader">
-      <span class="caption"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtry<span class="value">{{ filterCount }}</span></span>
+      <span class="caption"><svg class="icon ico2" aria-hidden="true"><use href="#tp-filter"></use></svg>Filtry</span>
       <button type="button" class="button toggle" aria-label="Zavřít filtry" onClick="{{ closeFilter }}"><svg class="icon ico3" aria-hidden="true"><use href="#tp-x"></use></svg></button>
     </dc-con>
     <dc-con class="dcContent">
-      <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="4">
-        <div class="group {{ g.cls }}">
-          <button type="button" class="label" aria-expanded="{{ g.expanded }}" onClick="{{ g.toggle }}">{{ g.name }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
-          <div class="items">
-            <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="4">
-              <label class="{{ o.cls }}"><input class="checkBox" type="checkbox" checked="{{ o.checked }}" disabled="{{ o.disabled }}" onChange="{{ o.toggle }}">{{ o.name }}<span class="value">{{ o.count }}</span></label>
-            </sc-for>
-          </div>
-        </div>
-      </sc-for>
       <div class="group">
         <button type="button" class="label">Cena<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
         <div class="items">
@@ -44,6 +34,16 @@
           </div>
         </div>
       </div>
+      <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="4">
+        <div class="group {{ g.cls }}">
+          <button type="button" class="label" aria-expanded="{{ g.expanded }}" onClick="{{ g.toggle }}">{{ g.name }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
+          <div class="items">
+            <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="4">
+              <label class="{{ o.cls }}"><input class="checkBox" type="checkbox" checked="{{ o.checked }}" disabled="{{ o.disabled }}" onChange="{{ o.toggle }}">{{ o.name }}<span class="value">{{ o.count }}</span></label>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
     </dc-con>
     <dc-con class="bottom">
       <button type="button" class="button toggle" onClick="{{ clearFilters }}">Zrušit filtry</button>

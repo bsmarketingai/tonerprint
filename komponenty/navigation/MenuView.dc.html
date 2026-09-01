@@ -21,7 +21,11 @@
     .MenuView .items > .root { flex: none; }
     .MenuView .items > .root > a { white-space: nowrap; }
     .MenuView > dc-con.dcContent > .separator, .MenuView > dc-con.dcContent > .button.toggle { flex: none; }
-    .MenuView > dc-con.dcContent > .button.toggle { margin-left: auto; }
+    /* „Ostatní“ je poslední položka lišty (ne odsazené tlačítko vpravo) —
+       vypadá jako ostatní odkazy, aby lišta držela jeden rytmus. */
+    .MenuView .items > ._allToggle { flex: none; }
+    .MenuView .items > ._allToggle > .button.toggle { display: flex; align-items: center; min-height: var(--btn-min-height); border: 0; border-radius: 0; background: none; padding: var(--spacer-8) var(--spacer-12); font-size: var(--font-size-14); font-weight: var(--font-weight-medium); color: var(--text-color); cursor: pointer; white-space: nowrap; }
+    .MenuView .items > ._allToggle > .button.toggle:hover { color: var(--color-main-600); background: var(--color-neutral-100); }
     /* CHYBÍ V DS: lišta kategorií zůstává na dosah i uprostřed dlouhé stránky.
        Odsazuje se o výšku hlavičky, kterou měří stránka do --tp-header-h. */
     /* Obchází runtime, ne DS: obal importované komponenty má výšku lišty, takže by
@@ -32,7 +36,7 @@
        podkategorie té, na které zákazník stojí. DS zná jen pevný promo blok. */
     .MenuCategoriesRwdView .items > .level_0.active > a { background: var(--color-neutral-100); color: var(--color-main-600); }
     .MenuCategoriesRwdView bs-lazy-render > .items > .level_1 { grid-template-columns: minmax(0, 1fr); }
-    .MenuCategoriesRwdView bs-lazy-render .caption { display: block; padding: var(--spacer-16) var(--spacer-20) 0; font-size: var(--font-size-12); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-muted); }
+    .MenuCategoriesRwdView bs-lazy-render .caption { display: none; padding: var(--spacer-16) var(--spacer-20) 0; font-size: var(--font-size-12); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-muted); }
     .MenuCategoriesRwdView bs-lazy-render > .items { padding: var(--spacer-16) var(--spacer-20) var(--spacer-24); }
     .MenuCategoriesRwdView ._subToggle, .MenuCategoriesRwdView ._subLevels { display: none; }
     /* CHYBÍ V DS: náhledovky podkategorií v mega-menu (jako na webu). DS zná
@@ -63,7 +67,14 @@
     @media (min-width: 820px) {
       ._menuWrap > .MenuCategoriesRwdView { max-height: calc(100vh - var(--tp-header-h, 0px) - var(--spacer-64)); }
       ._menuWrap > .MenuCategoriesRwdView > dc-con.dcContent { max-height: inherit; }
-      .MenuCategoriesRwdView > dc-con.dcContent > .items, .MenuCategoriesRwdView bs-lazy-render { max-height: inherit; overflow-y: auto; }
+      .MenuCategoriesRwdView bs-lazy-render { max-height: inherit; overflow-y: auto; }
+      /* Levý svislý seznam kategorií se v desktopu nezobrazuje (složité na
+         implementaci) — panel ukazuje jen podkategorie kategorie z lišty.
+         V markupu zůstává, protože z něj žije mobilní akordeon. */
+      .MenuCategoriesRwdView > dc-con.dcContent > .items { display: none; }
+      ._menuWrap > .MenuCategoriesRwdView > dc-con.dcContent,
+      .MenuCategoriesRwdView > dc-con.dcContent { grid-template-columns: minmax(0, 1fr); }
+      .MenuCategoriesRwdView bs-lazy-render { border-left: 0; }
     }
     /* CHYBÍ V DS: mobilní menu = akordeon. Do pásma l se podkategorie rozbalují
        přímo pod kategorií, protože pravý sloupec panelu se na mobil nevejde. */
@@ -100,11 +111,10 @@
         <sc-for list="{{ items }}" as="i" hint-placeholder-count="10">
           <li class="root {{ i.cls }}"><a href="{{ i.href }}" onMouseEnter="{{ i.onEnter }}" onFocus="{{ i.onEnter }}">{{ i.label }}</a></li>
         </sc-for>
+        <li class="root _allToggle">
+          <button type="button" class="button toggle" onClick="{{ onToggleAll }}" onMouseEnter="{{ onEnterAll }}" aria-expanded="{{ megaOpen }}">Ostatní</button>
+        </li>
       </ul>
-      <span class="separator" aria-hidden="true"></span>
-      <button type="button" class="button toggle" onClick="{{ onToggleAll }}" onMouseEnter="{{ onEnterAll }}" aria-expanded="{{ megaOpen }}">
-        <svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie
-      </button>
     </dc-con>
   </nav>
   <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
@@ -322,8 +332,15 @@ class Component extends DCLogic {
     const st = this.state;
     const megaOpen = !!this.props.megaOpen || st.allOpen || st.hover !== null;
     const active = cats[st.hover === null ? 0 : st.hover] || cats[0];
-    const activeSubs = active.subs;
-    const activeNoSubs = !active.subs.length;
+    /* „Ostatní“ (allOpen bez hoveru) ukazuje jen první úroveň kategorií,
+       ne podkategorie — je to rozcestník pro to, co se nevešlo na lištu. */
+    const rootsOnly = st.allOpen && st.hover === null;
+    const hiddenIdx = (st.hiddenKey || '').split(',').filter(s => s !== '').map(Number);
+    const overflowCats = hiddenIdx.length ? hiddenIdx.map(i => cats[i]).filter(Boolean) : cats;
+    const activeSubs = rootsOnly
+      ? overflowCats.map(g => ({ label: g.label, href: g.href, items: [] }))
+      : active.subs;
+    const activeNoSubs = !rootsOnly && !active.subs.length;
     return {
       items: cats.map((g, i) => ({
         label: g.label, href: g.href, cls: g.modifier || '',
@@ -342,8 +359,8 @@ class Component extends DCLogic {
       activeSubs,
       activeNoSubs,
       activeHref: active.href,
-      activeCtaLabel: active.ctaLabel || '',
-      activeHasCta: !!active.ctaLabel,
+      activeCtaLabel: rootsOnly ? '' : (active.ctaLabel || ''),
+      activeHasCta: !rootsOnly && !!active.ctaLabel,
       onToggleAll: () => this.setState(s => ({ allOpen: !(s.allOpen || s.hover !== null), hover: null })),
       onEnterAll: () => this.setState({ hover: null, allOpen: true }),
       onLeave: () => { if (!this.props.megaOpen) this.setState({ hover: null, allOpen: false }); },
@@ -356,18 +373,28 @@ class Component extends DCLogic {
   fitMenu() {
     const list = document.querySelector('.MenuView .items');
     if (!list) return;
-    const lis = Array.prototype.slice.call(list.children);
-    lis.forEach(li => { li.style.display = ''; });
+    const all = Array.prototype.slice.call(list.children);
+    /* „Ostatní“ je poslední položka lišty a nikdy se neschovává — z měření se
+       vyřazuje a jen se pro ni rezervuje místo na řádku. */
+    const toggle = list.querySelector('._allToggle');
+    const lis = all.filter(li => li !== toggle);
+    all.forEach(li => { li.style.display = ''; });
     if (getComputedStyle(list).display === 'none') return;
     const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
-    const avail = list.clientWidth;
+    const reserve = toggle ? toggle.getBoundingClientRect().width + gap : 0;
+    const avail = list.clientWidth - reserve;
     let used = 0, cut = false;
-    lis.forEach(li => {
+    const hidden = [];
+    lis.forEach((li, i) => {
       const w = li.getBoundingClientRect().width;
       const next = used ? used + gap + w : w;
-      if (cut || next > avail + 0.5) { cut = true; li.style.display = 'none'; return; }
+      if (cut || next > avail + 0.5) { cut = true; li.style.display = 'none'; hidden.push(i); return; }
       used = next;
     });
+    /* „Ostatní“ ukazuje právě to, co se na lištu nevešlo — seznam schovaných
+       indexů proto putuje zpátky do stavu. */
+    const key = hidden.join(',');
+    if (key !== (this.state.hiddenKey || '')) this.setState({ hiddenKey: key });
   }
 
   syncCustomElementClasses() {

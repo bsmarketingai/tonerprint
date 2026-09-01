@@ -12,6 +12,11 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: na mobilu se USP jen automaticky přepínají, ruční navigace
+       se nezobrazuje — na šířku pruhu se nevejde a je zbytečná. */
+    @media (max-width: 819px) {
+      .UserContentPanelView .items.top > .button.uspNav { display: none; }
+    }
   </style>
 </helmet>
 
