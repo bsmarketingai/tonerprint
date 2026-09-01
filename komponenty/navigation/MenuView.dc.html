@@ -81,7 +81,9 @@
     @media (max-width: 819px) {
       .MenuCategoriesRwdView bs-lazy-render { display: none; }
       .MenuCategoriesRwdView .items > .level_0 { display: grid; grid-template-columns: minmax(0, 1fr) var(--spacer-48); align-items: center; }
-      .MenuCategoriesRwdView .items > .level_0 > a .bs-crv { display: none; }
+      /* V akordeonu nese řádek jen text — ikony kategorií na mobilu ubírají
+         šířku a nic nerozlišují. */
+      .MenuCategoriesRwdView .items > .level_0 > a .icon { display: none; }
       .MenuCategoriesRwdView ._subToggle {
         display: inline-flex; align-items: center; justify-content: center;
         width: var(--spacer-48); min-height: var(--spacer-48); padding: 0;
