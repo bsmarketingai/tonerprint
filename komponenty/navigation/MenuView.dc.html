@@ -12,55 +12,109 @@
     body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
     a { color: var(--link-color); text-decoration: none; }
     a:hover { color: var(--link-color-hover); text-decoration: underline; }
-    /* CHYBÍ V DS: lišta kategorií dnes scrolluje celý dc-con.dcContent, včetně
-       „Všechny kategorie“, a přetečení není nijak signalizované. Má to být obráceně:
-       tlačítko zůstává na místě, vodorovně se posouvají jen položky, bez scrollbaru,
-       a když se nevejdou (nastane už na pásmu xl), je vpravo bílý přechod a šipka. */
+    /* CHYBÍ V DS: lišta kategorií dnes scrolluje vodorovně. Má se chovat jinak:
+       názvy se nezalamují ani neořezávají, na řádku zůstane jen to, co se celé
+       vejde, a zbytek se přesune do „Všechny kategorie“ na pravém konci řádku.
+       Kolik položek se vejde, měří logika komponenty. */
     .MenuView > dc-con.dcContent { overflow: visible; position: relative; }
-    .MenuView > dc-con.dcContent > .button.toggle, .MenuView > dc-con.dcContent > .separator { flex: none; }
-    .MenuView .items { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
-    .MenuView .items::-webkit-scrollbar { display: none; }
+    .MenuView .items { flex: 1 1 auto; min-width: 0; flex-wrap: nowrap; overflow: hidden; }
     .MenuView .items > .root { flex: none; }
-    /* Přechod jde až na pravou hranu, tedy i pod šipku — jinak by položka pod šipkou
-       zůstala plná a přetečení by nebylo poznat. Šipka stojí v DOM za přechodem,
-       takže leží nad ním. */
-    .MenuView ._menuFade { display: none; position: absolute; top: 0; bottom: 0; right: 0; width: var(--spacer-80); pointer-events: none; background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--bg-view-color) 55%); }
-    .MenuView ._menuScrollNext { display: none; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: var(--spacer-32); min-width: var(--spacer-32); min-height: var(--spacer-32); padding: 0; --btn-bg-color: transparent; --btn-bg-color-hover: var(--color-neutral-100); --btn-text-color: var(--text-color); --btn-text-color-hover: var(--color-main-600); }
-    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuFade { display: block; }
-    .MenuView > dc-con.dcContent[data-overflow="1"] > ._menuScrollNext { display: inline-flex; align-items: center; justify-content: center; }
-    .MenuView > dc-con.dcContent[data-overflow="1"] .items { padding-right: var(--spacer-72); }
+    .MenuView .items > .root > a { white-space: nowrap; }
+    .MenuView > dc-con.dcContent > .separator, .MenuView > dc-con.dcContent > .button.toggle { flex: none; }
+    .MenuView > dc-con.dcContent > .button.toggle { margin-left: auto; }
     /* CHYBÍ V DS: lišta kategorií zůstává na dosah i uprostřed dlouhé stránky.
        Odsazuje se o výšku hlavičky, kterou měří stránka do --tp-header-h. */
     /* Obchází runtime, ne DS: obal importované komponenty má výšku lišty, takže by
        přilepená lišta neměla kam odjet — display: contents ho vyřadí z layoutu. */
     .sc-host:has(> ._menuWrap) { display: contents; }
     ._menuWrap { position: sticky; top: var(--tp-header-h, 0px); z-index: calc(var(--z-header) - 1); }
+    /* CHYBÍ V DS: mega-menu má v levém sloupci vždy 1. úroveň kategorií a vpravo
+       podkategorie té, na které zákazník stojí. DS zná jen pevný promo blok. */
+    .MenuCategoriesRwdView .items > .level_0.active > a { background: var(--color-neutral-100); color: var(--color-main-600); }
+    .MenuCategoriesRwdView bs-lazy-render > .items > .level_1 { grid-template-columns: minmax(0, 1fr); }
+    .MenuCategoriesRwdView bs-lazy-render .caption { display: block; padding: var(--spacer-16) var(--spacer-20) 0; font-size: var(--font-size-12); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--text-color-muted); }
+    .MenuCategoriesRwdView bs-lazy-render > .items { padding: var(--spacer-16) var(--spacer-20) var(--spacer-24); }
+    .MenuCategoriesRwdView ._subToggle, .MenuCategoriesRwdView ._subLevels { display: none; }
+    /* CHYBÍ V DS: náhledovky podkategorií v mega-menu (jako na webu). DS zná
+       jen textový seznam, proto rozvržení „obrázek 65×65 vlevo, texty vpravo“. */
+    .MenuCategoriesRwdView bs-lazy-render .level_1 > span { display: grid; grid-template-columns: 65px minmax(0, 1fr); gap: var(--spacer-4) var(--spacer-12); align-items: start; }
+    .MenuCategoriesRwdView bs-lazy-render > .items { gap: var(--spacer-16) var(--spacer-24); }
+    .MenuCategoriesRwdView bs-lazy-render .level_1 .name { line-height: var(--line-height-tight, 1.25); }
+    .MenuCategoriesRwdView bs-lazy-render .level_2 { margin-top: 0; gap: 0; }
+    .MenuCategoriesRwdView bs-lazy-render .level_2 > li > a { padding: 0; line-height: 1.5; }
+    /* Kategorie bez náhledovky: v seznamu, kde náhledovky jsou, zůstává místo prázdné,
+       aby texty držely stejnou osu. Kde nemá náhledovku nikdo, sloupec se ruší. */
+    .MenuCategoriesRwdView bs-lazy-render > .items:not(:has(._thumb)) .level_1 > span { grid-template-columns: minmax(0, 1fr); }
+    .MenuCategoriesRwdView bs-lazy-render > .items:has(._thumb) .level_1 > span > .name,
+    .MenuCategoriesRwdView bs-lazy-render > .items:has(._thumb) .level_1 > span > .level_2 { grid-column: 2; }
+    .MenuCategoriesRwdView ._thumb { grid-row: 1 / span 2; display: block; width: 65px; height: 65px; overflow: hidden; }
+    .MenuCategoriesRwdView ._thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    /* CHYBÍ V DS: kategorie bez podkategorií — místo osamoceného odkazu CTA tlačítko.
+       DS nemá variantu tlačítka pro obsah mega-menu. */
+    .MenuCategoriesRwdView ._allCta { display: inline-flex; align-items: center; gap: var(--spacer-8);
+      margin: var(--spacer-16) var(--spacer-20) var(--spacer-24); padding: var(--spacer-12) var(--spacer-20);
+      background: var(--color-main-500); color: var(--color-white); border-radius: var(--radius-8);
+      font-size: var(--font-size-14); font-weight: var(--font-weight-bold); text-decoration: none; }
+    .MenuCategoriesRwdView ._allCta:hover { background: var(--color-main-600); color: var(--color-white); text-decoration: none; }
+    .MenuCategoriesRwdView ._allCta .icon { width: 16px; height: 16px; }
+    .MenuCategoriesRwdView ._topCta { margin: var(--spacer-12) var(--spacer-20) 0; }
+    /* CHYBÍ V DS: panel s dlouhou kategorií (Kancelářské potřeby) je vyšší než
+       okno — oba sloupce proto scrollují samostatně, panel nepřeroste obrazovku. */
+    @media (min-width: 820px) {
+      ._menuWrap > .MenuCategoriesRwdView { max-height: calc(100vh - var(--tp-header-h, 0px) - var(--spacer-64)); }
+      ._menuWrap > .MenuCategoriesRwdView > dc-con.dcContent { max-height: inherit; }
+      .MenuCategoriesRwdView > dc-con.dcContent > .items, .MenuCategoriesRwdView bs-lazy-render { max-height: inherit; overflow-y: auto; }
+    }
+    /* CHYBÍ V DS: mobilní menu = akordeon. Do pásma l se podkategorie rozbalují
+       přímo pod kategorií, protože pravý sloupec panelu se na mobil nevejde. */
+    @media (max-width: 819px) {
+      .MenuCategoriesRwdView bs-lazy-render { display: none; }
+      .MenuCategoriesRwdView .items > .level_0 { display: grid; grid-template-columns: minmax(0, 1fr) var(--spacer-48); align-items: center; }
+      .MenuCategoriesRwdView .items > .level_0 > a .bs-crv { display: none; }
+      .MenuCategoriesRwdView ._subToggle {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: var(--spacer-48); min-height: var(--spacer-48); padding: 0;
+        border: 0; background: transparent; color: var(--text-color-muted); cursor: pointer;
+      }
+      .MenuCategoriesRwdView ._subToggle .icon { transition: transform .15s ease; }
+      .MenuCategoriesRwdView .level_0.open > ._subToggle .icon { transform: rotate(180deg); }
+      .MenuCategoriesRwdView .level_0.open > ._subLevels { display: block; }
+      .MenuCategoriesRwdView ._subLevels {
+        grid-column: 1 / -1; list-style: none; margin: 0 0 var(--spacer-8);
+        padding: 0 0 var(--spacer-4) var(--spacer-28);
+      }
+      /* Svislou linku drží DS na položkách (._subLevels > li), proto ji tady
+         komponenta nekreslí znovu — jinak jsou v akordeonu dvě. */
+      .MenuCategoriesRwdView ._subLevels > li { display: block; padding: 0 0 0 var(--spacer-12); }
+      .MenuCategoriesRwdView ._subLevels > li > a.name { display: block; min-height: 0; padding: var(--spacer-6) 0; font-size: var(--font-size-16); line-height: 1.35; font-weight: var(--font-weight-bold); color: var(--text-color); }
+      .MenuCategoriesRwdView ._subLevels .level_2 { list-style: none; margin: 0 0 var(--spacer-6); padding: 0; display: flex; flex-direction: column; gap: 0; }
+      .MenuCategoriesRwdView ._subLevels .level_2 > li > a { display: block; min-height: 0; padding: var(--spacer-4) 0; font-size: var(--font-size-16); line-height: 1.35; color: var(--color-neutral-600); }
+    }
   </style>
 </helmet>
 
-<div class="_menuWrap">
+<div class="_menuWrap" onMouseLeave="{{ onLeave }}">
   <nav class="MenuView v1a v1 bs-view dcon dc000" aria-label="Kategorie">
     <dc-con class="dcContent">
-      <button type="button" class="button toggle" onClick="{{ onToggleMega }}" aria-expanded="{{ megaOpen }}">
-        <svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie
-      </button>
-      <span class="separator" aria-hidden="true"></span>
       <ul class="items">
-        <sc-for list="{{ items }}" as="i" hint-placeholder-count="9">
-          <li class="root {{ i.modifier }}"><a href="{{ i.href }}">{{ i.label }}</a></li>
+        <sc-for list="{{ items }}" as="i" hint-placeholder-count="10">
+          <li class="root {{ i.cls }}"><a href="{{ i.href }}" onMouseEnter="{{ i.onEnter }}" onFocus="{{ i.onEnter }}">{{ i.label }}</a></li>
         </sc-for>
       </ul>
-      <span class="_menuFade" aria-hidden="true"></span>
-      <button type="button" class="button _menuScrollNext" aria-label="Další kategorie" onClick="{{ onScrollNext }}"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+      <span class="separator" aria-hidden="true"></span>
+      <button type="button" class="button toggle" onClick="{{ onToggleAll }}" onMouseEnter="{{ onEnterAll }}" aria-expanded="{{ megaOpen }}">
+        <svg class="icon ico2" aria-hidden="true"><use href="#tp-menu-2"></use></svg>Všechny kategorie
+      </button>
     </dc-con>
   </nav>
   <div class="MenuCategoriesRwdView v1a v1 bs-view dcon dc000" style="display: {{ megaDisplay }}">
     <dc-con class="dcContent">
       <ul class="items">
-        <sc-for list="{{ megaItems }}" as="g" hint-placeholder-count="9">
-          <li class="level_0 {{ g.modifier }}">
-            <a href="{{ g.href }}"><svg class="icon ico2" aria-hidden="true"><use href="{{ g.icon }}"></use></svg>{{ g.label }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
-            <sc-if value="{{ g.hasSubs }}">
+        <sc-for list="{{ megaItems }}" as="g" hint-placeholder-count="15">
+          <li class="level_0 {{ g.cls }}">
+            <a href="{{ g.href }}" onMouseEnter="{{ g.onEnter }}" onFocus="{{ g.onEnter }}"><svg class="icon ico2" aria-hidden="true"><use href="{{ g.icon }}"></use></svg>{{ g.label }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+            <sc-if value="{{ g.hasSubs }}" hint-placeholder-val="{{ true }}">
+              <button type="button" class="_subToggle" onClick="{{ g.onToggleSub }}" aria-expanded="{{ g.open }}" aria-label="Zobrazit podkategorie"><svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-down"></use></svg></button>
               <ul class="_subLevels level_1">
                 <sc-for list="{{ g.subs }}" as="s" hint-placeholder-count="4">
                   <li>
@@ -77,77 +131,243 @@
           </li>
         </sc-for>
       </ul>
-      <sc-if value="{{ hasFeatured }}">
-        <bs-lazy-render class="expanded">
-          <span class="caption">{{ featuredCaption }}</span>
-          <ul class="items">
-            <sc-for list="{{ featured }}" as="f" hint-placeholder-count="6">
-              <li class="level_1">
-                <span class="image"><img src="{{ f.image }}" alt="" loading="lazy"></span>
-                <span>
-                  <a class="name" href="{{ f.href }}">{{ f.label }}</a>
-                  <ul class="level_2">
-                    <sc-for list="{{ f.items }}" as="l" hint-placeholder-count="3">
-                      <li><a href="{{ l.href }}">{{ l.label }}</a></li>
-                    </sc-for>
-                  </ul>
-                </span>
-              </li>
-            </sc-for>
-          </ul>
-        </bs-lazy-render>
-      </sc-if>
+      <bs-lazy-render class="expanded">
+        <span class="caption">{{ activeCaption }}</span>
+        <sc-if value="{{ activeHasCta }}" hint-placeholder-val="{{ false }}">
+          <a class="_allCta _topCta" href="{{ activeHref }}">{{ activeCtaLabel }}<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+        </sc-if>
+        <ul class="items">
+          <sc-for list="{{ activeSubs }}" as="f" hint-placeholder-count="6">
+            <li class="level_1">
+              <span>
+                <sc-if value="{{ f.thumb }}" hint-placeholder-val="{{ false }}">
+                  <a class="_thumb" href="{{ f.href }}" tabindex="-1" aria-hidden="true"><img data-src="{{ f.thumb }}" alt="" width="65" height="65"></a>
+                </sc-if>
+                <a class="name" href="{{ f.href }}">{{ f.label }}</a>
+                <ul class="level_2">
+                  <sc-for list="{{ f.items }}" as="l" hint-placeholder-count="3">
+                    <li><a href="{{ l.href }}">{{ l.label }}</a></li>
+                  </sc-for>
+                </ul>
+              </span>
+            </li>
+          </sc-for>
+        </ul>
+        <sc-if value="{{ activeNoSubs }}" hint-placeholder-val="{{ false }}">
+          <a class="_allCta" href="{{ activeHref }}">Zobrazit celou kategorii<svg class="icon ico2" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></a>
+        </sc-if>
+      </bs-lazy-render>
     </dc-con>
   </div>
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:56},&quot;items&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,modifier}&gt;&quot;},&quot;megaItems&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,icon,modifier,subs}&gt;&quot;},&quot;featured&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{label,href,image,items}&gt;&quot;},&quot;featuredCaption&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;megaOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onToggleMega&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260,&quot;height&quot;:56},&quot;megaOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onToggleMega&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
 class Component extends DCLogic {
-  /* Lišta kategorií a mega-menu. Data i přepínání drží stránka; komponenta si řeší
-     jen vodorovný posun položek a signalizaci přetečení. */
+  /* Lišta kategorií a mega-menu. Strom kategorií odpovídá katalogu tonerprint.cz
+     a je zdrojem pravdy tady v komponentě — stránky ho nepředávají, je na všech
+     stejný. Stránka řídí jen otevření z hamburgeru v hlavičce (megaOpen). */
+  state = { hover: null, allOpen: false, openSub: null };
+
+  get categories() {
+    const u = 'vypis-kategorie.dc.html';
+    const c = (label, items) => ({ label, href: u, items: (items || []).map(l => ({ label: l, href: u })) });
+    return [
+      { label: 'Spotřební materiál do tiskáren', icon: '#tp-printer', subs: [
+        { ...c('Tonery', ['Kompatibilní tonery', 'Originální tonery']), thumb: 'ds/assets/menu/sub-tonery.png' },
+        { ...c('Inkoustové cartridge', ['Kompatibilní cartridge', 'Originál cartridge']), thumb: 'ds/assets/menu/sub-ink.png' },
+        { ...c('Válce a příslušenství', ['Kompatibilní válce', 'Originální válce']), thumb: 'ds/assets/menu/sub-drum.png' },
+        { ...c('Pásky a fólie', ['Pásky pro tiskárny', 'Pásky pro psací stroje', 'Fólie pro faxy a tiskárny', 'Pásky do štítkovače']), thumb: 'ds/assets/menu/sub-pasky.png' },
+      ] },
+      { label: 'Kancelářská technika', icon: '#tp-scale', subs: [
+        { ...c('Skartovačky', ['Rexel', 'Dahle', 'HSM', 'Kobra']), thumb: 'ds/assets/menu/sub-skartovacky.png' },
+        { ...c('Laminace', ['Laminovací fólie', 'Laminovací stroje']), thumb: 'ds/assets/menu/sub-laminace.png' },
+        { ...c('Řezačky', ['Řezačky pákové', 'Řezačky kotoučové', 'Stohové řezačky', 'Řezací podložky']), thumb: 'ds/assets/menu/sub-rezacky.png' },
+        { ...c('Vazba', ['Desky pro termovazbu', 'Hřbety pro kroužkovou vazbu', 'Nasouvací lišty']), thumb: 'ds/assets/menu/sub-vazba.png' },
+        { ...c('Štítkovače', ['Ruční štítkovač', 'Stolní štítkovač']), thumb: 'ds/assets/menu/sub-stitkovace.png' },
+        { ...c('Váhy, poštovní'), thumb: 'ds/assets/menu/sub-vahy.png' },
+        { ...c('Skládačka papíru'), thumb: 'ds/assets/menu/sub-skladacka.png' },
+      ] },
+      { label: 'Tabule', icon: '#tp-layout-grid', subs: [
+        { ...c('Magnetické bílé tabule', ['100 x 200 cm', '150 x 100 cm', '180 x 120 cm', '240 x 120 cm', '300 x 100 cm']), thumb: 'ds/assets/menu/tab-magneticke.png' },
+        { ...c('Skleněné tabule'), thumb: 'ds/assets/menu/tab-sklenene.png' },
+        { ...c('Tabule křídové'), thumb: 'ds/assets/menu/tab-kridove.png' },
+        { ...c('Keramické bílé tabule', ['Keramické tabule 60x45', 'Keramické tabule 60x90', 'Keramické tabule 90x120', 'Keramické tabule 150x100', 'Keramické tabule 200x100']), thumb: 'ds/assets/menu/tab-keramicke.png' },
+        { ...c('Prezentace dokumentů', ['Nástěnný prezentační systém', 'Stolní prezentační systém', 'Podlahový prezentační systém', 'Kapsy a příslušenství']), thumb: 'ds/assets/menu/tab-prezentace.png' },
+        { ...c('Magnetické bílé bezrámové tabule'), thumb: 'ds/assets/menu/tab-bezramove.png' },
+        { ...c('Korkové tabule', ['40 x 60 cm', '60 x 90 cm', '90 x 120 cm', '90 - 300 cm']), thumb: 'ds/assets/menu/tab-korkove.png' },
+        { ...c('Panely, venkovní stojany'), thumb: 'ds/assets/menu/tab-panely.png' },
+        { ...c('Magnetická rozkládací tabule'), thumb: 'ds/assets/menu/tab-rozkladaci.png' },
+        { ...c('Textilní, filcová'), thumb: 'ds/assets/menu/tab-textilni.png' },
+        { ...c('Flip-charty', ['Flip-charty', 'Příslušenství k flip-chartům']), thumb: 'ds/assets/menu/tab-flipchart.png' },
+        { ...c('Rámečky', ['Kliprámy', 'Plakátové lišty', 'Dveřní cedule a informační tabulky', 'Informační systémy']), thumb: 'ds/assets/menu/tab-ramecky.png' },
+        { ...c('Vitríny'), thumb: 'ds/assets/menu/tab-vitriny.png' },
+      ] },
+      { label: 'Papírenské produkty', icon: '#tp-copy', subs: [
+        { ...c('Papír', ['Xerografický papír A4', 'Xerografický papír A3', 'Xerografický papír A2', 'Xerografický papír A5, A6']), thumb: 'ds/assets/menu/pap-papir.png' },
+        { ...c('Pauzovací a plotrový papír', ['Pauzovací papír', 'Plátno', 'Kartonový tubus']), thumb: 'ds/assets/menu/pap-plotrovy.png' },
+        c('Vlnitá lepenka'),
+        { ...c('Etikety a fólie', ['Rayfilm', 'MP print', 'Etikety na kotouči']), thumb: 'ds/assets/menu/pap-etikety.png' },
+        { ...c('Dopisní obálky', ['Bublinkové', 'Dlouhé', 'Expediční', 'Formát A4', 'Formát A5']), thumb: 'ds/assets/menu/pap-obalky.png' },
+        { ...c('Tiskopisy', ['Baloušek', 'Optys']), thumb: 'ds/assets/menu/pap-tiskopisy.png' },
+      ] },
+      { label: 'Kancelářské potřeby', icon: '#tp-edit', subs: [
+        { ...c('Sešívačky', ['Sešívačky', 'Spony do sešívačky']), thumb: 'ds/assets/menu/kp-sesivacky.png' },
+        { ...c('Děrovače'), thumb: 'ds/assets/menu/kp-derovace.png' },
+        { ...c('Razítka', ['Razítka', 'Barvy do razítka', 'Podušky']), thumb: 'ds/assets/menu/kp-razitka.png' },
+        { ...c('Organizování a úprava dokumentů', ['Pořadače', 'Spisové desky', 'Rychlovazače', 'Odkládací mapy', 'Závěsné složky']), thumb: 'ds/assets/menu/kp-organizovani.png' },
+        { ...c('Bločky samolepící, záložky'), thumb: 'ds/assets/menu/kp-blocky.png' },
+        { ...c('Motouzy'), thumb: 'ds/assets/menu/kp-motouzy.png' },
+        { ...c('Opravné strojky a pera'), thumb: 'ds/assets/menu/kp-opravne.png' },
+        { ...c('Židle, podložky a stupátka', ['Židle', 'Podložky a stupátka']), thumb: 'ds/assets/menu/kp-zidle.png' },
+        { ...c('Kalkulačky', ['Školní', 'Kapesní', 'Stolní', 'S tiskem']), thumb: 'ds/assets/menu/kp-kalkulacky.png' },
+        { ...c('Datová media', ['CD-R média', 'CD-RW', 'DVD-R', 'DVD-RAM', 'BD-R']), thumb: 'ds/assets/menu/kp-datova.png' },
+        { ...c('Paměťová média', ['Externí pevný disk', 'Memory Stick', 'Multimedia Memory card', 'Externí čtečky karet']), thumb: 'ds/assets/menu/kp-pametova.png' },
+        { ...c('Čisticí produkty', ['Univerzální', 'Pro plastové povrchy', 'Pro skleněné povrchy', 'Speciální']), thumb: 'ds/assets/menu/kp-cistici.png' },
+        { ...c('Odpadkové koše'), thumb: 'ds/assets/menu/kp-kose.png' },
+        { ...c('Pokladny'), thumb: 'ds/assets/menu/kp-pokladny.png' },
+        { ...c('Baterie', ['Baterie', 'Nabíječky', 'Power Bank']), thumb: 'ds/assets/menu/kp-baterie.png' },
+      ] },
+      { label: 'Školní potřeby', icon: '#tp-book', subs: [
+        { ...c('Sešity'), thumb: 'ds/assets/menu/sp-sesity.png' },
+        { ...c('Skicáky, náčrtníky, náčrtkové papíry'), thumb: 'ds/assets/menu/sp-skicaky.png' },
+        { ...c('Školní batohy a aktovky'), thumb: 'ds/assets/menu/sp-batohy.png' },
+        c('Školní pouzdra, penály'),
+        { ...c('Psací potřeby', ['Pera, náplně do per', 'Mikrotužky', 'Ořezávátka', 'Školní kružítka', 'EnerGel']), thumb: 'ds/assets/menu/sp-psaci.png' },
+        { ...c('Bloky'), thumb: 'ds/assets/menu/sp-bloky.png' },
+        { ...c('Záznamní knihy'), thumb: 'ds/assets/menu/sp-zaznamni.png' },
+        { ...c('Nůžky'), thumb: 'ds/assets/menu/sp-nuzky.png' },
+        { ...c('Pryže'), thumb: 'ds/assets/menu/sp-pryze.png' },
+        { ...c('Lepidla'), thumb: 'ds/assets/menu/sp-lepidla.png' },
+        { ...c('Pravítka'), thumb: 'ds/assets/menu/sp-pravitka.png' },
+        { ...c('Ostatní potřeby'), thumb: 'ds/assets/menu/sp-ostatni.png' },
+        { ...c('Výtvarné potřeby', ['Akrylové barvy', 'Barvy na sklo', 'Barvy na tělo', 'Křídy a uhly']), thumb: 'ds/assets/menu/sp-vytvarne.png' },
+        { ...c('Ruční práce a tvoření', ['Balonky', 'Malířská plátna', 'Tavné pistole a příslušenství']), thumb: 'ds/assets/menu/sp-tvoreni.png' },
+        { ...c('Ulamovací nože'), thumb: 'ds/assets/menu/sp-noze.png' },
+      ] },
+      { label: 'Hygiena', icon: '#tp-heart', subs: [
+        { ...c('Mýdla, pěny, gely', ['Mýdla, pěny, gely', 'Krémy na ruce']), thumb: 'ds/assets/menu/hy-mydla.png' },
+        { ...c('Prací prášky a aviváže', ['Prací prášky', 'Prací gely', 'Aviváž']), thumb: 'ds/assets/menu/hy-praci.png' },
+        { ...c('Rukavice', ['Pracovní rukavice', 'Jednorázové rukavice']), thumb: 'ds/assets/menu/hy-rukavice.png' },
+        { ...c('Domácnost', ['Ubrousky, utěrky a papír', 'Zásobníky', 'Osvěžovače vzduchu', 'Úklidová dezinfekce', 'Přípravky na mytí nádobí']), thumb: 'ds/assets/menu/hy-domacnost.png' },
+      ] },
+      { label: 'Jednorázové nádobí a obaly', icon: '#tp-package', subs: [
+        { ...c('Burger boxy'), thumb: 'ds/assets/menu/jn-burger.png' },
+        { ...c('Dortové krabice'), thumb: 'ds/assets/menu/jn-dortove-krabice.png' },
+        { ...c('Dortové podložky'), thumb: 'ds/assets/menu/jn-dortove-podlozky.png' },
+        { ...c('Krabice a podnos na chlebíčky'), thumb: 'ds/assets/menu/jn-chlebicky.png' },
+        { ...c('Krabice na pizzu / koláče'), thumb: 'ds/assets/menu/jn-pizza.png' },
+        { ...c('Krajky pod dort'), thumb: 'ds/assets/menu/jn-krajky.png' },
+        { ...c('Menu boxy'), thumb: 'ds/assets/menu/jn-menuboxy.png' },
+        { ...c('Misky'), thumb: 'ds/assets/menu/jn-misky.png' },
+        { ...c('Misky kónické'), thumb: 'ds/assets/menu/jn-misky-konicke.png' },
+        { ...c('Misky na dresink'), thumb: 'ds/assets/menu/jn-dresink.png' },
+        { ...c('Misky na přílohy'), thumb: 'ds/assets/menu/jn-prilohy.png' },
+        { ...c('Nápojové kelímky', ['Kelímky papírové', 'Kelímky plastové', 'Kelímky pěnové']), thumb: 'ds/assets/menu/jn-kelimky.png' },
+        { ...c('Odnosové a výslužkové krabice'), thumb: 'ds/assets/menu/jn-odnosove.png' },
+        { ...c('Tácky'), thumb: 'ds/assets/menu/jn-tacky.png' },
+        { ...c('Talíře'), thumb: 'ds/assets/menu/jn-talire.png' },
+        { ...c('KRAFTové výrobky'), thumb: 'ds/assets/menu/jn-kraft.png' },
+        { ...c('Brčka'), thumb: 'ds/assets/menu/jn-brcka.png' },
+        { ...c('Hliníkové nádobí'), thumb: 'ds/assets/menu/jn-hlinik.png' },
+        { ...c('Jednorázové příbory', ['Dřevěné', 'Plastové']), thumb: 'ds/assets/menu/jn-pribory.png' },
+        c('Odnosové tašky'),
+      ] },
+      { label: 'Balící materiál', icon: '#tp-package-export', subs: [
+        { ...c('Strečové (průtažné) fólie', ['Ruční strečová fólie']), thumb: 'ds/assets/menu/bm-strec.png' },
+        { ...c('Pytle na odpad, sáčky', ['Papírové pytle', 'Pytle na odpadky', 'Sáčky']), thumb: 'ds/assets/menu/bm-pytle.png' },
+        { ...c('Lepící pásky', ['Plastová lepící páska', 'Papírová lepící páska', 'Oboustranná lepící páska', 'Odvíječ lepící pásky']), thumb: 'ds/assets/menu/bm-pasky.png' },
+        { ...c('Balící stroje'), thumb: 'ds/assets/menu/bm-stroje.png' },
+        { ...c('Ostatní'), thumb: 'ds/assets/menu/bm-ostatni.png' },
+      ] },
+      { label: 'Kalendáře, diáře', icon: '#tp-calendar-time', subs: [
+        { ...c('Nástěnné kalendáře'), thumb: 'ds/assets/menu/kal-nastenne.png' },
+        { ...c('Stolní kalendáře'), thumb: 'ds/assets/menu/kal-stolni.png' },
+        { ...c('Diáře', ['formát A4', 'formát A5', 'formát B5', 'formát B6', 'kapesní']), thumb: 'ds/assets/menu/kal-diare.png' },
+        { ...c('Přáníčka'), thumb: 'ds/assets/menu/kal-pranicka.png' },
+      ] },
+      { label: 'Zboží s Bonusem', icon: '#tp-coins', subs: [
+        { ...c('Herní židle'), thumb: 'ds/assets/menu/bonus-herni-zidle.png' },
+        c('Ostatní'),
+      ] },
+      { label: 'GRIL', icon: '#tp-star', subs: [] },
+      { label: 'Doprodej', icon: '#tp-trending-down', subs: [] },
+      { label: 'Akce', icon: '#tp-discount', modifier: 'sale', subs: [] },
+      { label: 'Výrobci', icon: '#tp-tag', ctaLabel: 'Zobrazit všechny výrobce', subs: [
+        'FINO', 'Apacer', 'Gembird', 'E-BLUE', 'Nanolab', 'Fresh air', 'MFP', 'Duracell',
+        'SLUNY s.r.o.', 'HOFFMANN Tomasz', 'Wedo', 'PARTYDECO', 'Concorde', 'Philips',
+        'Devil', 'Papernet', 'Donau', 'Panasonic', 'Rebell', 'Epson', 'Krpa',
+        'HIT OFFICE, s.r.o.', 'DSB-SKY', 'Impap', 'Rexel', 'Trodat',
+        'Optys', 'UNI', 'Vikpap', 'Kores', 'Jelen', 'SECUPACK s.r.o.', 'All New', 'Alba',
+        'SAUL SADOCH S.p.A. REX PRODOTTI CARTOTECNICI', 'Powerton', 'HP', 'Staedtler',
+        'Isolda', 'Anděl Přerov s.r.o.', 'KrpaForm', 'Johnson', 'Kingston', 'Melitrade a.s.',
+        'Wäsche Meister', 'Siemens', 'Tempus', 'PATRIOT', 'Hlubna', 'Janegal', 'Kyocera',
+        'VICTORIA VISUAL',
+        'Důbrava', 'Savo', 'Kioxia', 'image', 'Larrin', 'Lexmark', 'Relido', 'Deli', 'Varta',
+        'Creall', 'AT', 'Baloušek Tisk', 'Colop', 'Henkel', 'Sanytol', 'Maxell', 'JAR',
+        'GLADE', 'Notes', 'Citizen', 'Bonux', 'Milan', 'Label', 'Baloušek', 'Neo Tools',
+        'Druchema',
+        'SK Label', 'Parker', 'BONUS', 'UPM', 'Karina', 'Printronix', 'KREUL', 'IBM', 'WD',
+        'Notes a.s.', 'DOMESTOS', 'Mitia', 'Papírny Brno', 'Victoria Technology',
+        'compatible', 'Colorino', 'ICO', 'Dymo', 'Sandisk', 'Rapesco', 'Juta', 'CIF',
+        'EuroSupplies', 'Adata', 'Lavon', 'ERICHKRAUSE',
+      ].map(n => c(n)) },
+    ].map(g => ({ ...g, href: 'vypis-kategorie.dc.html' }));
+  }
+
+  open(i) { this.setState({ hover: i }); }
+
   renderVals() {
-    const p = this.props;
-    const megaItems = (p.megaItems ?? []).map(g => ({ ...g, hasSubs: !!(g.subs && g.subs.length) }));
-    const featured = p.featured ?? [];
+    const cats = this.categories;
+    const st = this.state;
+    const megaOpen = !!this.props.megaOpen || st.allOpen || st.hover !== null;
+    const active = cats[st.hover === null ? 0 : st.hover] || cats[0];
+    const activeSubs = active.subs;
+    const activeNoSubs = !active.subs.length;
     return {
-      items: p.items ?? [],
-      megaItems,
-      megaDisplay: p.megaOpen ? 'block' : 'none',
-      megaOpen: p.megaOpen ?? false,
-      onToggleMega: p.onToggleMega,
-      featured,
-      hasFeatured: featured.length > 0,
-      featuredCaption: p.featuredCaption ?? '',
-      onScrollNext: e => {
-        const items = e.currentTarget.parentElement.querySelector('.items');
-        if (items) items.scrollBy({ left: Math.round(items.clientWidth * 0.6) });
-      },
+      items: cats.map((g, i) => ({
+        label: g.label, href: g.href, cls: g.modifier || '',
+        onEnter: () => this.open(i),
+      })),
+      megaItems: cats.map((g, i) => ({
+        label: g.label, href: g.href, icon: g.icon,
+        cls: [g.modifier || '', st.hover === i ? 'active' : '', st.openSub === i ? 'open' : ''].filter(Boolean).join(' '),
+        hasSubs: g.subs.length > 0, subs: g.subs, open: st.openSub === i,
+        onEnter: () => this.open(i),
+        onToggleSub: e => { e.preventDefault(); this.setState(s => ({ openSub: s.openSub === i ? null : i })); },
+      })),
+      megaOpen,
+      megaDisplay: megaOpen ? 'block' : 'none',
+      activeCaption: active.label,
+      activeSubs,
+      activeNoSubs,
+      activeHref: active.href,
+      activeCtaLabel: active.ctaLabel || '',
+      activeHasCta: !!active.ctaLabel,
+      onToggleAll: () => this.setState(s => ({ allOpen: !(s.allOpen || s.hover !== null), hover: null })),
+      onEnterAll: () => this.setState({ hover: null, allOpen: true }),
+      onLeave: () => { if (!this.props.megaOpen) this.setState({ hover: null, allOpen: false }); },
     };
   }
 
-  /* Přetečení položek se hlásí atributem data-overflow — CSS na něj váže bílý
-     přechod a šipku. Měří se po scrollu, resize i doměření fontů. */
-  watchMenu() {
-    this.menuSync = () => {
-      document.querySelectorAll('.MenuView > dc-con.dcContent').forEach(row => {
-        const items = row.querySelector('.items');
-        if (!items) return;
-        const more = items.scrollWidth - items.clientWidth - items.scrollLeft > 8;
-        row.setAttribute('data-overflow', more ? '1' : '0');
-      });
-    };
-    this.menuSync();
-    window.addEventListener('resize', this.menuSync);
-    window.addEventListener('load', this.menuSync);
-    document.querySelectorAll('.MenuView .items').forEach(items => {
-      items.addEventListener('scroll', this.menuSync, { passive: true });
-      if (window.ResizeObserver) {
-        this.ro = this.ro || new ResizeObserver(() => this.menuSync());
-        this.ro.observe(items);
-      }
+  /* Přetečení lišty: položka se nikdy neořezává. Sečteme šířky zleva a jakmile
+     se další celá nevejde, schováme ji i všechny za ní — jsou v „Všechny
+     kategorie“. Měří se po resize, po doměření fontů a po každém renderu. */
+  fitMenu() {
+    const list = document.querySelector('.MenuView .items');
+    if (!list) return;
+    const lis = Array.prototype.slice.call(list.children);
+    lis.forEach(li => { li.style.display = ''; });
+    if (getComputedStyle(list).display === 'none') return;
+    const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+    const avail = list.clientWidth;
+    let used = 0, cut = false;
+    lis.forEach(li => {
+      const w = li.getBoundingClientRect().width;
+      const next = used ? used + gap + w : w;
+      if (cut || next > avail + 0.5) { cut = true; li.style.display = 'none'; return; }
+      used = next;
     });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.menuSync);
   }
 
   syncCustomElementClasses() {
@@ -160,18 +380,8 @@ class Component extends DCLogic {
   /* Styly a sprite DS: při importu do stránky je načítá stránka (relativní cesty
      se pak řeší proti ní, ne proti komponentě). Samostatně otevřená komponenta si
      je doplní sama — proto se nelinkují v helmetu, ale až po mountu a jen když chybí. */
-/* Cesty k assetům se píšou tak, jak je potřebuje stránka (ds/…), protože relativní
-     URL se při importu řeší proti dokumentu stránky, ne proti komponentě. Samostatně
-     otevřená komponenta si je po mountu přepíše na svou hloubku. */
   get standalone() { return location.pathname.includes('/komponenty/'); }
   dsPrefix() { return this.standalone ? '../../' : ''; }
-  fixStandalonePaths() {
-    if (!this.standalone) return;
-    document.querySelectorAll('img[src^="ds/"]').forEach(img => { img.src = '../../' + img.getAttribute('src'); });
-    document.querySelectorAll('[style*="url(ds/"]').forEach(el => {
-      el.setAttribute('style', el.getAttribute('style').split('url(ds/').join('url(../../ds/'));
-    });
-  }
   ensureDsAssets() {
     if (!document.querySelector('link[href$="ds/styles.css"]')) {
       const l = document.createElement('link');
@@ -184,22 +394,47 @@ class Component extends DCLogic {
       sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
       document.head.appendChild(sc);
     }
-    this.fixStandalonePaths();
+  }
+
+  /* Náhledovky se píšou jako data-src; skutečné src se doplní po mountu podle
+     hloubky dokumentu (šablonová hole v src by se během streamu vyžádala jako URL). */
+  hydrateImages() {
+    document.querySelectorAll('.MenuCategoriesRwdView img[data-src]').forEach(img => {
+      const src = this.dsPrefix() + img.getAttribute('data-src');
+      if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
   }
 
   componentDidMount() {
     this.ensureDsAssets();
+    this.hydrateImages();
     this.syncCustomElementClasses();
-    this.watchMenu();
+    /* Mobilní menu otevřené z hamburgeru se při zvětšení okna nad pásmo l zavře —
+       jinak by v desktopu zůstal viset panel, který už nemá čím zavřít. */
+    this.closeIfDesktop = () => {
+      if (window.innerWidth < 820) return;
+      if (this.props.megaOpen && this.props.onToggleMega) this.props.onToggleMega();
+      if (this.state.allOpen || this.state.hover !== null || this.state.openSub !== null) {
+        this.setState({ allOpen: false, hover: null, openSub: null });
+      }
+    };
+    this.onResize = () => { this.fitMenu(); this.closeIfDesktop(); };
+    this.fitMenu();
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('load', this.onResize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.onResize);
+    this.onKey = e => { if (e.key === 'Escape') this.setState({ hover: null, allOpen: false }); };
+    document.addEventListener('keydown', this.onKey);
   }
   componentDidUpdate() {
     this.syncCustomElementClasses();
-    if (this.menuSync) this.menuSync();
+    this.hydrateImages();
+    this.fitMenu();
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', this.menuSync);
-    window.removeEventListener('load', this.menuSync);
-    if (this.ro) this.ro.disconnect();
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('load', this.onResize);
+    document.removeEventListener('keydown', this.onKey);
   }
 }
 
