@@ -21,32 +21,54 @@
 }
 .ProductsMasterView > dc-con.dcContent { display: flex; flex-direction: column; gap: var(--eshop-gap); min-width: 0; }
 .ProductsMasterView > dc-con.dcQuery { display: flex; flex-direction: column; gap: var(--eshop-gap); min-width: 0; }
+/* nadpis kategorie a počet produktů v jednom řádku, počet úplně vpravo */
+.ProductsMasterView > dc-con.dcQuery > dc-con.dcHeader { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--spacer-4) var(--spacer-16); }
+/* počet produktů je neklikatelný chip — bílý s rámečkem, na šedém pozadí stránky
+   by šedý podklad nebyl vidět */
+.ProductsMasterView > dc-con.dcQuery > dc-con.dcHeader .totalItems {
+  display: inline-flex; align-items: center; gap: var(--spacer-4); align-self: center;
+  padding: var(--spacer-4) var(--spacer-10); border-radius: var(--radius-pill);
+  background: var(--bg-view-color); border: var(--border); color: var(--text-color-muted);
+  font-size: var(--font-size-13); white-space: nowrap; cursor: default; user-select: none;
+}
+.ProductsMasterView > dc-con.dcQuery > dc-con.dcHeader .totalItems strong { color: var(--text-color); font-weight: var(--font-weight-bold); }
 .ProductsMasterView .title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); }
 .ProductsMasterView .shortDescription { margin: var(--spacer-8) 0 0; color: var(--text-color-muted); max-width: 70ch; }
 .ProductsMasterView.firstPage .shortDescription { display: block; }
 .ProductsMasterView .shortDescription { display: none; }
 
+/* --- ._categoryBottom — SEO blok a FAQ pod výpisem ----------------------
+   Pod sebou; od xxl (1150+) vedle sebe ve dvou stejných sloupcích.
+   Od stránkování ho dělí 64 px (mezera sloupce --eshop-gap + dorovnání). */
+._categoryBottom { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--eshop-gap); align-items: start; margin-top: max(0px, calc(var(--spacer-64) - var(--eshop-gap))); }
+._categoryBottom > * { min-width: 0; }
+/* ===== BP: XXL (1150–1439) ===== */
+@media (min-width: 1150px) { ._categoryBottom { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
 /* --- ._categoryText — rozbalovací text kategorie -----------------------
    Víceodstavcový SEO text: ve výchozím stavu zkrácený s přechodem do bílé.
    K OVĚŘENÍ S BS SHOPEM: název pomocné třídy. */
-._categoryTextBlock { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacer-4); }
+._categoryTextBlock { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--spacer-24); row-gap: var(--spacer-4); align-items: start; }
+._categoryTextBlock > .caption { grid-column: 1 / -1; }
+/* otvírák textu kategorie stojí v pravém sloupci u spodní hrany textu */
+._categoryTextBlock > ._expandButton { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; padding-bottom: 0; }
 ._categoryText { color: var(--text-color-muted); max-width: 78ch; }
 ._categoryText > p { margin: 0 0 var(--spacer-10); }
 ._categoryText > p:last-child { margin-bottom: 0; }
 ._categoryText.collapsed {
-  max-height: calc(3 * var(--font-size-16) * var(--line-height-base));
+  max-height: calc(2 * var(--font-size-16) * var(--line-height-base));
   overflow: hidden;
   mask-image: linear-gradient(to bottom, var(--color-black) 55%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, var(--color-black) 55%, transparent 100%);
 }
 /* otvírák textu je stejný prvek jako v drawru filtrů, jen mimo něj */
-._expandButton {
+._expandButton:not(.button) {
   display: inline-flex; align-items: center; gap: var(--spacer-4);
   background: none; border: 0; padding: var(--spacer-6) 0;
   font: var(--font-weight-semibold) var(--font-size-14) var(--font-family);
   color: var(--link-color); cursor: pointer;
 }
-._expandButton:hover { color: var(--color-main-700); }
+._expandButton:not(.button):hover { color: var(--color-main-700); }
 ._expandButton:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 ._expandButton .icon { transition: transform .15s ease; }
 ._expandButton[aria-expanded="true"] .icon { transform: rotate(180deg); }

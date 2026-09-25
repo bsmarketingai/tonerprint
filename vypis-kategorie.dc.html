@@ -72,8 +72,30 @@
     ._activeFilters .chip:focus-visible { outline: none; box-shadow: var(--focus-ring); }
     ._activeFilters .chip.reset { background: var(--color-primary-100); color: var(--color-primary-700); }
     ._activeFilters .chip.reset:hover { background: var(--color-primary-200); }
+    /* Prezentační ovladač — není součást webu ani DS, jen přepínač variant pro klienta. */
+    ._presentationBar {
+      position: fixed; left: 50%; bottom: var(--spacer-20); transform: translateX(-50%); z-index: 9999;
+      display: flex; align-items: center; gap: var(--spacer-4);
+      padding: var(--spacer-6); background: var(--color-main-900); color: var(--color-white);
+      border-radius: var(--radius-pill); box-shadow: var(--shadow-3);
+      font: var(--font-weight-semibold) var(--font-size-13) / 1 var(--font-family);
+    }
+    ._presentationBar .caption { padding: 0 var(--spacer-10) 0 var(--spacer-12); color: var(--color-main-200); white-space: nowrap; }
+    ._presentationBar button {
+      display: inline-flex; align-items: baseline; gap: var(--spacer-6);
+      min-height: var(--spacer-40); padding: 0 var(--spacer-16); border: 0; border-radius: var(--radius-pill);
+      background: transparent; color: var(--color-white); font: inherit; font-weight: var(--font-weight-extrabold); cursor: pointer;
+      align-items: center;
+    }
+    ._presentationBar button:hover { background: rgba(255, 255, 255, .12); }
+    ._presentationBar button.active { background: var(--color-white); color: var(--color-main-900); }
+    ._presentationBar button .note { font-weight: var(--font-weight-medium); opacity: .75; }
+    ._presentationBar button:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    @media (max-width: 549px) { ._presentationBar .caption, ._presentationBar button .note { display: none; } }
   </style>
 </helmet>
+
+<dc-import name="komponenty/global/InfoBarView" hint-size="100%,40px"></dc-import>
 
 <dc-import name="komponenty/global/UserContentPanelView"
   usp="{{ topbarUsp }}" links="{{ topbarLinks }}" current="{{ uspCurrent }}"
@@ -102,7 +124,10 @@
 
   <div class="ProductsMasterView ProductsMasterViewBase v1a v1 bs-view dcon dc000 firstPage">
     <dc-con class="dcQuery">
-      <h1 class="title">Kancelářská technika</h1>
+      <dc-con class="dcHeader">
+        <h1 class="title">Kancelářská technika</h1>
+        <span class="totalItems"><strong>{{ totalItems }}</strong> produktů</span>
+      </dc-con>
 
       <dc-import name="komponenty/navigation/CategoryTextView"
         text-collapsed="{{ textCollapsed }}"
@@ -124,6 +149,8 @@
           </ul>
         </div>
       </sc-if>
+
+      <dc-import name="komponenty/navigation/AiHelpView" hint-size="100%,96px"></dc-import>
 
       <dc-import name="komponenty/navigation/SimpleFilterView"
         open-filter="{{ openFilter }}"
@@ -157,8 +184,8 @@
             <sc-if value="{{ isRows }}">
               <dc-import name="komponenty/product/ProductViewBig"
                 state="{{ p.stateClass }}"
-                code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
-                flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
+                code="{{ p.code }}" manufacturer="{{ p.manufacturer }}" product-name="{{ p.name }}" desc="{{ p.desc }}" parameters="{{ p.parameters }}" image="{{ p.image }}"
+                flags="{{ p.flags }}"
                 old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
                 availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
                 unit="{{ p.unit }}" quantity="{{ p.qty }}"
@@ -168,8 +195,8 @@
             <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
               <dc-import name="komponenty/product/ProductView"
                 state="{{ p.stateClass }}" modifier="{{ cardMod }}"
-                code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
-                flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
+                code="{{ p.code }}" manufacturer="{{ p.manufacturer }}" product-name="{{ p.name }}" desc="{{ p.desc }}" parameters="{{ p.parameters }}" image="{{ p.image }}"
+                flags="{{ p.flags }}"
                 old-price="{{ p.oldPrice }}" price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
                 availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
                 unit="{{ p.unit }}" quantity="{{ p.qty }}"
@@ -191,9 +218,21 @@
   last-cls="{{ lastCls }}"
   go-last="{{ goLast }}"
   page-next="{{ pageNext }}"
-        hint-size="100%,120px"></dc-import>    </dc-con>
+        hint-size="100%,120px"></dc-import>
+
+      <div class="_categoryBottom">
+        <dc-import name="komponenty/navigation/CategorySeoView" hint-size="100%,320px"></dc-import>
+        <dc-import name="komponenty/navigation/CategoryFaqView" hint-size="100%,360px"></dc-import>
+      </div>
+    </dc-con>
   </div>
 </main>
+
+<div class="_presentationBar" role="group" aria-label="Prezentace: varianta karty produktu">
+  <span class="caption">Karta produktu</span>
+  <button type="button" class="{{ p1Class }}" aria-pressed="{{ isP1 }}" onClick="{{ setP1 }}">P1<span class="note">Výchozí</span></button>
+  <button type="button" class="{{ p2Class }}" aria-pressed="{{ isP2 }}" onClick="{{ setP2 }}">P2<span class="note">Tonery</span></button>
+</div>
 
 <dc-import name="komponenty/overlay/FilterView"
   filter-active="{{ filterActive }}"
@@ -207,7 +246,6 @@
   <dc-import name="komponenty/home/StatsBarView" hint-size="100%,120px"></dc-import>
 </div>
 <dc-import name="komponenty/global/FooterView"
-  about-caption="TonerPrint" about-text="Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji."
   copyright="© 2026 Tonerprint.cz" claim="Tvoříme dobré pracovní prostředí"
   hint-size="100%,420px"></dc-import>
 
@@ -215,7 +253,7 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;showSubcategories&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Výpis&quot;}}">
 class Component extends DCLogic {
   state = {
-    mega: false, usp: 0, sort: 'top', view: 'grid', page: 1, shown: 8,
+    cardVariant: 'p1', mega: false, usp: 0, sort: 'top', view: 'grid', page: 1, shown: 8,
     textOpen: false, filterOpen: false, basketOpen: false, qtys: {}, cart: [], loginOpen: false, q: '', searchOpen: false,
     checked: { hp: true, skladem: true }, collapsedGroups: { typ: true },
   };
@@ -233,7 +271,7 @@ class Component extends DCLogic {
       },
       {
         "icon": "#tp-clock",
-        "label": "Odesíláme do 24 h"
+        "label": "Běžně odesíláme do 48 h"
       },
       {
         "icon": "#tp-coins",
@@ -261,14 +299,14 @@ class Component extends DCLogic {
 
   /* Katalog kategorie Kancelářská technika — prototyp, ne data z BS Shopu. */
   catalog = [
-    { key: 'lf-a4-80', code: 'LF-A4-80', name: 'Laminovací fólie A4, 80 mic, lesklé, 100 ks', desc: 'Spolehlivá ochrana dokumentů v běžné kanceláři. Fólie sedne do všech laminátorů na A4.', priceVat: 106, priceNoVat: 87.2, old: 129, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 340 bal', availClass: 'cs_zelena', unit: 'bal', flag: 'Akce −18 %', flagClass: 'flag01', sold: 940, added: 4, brand: 'tonerprint' },
-    { key: 'lf-a4-100', code: 'LF-A4-100', name: 'Laminovací fólie A4, 100 mic, lesklé, 100 ks', desc: 'Silnější fólie pro jídelní lístky a cedule, které vydrží denní provoz.', priceVat: 144, priceNoVat: 119, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 180 bal', availClass: 'cs_zelena', unit: 'bal', sold: 720, added: 6, brand: 'tonerprint' },
-    { key: 'at-13c', code: 'AT-13C', name: 'Skartovačka AT-13C, 13 listů, křížový řez', desc: 'Pro kancelář se dvěma až pěti lidmi. Koš 23 l, skartuje i sponky a platební karty.', priceVat: 2490, priceNoVat: 2058, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 8 ks', availClass: 'cs_zelena', unit: 'ks', flag: 'Doporučujeme', flagClass: 'flag02', sold: 310, added: 2, brand: 'argo' },
-    { key: 'at-8c', code: 'AT-8C', name: 'Skartovačka AT-8C, 8 listů, křížový řez', desc: 'Menší model pro domácí pracovnu. Koš 15 l, hlučnost 58 dB.', priceVat: 1790, priceNoVat: 1479, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Naskladňujeme do 4 dnů', availClass: 'cs_zluta', unit: 'ks', sold: 260, added: 5, brand: 'argo' },
-    { key: 'rez-a4', code: 'REZ-A4', name: 'Páková řezačka Argo A4, 12 listů', desc: 'Kovová základna s měřítkem a přítlačnou lištou. Řez do 12 listů 80g papíru.', priceVat: 1190, priceNoVat: 983, image: 'ds/assets/produkty/rezacka-argo-a4.jpg', avail: 'Skladem 22 ks', availClass: 'cs_zelena', unit: 'ks', sold: 180, added: 3, brand: 'argo' },
-    { key: 'rez-a3', code: 'REZ-A3', name: 'Páková řezačka Argo A3, 12 listů', desc: 'Stejná mechanika jako A4, delší lišta pro plakáty a výkresy.', priceVat: 1690, priceNoVat: 1397, image: 'ds/assets/produkty/rezacka-argo-a4.jpg', avail: 'Momentálně vyprodáno', availClass: 'cs_cervena', unit: 'ks', empty: true, sold: 120, added: 7, brand: 'argo' },
-    { key: 'lf-a5-80', code: 'LF-A5-80', name: 'Laminovací fólie A5, 80 mic, lesklé, 100 ks', desc: 'Na jmenovky, štítky a menší cedule. Vhodné i do menších laminátorů.', priceVat: 79, priceNoVat: 65.3, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 96 bal', availClass: 'cs_zelena', unit: 'bal', sold: 540, added: 8, brand: 'tonerprint' },
-    { key: 'paska-4280', code: 'TESA-4280', name: 'Lepicí páska tesa 4280, 25 mm × 66 m, 6 ks', desc: 'Tichá páska do odvíječe. Drží i na recyklovaných kartonech.', priceVat: 189, priceNoVat: 156, image: 'ds/assets/produkty/paska-tesa-4280.jpg', avail: 'Skladem 410 bal', availClass: 'cs_zelena', unit: 'bal', sold: 620, added: 1, brand: 'tesa' },
+    { key: 'lf-a4-80', code: 'LF-A4-80', manufacturer: 'AT', name: 'Laminovací fólie A4, 80 mic, lesklé, 100 ks', desc: 'Spolehlivá ochrana dokumentů v běžné kanceláři. Fólie sedne do všech laminátorů na A4.', priceVat: 106, priceNoVat: 87.2, old: 129, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 340 bal', availClass: 'cs_zelena', unit: 'bal', sold: 940, added: 4, brand: 'tonerprint', flags: [{ text: 'Akce −18 %', cls: 'flag01' }, { text: 'Vyrobeno v Česku', cls: 'flag07' }] },
+    { key: 'lf-a4-100', code: 'LF-A4-100', manufacturer: 'AT', name: 'Laminovací fólie A4, 100 mic, lesklé, 100 ks', desc: 'Silnější fólie pro jídelní lístky a cedule, které vydrží denní provoz.', priceVat: 144, priceNoVat: 119, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 180 bal', availClass: 'cs_zelena', unit: 'bal', sold: 720, added: 6, brand: 'tonerprint', flags: [] },
+    { key: 'at-13c', code: 'AT-13C', manufacturer: 'AT', name: 'Skartovačka AT-13C, 13 listů, křížový řez', desc: 'Pro kancelář se dvěma až pěti lidmi. Koš 23 l, skartuje i sponky a platební karty.', priceVat: 2490, priceNoVat: 2058, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 8 ks', availClass: 'cs_zelena', unit: 'ks', sold: 310, added: 2, brand: 'argo', flags: [{ text: 'Logos doporučuje', cls: 'flag02' }] },
+    { key: 'at-8c', code: 'AT-8C', manufacturer: 'AT', name: 'Skartovačka AT-8C, 8 listů, křížový řez', desc: 'Menší model pro domácí pracovnu. Koš 15 l, hlučnost 58 dB.', priceVat: 1790, priceNoVat: 1479, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Naskladňujeme do 4 dnů', availClass: 'cs_zluta', unit: 'ks', sold: 260, added: 5, brand: 'argo', flags: [{ text: 'Novinka', cls: 'flag03' }] },
+    { key: 'rez-a4', code: 'REZ-A4', manufacturer: 'Argo', name: 'Páková řezačka Argo A4, 12 listů', desc: 'Kovová základna s měřítkem a přítlačnou lištou. Řez do 12 listů 80g papíru.', priceVat: 1190, priceNoVat: 983, image: 'ds/assets/produkty/rezacka-argo-a4.jpg', avail: 'Skladem 22 ks', availClass: 'cs_zelena', unit: 'ks', sold: 180, added: 3, brand: 'argo', flags: [{ text: 'Vyrobeno v Česku', cls: 'flag07' }] },
+    { key: 'rez-a3', code: 'REZ-A3', manufacturer: 'Argo', name: 'Páková řezačka Argo A3, 12 listů', desc: 'Stejná mechanika jako A4, delší lišta pro plakáty a výkresy.', priceVat: 1690, priceNoVat: 1397, image: 'ds/assets/produkty/rezacka-argo-a4.jpg', avail: 'Momentálně vyprodáno', availClass: 'cs_cervena', unit: 'ks', empty: true, sold: 120, added: 7, brand: 'argo', flags: [{ text: 'Novinka', cls: 'flag03' }, { text: 'Logos doporučuje', cls: 'flag02' }] },
+    { key: 'lf-a5-80', code: 'LF-A5-80', manufacturer: 'AT', name: 'Laminovací fólie A5, 80 mic, lesklé, 100 ks', desc: 'Na jmenovky, štítky a menší cedule. Vhodné i do menších laminátorů.', priceVat: 79, priceNoVat: 65.3, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Skladem 96 bal', availClass: 'cs_zelena', unit: 'bal', sold: 540, added: 8, brand: 'tonerprint', flags: [{ text: 'Akce', cls: 'flag01' }] },
+    { key: 'paska-4280', code: 'TESA-4280', manufacturer: 'tesa', name: 'Lepicí páska tesa 4280, 25 mm × 66 m, 6 ks', desc: 'Tichá páska do odvíječe. Drží i na recyklovaných kartonech.', priceVat: 189, priceNoVat: 156, image: 'ds/assets/produkty/paska-tesa-4280.jpg', avail: 'Skladem 410 bal', availClass: 'cs_zelena', unit: 'bal', sold: 620, added: 1, brand: 'tesa', flags: [] },
   ];
 
   subcategories = [
@@ -277,7 +315,7 @@ class Component extends DCLogic {
     { name: 'Řezačky', count: '36', image: 'ds/assets/produkty/rezacka-argo-a4.jpg' },
     { name: 'Vazba', count: '54', image: 'ds/assets/kategorie/kancelar.png' },
     { name: 'Štítkovače', count: '27', image: 'ds/assets/kategorie/tisk.png' },
-    { name: 'Váhy, poštovní', count: '19', image: 'ds/assets/kategorie/sklad.png' },
+    { name: 'Poštovní váhy', count: '19', image: 'ds/assets/kategorie/sklad.png' },
   ];
 
   groups = [
@@ -310,7 +348,7 @@ class Component extends DCLogic {
   found() {
     const n = this.norm(this.state.q.trim());
     if (!n) return [];
-    return this.catalog.filter(p => this.norm(p.name).includes(n) || this.norm(p.code).includes(n));
+    return this.allItems.filter(p => this.norm(p.name).includes(n) || this.norm(p.code).includes(n));
   }
 
   /* Ceny v celých korunách (Price.prompt.md) — mezera jako oddělovač tisíců. */
@@ -323,28 +361,45 @@ class Component extends DCLogic {
   qtyOf(key) { return this.state.qtys[key] ?? 1; }
 
   addToCart(key) {
-    const p = this.catalog.find(x => x.key === key);
+    const p = this.allItems.find(x => x.key === key.replace(/-\d$/, ''));
     if (!p || p.empty) return;
     const add = this.qtyOf(key);
     this.setState(s => {
       const cart = s.cart.slice();
-      const at = cart.findIndex(i => i.key === key);
+      const at = cart.findIndex(i => i.key === p.key);
       if (at >= 0) cart[at] = { ...cart[at], qty: cart[at].qty + add };
-      else cart.push({ key, qty: add });
+      else cart.push({ key: p.key, qty: add });
       /* Stejné chování jako na homepage: po vložení se otevře panel košíku,
          aby zákazník viděl, co přidal, a našeptávač se zavře. */
       return { cart, basketOpen: true, searchOpen: false };
     });
   }
 
+  /* Varianta P2 — karty tonerů s parametry místo krátkého popisu. Prototyp. */
+  tonerCatalog = [
+    { key: 't-cf279a-alt', code: 'CF279A', manufacturer: 'HP', name: 'Toner HP 79A (CF279A), černý, alternativní', desc: '', parameters: [{ cls: 'type', text: 'Alternativní toner' }, { cls: 'yield', text: '1 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'HP LaserJet Pro M12 / M26…' }], priceVat: 479, priceNoVat: 396, image: 'ds/assets/produkty/toner-hp-cf279a.jpg', avail: 'Skladem 120 ks', availClass: 'cs_zelena', unit: 'ks', sold: 990, added: 3, brand: 'tonerprint', flags: [{ text: 'Alternativa Color X', cls: 'flag05' }, { text: 'Logos doporučuje', cls: 'flag02' }] },
+    { key: 't-cf279a-orig', code: 'CF279A', manufacturer: 'HP', name: 'Toner HP 79A (CF279A), černý, originální', desc: '', parameters: [{ cls: 'type', text: 'Originální toner' }, { cls: 'yield', text: '1 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'HP LaserJet Pro M12 / M26…' }], priceVat: 1690, priceNoVat: 1397, image: 'ds/assets/produkty/toner-hp-cf279a.jpg', avail: 'Skladem 14 ks', availClass: 'cs_zelena', unit: 'ks', sold: 410, added: 5, brand: 'hp', flags: [] },
+    { key: 't-cf226x-alt', code: 'CF226X', manufacturer: 'HP', name: 'Toner HP 26X (CF226X), černý, alternativní', desc: '', parameters: [{ cls: 'type', text: 'Alternativní toner' }, { cls: 'yield', text: '9 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'HP LaserJet Pro M402 / M426…' }], priceVat: 589, priceNoVat: 487, old: 690, image: 'ds/assets/produkty/toner-hp-cf226x.jpg', avail: 'Skladem 64 ks', availClass: 'cs_zelena', unit: 'ks', sold: 870, added: 7, brand: 'tonerprint', flags: [{ text: 'Akce −15 %', cls: 'flag01' }, { text: 'Alternativa Color X', cls: 'flag05' }] },
+    { key: 't-cf226x-orig', code: 'CF226X', manufacturer: 'HP', name: 'Toner HP 26X (CF226X), černý, originální', desc: '', parameters: [{ cls: 'type', text: 'Originální toner' }, { cls: 'yield', text: '9 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'HP LaserJet Pro M402 / M426…' }], priceVat: 4990, priceNoVat: 4124, image: 'ds/assets/produkty/toner-hp-cf226x.jpg', avail: 'Skladem 3 ks', availClass: 'cs_zluta', unit: 'ks', sold: 180, added: 9, brand: 'hp', flags: [{ text: 'Novinka', cls: 'flag03' }] },
+    { key: 't-tn2411-alt', code: 'TN-2411', manufacturer: 'Brother', name: 'Toner Brother TN-2411, černý, alternativní', desc: '', parameters: [{ cls: 'type', text: 'Alternativní toner' }, { cls: 'yield', text: '1 200 stran' }, { cls: 'compat', label: 'Pro:', text: 'Brother HL-L2312D / DCP-L2512D…' }], priceVat: 349, priceNoVat: 288, image: 'ds/assets/produkty/toner-brother-tn2411.jpg', avail: 'Skladem 88 ks', availClass: 'cs_zelena', unit: 'ks', sold: 760, added: 2, brand: 'tonerprint', flags: [{ text: 'Alternativa Color X', cls: 'flag05' }] },
+    { key: 't-tn2411-orig', code: 'TN-2411', manufacturer: 'Brother', name: 'Toner Brother TN-2411, černý, originální', desc: '', parameters: [{ cls: 'type', text: 'Originální toner' }, { cls: 'yield', text: '1 200 stran' }, { cls: 'compat', label: 'Pro:', text: 'Brother HL-L2312D / DCP-L2512D…' }], priceVat: 1190, priceNoVat: 983, image: 'ds/assets/produkty/toner-brother-tn2411.jpg', avail: 'Skladem 11 ks', availClass: 'cs_zelena', unit: 'ks', sold: 240, added: 6, brand: 'brother', flags: [] },
+    { key: 't-crg039h-alt', code: 'CRG-039H', manufacturer: 'Canon', name: 'Toner Canon CRG-039H, černý, alternativní', desc: '', parameters: [{ cls: 'type', text: 'Alternativní toner' }, { cls: 'yield', text: '25 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'Canon i-SENSYS LBP351x / LBP352x' }], priceVat: 1490, priceNoVat: 1231, image: 'ds/assets/produkty/toner-canon-crg039h.jpg', avail: 'Skladem 22 ks', availClass: 'cs_zelena', unit: 'ks', sold: 320, added: 4, brand: 'tonerprint', flags: [{ text: 'Alternativa Color X', cls: 'flag05' }, { text: 'Vyrobeno v Česku', cls: 'flag07' }] },
+    { key: 't-crg039h-orig', code: 'CRG-039H', manufacturer: 'Canon', name: 'Toner Canon CRG-039H, černý, originální', desc: '', parameters: [{ cls: 'type', text: 'Originální toner' }, { cls: 'yield', text: '25 000 stran' }, { cls: 'compat', label: 'Pro:', text: 'Canon i-SENSYS LBP351x / LBP352x' }], priceVat: 7990, priceNoVat: 6603, image: 'ds/assets/produkty/toner-canon-crg039h.jpg', avail: 'Na objednávku', availClass: 'cs_seda', unit: 'ks', sold: 60, added: 8, brand: 'canon', flags: [] },
+  ];
+
+  get allItems() { return this.catalog.concat(this.tonerCatalog); }
+
   itemsLabel(n) { return n === 1 ? '1 produkt' : n < 5 ? n + ' produkty' : n + ' produktů'; }
 
   /* Výpis má víc než jednu dávku: „Načíst další“ přisype další porci ze zásoby.
      Prototyp — zásoba se skládá z katalogu ve třech vlnách s vlastními kódy. */
   pool() {
-    if (this._pool) return this._pool;
+    const variant = this.state.cardVariant;
+    if (this._pool && this._poolVariant === variant) return this._pool;
+    this._poolVariant = variant;
+    const src = variant === 'p2' ? this.tonerCatalog : this.catalog;
     const waves = [0, 1, 2];
-    this._pool = waves.flatMap(w => this.catalog.map(p => w === 0 ? p : {
+    this._pool = waves.flatMap(w => src.map(p => w === 0 ? p : {
       ...p,
       key: p.key + '-' + w,
       code: p.code + '/' + (w + 1),
@@ -369,7 +424,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const cart = this.state.cart.map(i => ({ ...this.catalog.find(p => p.key === i.key), qty: i.qty }));
+    const cart = this.state.cart.map(i => ({ ...this.allItems.find(p => p.key === i.key), qty: i.qty }));
     const count = cart.reduce((n, i) => n + i.qty, 0);
     const total = cart.reduce((n, i) => n + i.priceVat * i.qty, 0);
     const rows = this.state.view === 'rows';
@@ -490,6 +545,12 @@ class Component extends DCLogic {
       loadMoreLabel: 'Načíst dalších ' + Math.min(8, this.pool().length - shown) + ' produktů',
       loadMore: () => this.setState(s => ({ shown: s.shown + 8 })),
 
+      isP1: this.state.cardVariant === 'p1',
+      isP2: this.state.cardVariant === 'p2',
+      p1Class: this.state.cardVariant === 'p1' ? 'active' : '',
+      p2Class: this.state.cardVariant === 'p2' ? 'active' : '',
+      setP1: () => this.setState({ cardVariant: 'p1', shown: 8 }),
+      setP2: () => this.setState({ cardVariant: 'p2', shown: 8 }),
       products: this.sorted().slice(0, shown).map(p => ({
         ...p,
         stateClass: p.empty ? 'empty' : 'canBuy',

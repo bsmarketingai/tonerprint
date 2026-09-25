@@ -64,6 +64,8 @@
   </style>
 </helmet>
 
+<dc-import name="komponenty/global/InfoBarView" hint-size="100%,40px"></dc-import>
+
 <dc-import name="komponenty/global/UserContentPanelView"
   usp="{{ topbarUsp }}" links="{{ topbarLinks }}" current="{{ uspCurrent }}"
   on-prev="{{ uspPrev }}" on-next="{{ uspNext }}" on-login="{{ toggleLogin }}"
@@ -105,7 +107,7 @@
       <div class="scrollContainer" tabindex="0" role="group" aria-label="Vybíráme pro kancelář" ref="{{ carouselRef }}" onScroll="{{ onCarouselScroll }}">
         <sc-for list="{{ carousel }}" as="p" hint-placeholder-count="5">
           <dc-import name="komponenty/product/ProductView"
-            code="{{ p.code }}" product-name="{{ p.name }}" image="{{ p.image }}"
+            code="{{ p.code }}" manufacturer="{{ p.manufacturer }}" product-name="{{ p.name }}" image="{{ p.image }}"
             price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
             availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
             unit="{{ p.unit }}" quantity="{{ p.qty }}" buy-label="Do košíku"
@@ -124,10 +126,11 @@
   </section>
 
   <dc-import name="komponenty/home/HomeAsideView" hint-size="100%,520px"></dc-import>
+
+  <dc-import name="komponenty/home/AboutView" hint-size="100%,360px"></dc-import>
 </main>
 
 <dc-import name="komponenty/global/FooterView"
-  about-caption="O Tonerprint" about-text="Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji — kvalitní produkty, férové ceny a lidský přístup."
   copyright="© 2026 Tonerprint.cz" claim="Tvoříme dobré pracovní prostředí"
   email="{{ email }}" error="{{ error }}" sent="{{ sent }}" on-email-change="{{ onEmailChange }}" on-subscribe="{{ onSubscribe }}"
   hint-size="100%,420px"></dc-import>
@@ -165,7 +168,7 @@ class Component extends DCLogic {
       },
       {
         "icon": "#tp-clock",
-        "label": "Odesíláme do 24 h"
+        "label": "Běžně odesíláme do 48 h"
       },
       {
         "icon": "#tp-flag",
@@ -193,13 +196,13 @@ class Component extends DCLogic {
 
   /* Katalog pro našeptávač a košík — prototyp, ne data z BS Shopu. */
   catalog = [
-    { code: 'CF279A', key: 'cf279a', name: 'Kompatibilní toner HP CF279A (79A), černý, 1 000 stran', price: 479, image: 'ds/assets/produkty/toner-hp-cf279a.jpg', availability: 'Skladem 112 ks' },
-    { code: 'CF226X', key: 'cf226x', name: 'Kompatibilní toner HP CF226X (26X), černý, 9 000 stran', price: 589, image: 'ds/assets/produkty/toner-hp-cf226x.jpg', availability: 'Skladem 96 ks' },
-    { code: 'TN-2411', key: 'tn2411', name: 'Kompatibilní toner Brother TN-2411, černý, 1 200 stran', price: 349, image: 'ds/assets/produkty/toner-brother-tn2411.jpg', availability: 'Skladem 180 ks' },
-    { code: 'CRG-039H', key: 'crg039h', name: 'Kompatibilní toner Canon CRG-039H, černý, 25 000 stran', price: 1290, image: 'ds/assets/produkty/toner-canon-crg039h.jpg', availability: 'Skladem 24 ks' },
-    { code: 'LF-A4-80', key: 'lfa480', name: 'Laminovací fólie A4, 80 mic, 100 ks', price: 129, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', availability: 'Skladem 340 ks' },
-    { code: 'AT-13C', key: 'at13c', name: 'Skartovačka papíru AT-13C, 13 listů, křížový řez', price: 2490, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', availability: 'Skladem 8 ks' },
-    { code: 'PW-TINA-CE', key: 'tina', name: 'Kancelářská židle Tina, ergonomická, černá', price: 2990, image: 'ds/assets/produkty/kreslo-tina-cerne.jpg', availability: 'Skladem 18 ks' },
+    { code: 'CF279A', manufacturer: 'HP', key: 'cf279a', name: 'Kompatibilní toner HP CF279A (79A), černý, 1 000 stran', price: 479, image: 'ds/assets/produkty/toner-hp-cf279a.jpg', availability: 'Skladem 112 ks' },
+    { code: 'CF226X', manufacturer: 'HP', key: 'cf226x', name: 'Kompatibilní toner HP CF226X (26X), černý, 9 000 stran', price: 589, image: 'ds/assets/produkty/toner-hp-cf226x.jpg', availability: 'Skladem 96 ks' },
+    { code: 'TN-2411', manufacturer: 'Brother', key: 'tn2411', name: 'Kompatibilní toner Brother TN-2411, černý, 1 200 stran', price: 349, image: 'ds/assets/produkty/toner-brother-tn2411.jpg', availability: 'Skladem 180 ks' },
+    { code: 'CRG-039H', manufacturer: 'Canon', key: 'crg039h', name: 'Kompatibilní toner Canon CRG-039H, černý, 25 000 stran', price: 1290, image: 'ds/assets/produkty/toner-canon-crg039h.jpg', availability: 'Skladem 24 ks' },
+    { code: 'LF-A4-80', manufacturer: 'AT', key: 'lfa480', name: 'Laminovací fólie A4, 80 mic, 100 ks', price: 129, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', availability: 'Skladem 340 ks' },
+    { code: 'AT-13C', manufacturer: 'AT', key: 'at13c', name: 'Skartovačka papíru AT-13C, 13 listů, křížový řez', price: 2490, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', availability: 'Skladem 8 ks' },
+    { code: 'PW-TINA-CE', manufacturer: 'Powerton', key: 'tina', name: 'Kancelářská židle Tina, ergonomická, černá', price: 2990, image: 'ds/assets/produkty/kreslo-tina-cerne.jpg', availability: 'Skladem 18 ks' },
   ];
 
   /* DS Price.prompt.md: mezera jako oddělovač tisíců, „Kč“ za číslem, vždy celé koruny. */

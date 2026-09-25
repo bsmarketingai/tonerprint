@@ -98,6 +98,16 @@
    proto vždy plný rádius z tokenu — nikdy oříznutá levá strana looku B. */
 .ProductView .ActionIconsView .productFlag { border-radius: var(--flag-border-radius); padding: var(--flag-p); }
 .ProductView .code { font-size: var(--font-size-12); color: var(--text-color-muted); }
+/* výrobce je malý klikatelný chip — vede na výpis produktů výrobce */
+.ProductView .manufacturer {
+  align-self: flex-start; display: inline-flex; align-items: center;
+  padding: var(--spacer-4) var(--spacer-10); border: var(--border); border-radius: var(--radius-pill);
+  background: var(--bg-view-color); color: var(--text-color-muted);
+  font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); line-height: var(--line-height-tight);
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.ProductView .manufacturer:hover { background: var(--color-main-100); border-color: var(--color-main-300); color: var(--color-main-700); text-decoration: none; }
+.ProductView .manufacturer:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .ProductView .name {
   font-size: var(--font-size-14); font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-base); color: var(--text-color);
@@ -138,10 +148,12 @@
 .ProductView, .ProductView.empty { align-items: stretch; text-align: left; }
 .ProductView > dc-con { align-items: stretch; text-align: left; }
 .ProductView .AvailabilityView { align-self: flex-start; }
+/* dostupnost stojí v dlaždici nad cenami, od cen ji dělí 6 px */
+.ProductView > dc-con.dcPrice > .AvailabilityView { margin-bottom: var(--spacer-6); }
 .ProductView.empty .image .mainImage { opacity: .45; filter: grayscale(1); }
 .ProductView.empty .name { color: var(--text-color-muted); }
 /* v1b — tichá varianta bez kódu, pro carousel */
-.ProductView.v1b .code { display: none; }
+.ProductView.v1b .code, .ProductView.v1b .manufacturer { display: none; }
 /* řádková varianta pro ViewTypeSelector custom1 */
 .ProductView.big {
   display: grid; grid-template-columns: 96px minmax(0, 1fr);
@@ -294,9 +306,9 @@ bs-separator-horizontal { display: block; height: var(--spacer-1); background: v
   color: var(--text-color);
 }
 .FlatCategoriesRwdView.v5a dc-root > a:hover { text-decoration: none; }
-.FlatCategoriesRwdView.v5a .image { flex: none; width: var(--spacer-32); height: var(--spacer-32); display: block; }
+.FlatCategoriesRwdView.v5a .image { flex: none; width: var(--spacer-50); height: var(--spacer-50); display: block; }
 .FlatCategoriesRwdView.v5a .image img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
-.FlatCategoriesRwdView.v5a .name { flex: 1 1 auto; min-width: 0; font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); }
+.FlatCategoriesRwdView.v5a .name { flex: 1 1 auto; min-width: 0; font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); }
 .FlatCategoriesRwdView.v5a .value { flex: none; font-size: var(--font-size-12); color: var(--text-color-muted); }
 .FlatCategoriesRwdView.v5a .icon.bs-crv { flex: none; color: var(--color-neutral-400); }
 .FlatCategoriesRwdView.v5a dc-root:hover { border-color: var(--color-main-300); }

@@ -87,6 +87,18 @@ Vizuál (barvy, mezery, radiusy, stíny) je volný a řídí se tokeny.
 `_quickBuy` (názvosloví BS Shopu). V tmavém horním pruhu **odkaz na přihlášení není**
 a v hlavičce se nepřidává žádné další tlačítko „Přihlásit“.
 
+## Deník úprav
+`denik-uprav.dc.html` (HTML v designu webu, tokeny z `ds/`) se vede **automaticky** při každé práci:
+- Nahoře sekce **K upřesnění s klientem** — otázky a věci k vysvětlení. Vyřešené body mazat.
+- Pod ní dny chronologicky, **nejnovější nahoře** (nadpis `## D. M. RRRR`), uvnitř
+  podle oblasti. Každá úprava, kterou má klient vidět nebo potvrdit, jako řádek
+  **Předtím** | **Teď** (kopírovat existující řádek, držet stejný markup).
+- Nejspodnější sekce **Před prvními úpravami** je výchozí stav před začátkem úprav
+  s klientem (24. 9. 2026) — nemění se, nové dny se přidávají nad ni.
+- Počet v pilulce „N otevřených“ držet podle počtu bodů k upřesnění.
+- Interní technické změny (náplasti runtime, refaktor bez dopadu na vzhled) se nepíšou.
+- Pokyn **„zapiš do DU“** = doplň do deníku, co v něm chybí.
+
 ## Kde co je
 - `index.dc.html` — homepage, `vypis-kategorie.dc.html` — výpis kategorie,
   `detail-produktu.dc.html` — detail produktu.

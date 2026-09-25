@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="ds/styles.css">
+  <style>
+    body { margin: 0; background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+<div style="max-width: 1040px; margin: 0 auto; padding: var(--spacer-48) var(--spacer-24) var(--spacer-72); display: flex; flex-direction: column; gap: var(--spacer-40);">
+
+  <header style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+    <div style="font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); color: var(--color-main-600); text-transform: uppercase; letter-spacing: .06em;">TonerPrint.cz</div>
+    <h1 style="margin: 0; font-size: var(--font-size-40); line-height: var(--line-height-tight); font-weight: var(--font-weight-extrabold);">Deník úprav</h1>
+    <p style="margin: 0; max-width: 640px; color: var(--text-color-muted); text-wrap: pretty;">Úpravy, které máte vidět nebo potvrdit. U každé je předchozí stav a změna. Nejnovější den je nahoře.</p>
+  </header>
+
+  <section style="background: var(--bg-view-color); border-radius: var(--radius-12); box-shadow: var(--shadow-1); padding: var(--spacer-32); display: flex; flex-direction: column; gap: var(--spacer-20);">
+    <div style="display: flex; align-items: center; gap: var(--spacer-12);">
+      <h2 style="margin: 0; font-size: var(--font-size-24); font-weight: var(--font-weight-bold);">K upřesnění s klientem</h2>
+      <span style="background: var(--color-primary-100); color: var(--color-primary-700); border-radius: var(--radius-pill); padding: var(--spacer-2) var(--spacer-10); font-size: var(--font-size-13); font-weight: var(--font-weight-semibold);">6 otevřených</span>
+    </div>
+    <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacer-12);">
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Karusel „Vybíráme pro kancelář“</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Karusel zobrazí to, co si vymyslíte s p. Vymlátilem. Na názvu nezáleží, nastaví se při vývoji. Nanejvýš se změní ikona.</span>
+      </li>
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Vyhledávání v hlavičce</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Je vyhledávání v hlavičce takto v pořádku?</span>
+      </li>
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Filtry ve výpisu kategorie</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Přesné filtry pro jednotlivé kategorie se určí až při implementaci, v designu je není potřeba řešit do detailu. Design ukazuje, jak vypadají všechny druhy filtrů, názvy jsou jen ilustrační.</span>
+      </li>
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Karta produktu P2 pro tonery — zdroj parametrů</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Odkud se budou brát parametry na kartě (typ toneru, počet stran, kompatibilní tiskárny)? A co přesně má vypisovat řádek „Pro:“? Kompatibilních modelů bývají stovky — na kartě navrhujeme jen první jeden až dva a úplný seznam až v detailu produktu.</span>
+      </li>
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Pruh „Poradit s výběrem“ — text podle kategorie</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Nadpis a text v pruhu nad produkty se mají měnit podle kategorie (např. u skartovaček „pro kolik lidí a co budete skartovat“). Půjde je v administraci nastavit pro každou kategorii zvlášť?</span>
+      </li>
+      <li style="border: 1px solid var(--border-color); border-radius: var(--radius-8); padding: var(--spacer-16); display: flex; flex-direction: column; gap: var(--spacer-6);">
+        <strong style="font-weight: var(--font-weight-semibold);">Texty v návrhu jsou jen ukázka</strong>
+        <span style="color: var(--text-color-muted); text-wrap: pretty;">Všechny texty v návrhu (popisy kategorií, SEO bloky, produkty, parametry) slouží jen pro představu rozvržení. Finální znění si budete ladit až na webu v administraci.</span>
+      </li>
+    </ol>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: var(--spacer-24);">
+    <div style="display: flex; align-items: baseline; gap: var(--spacer-12); border-bottom: 2px solid var(--color-main-600); padding-bottom: var(--spacer-8);">
+      <h2 style="margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold);">25. 9. 2026</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Informační lišta (všechny stránky)</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nad stránkou nic.</span><span>Úplně nahoře oranžová lišta „🎉 Spustili jsme nový design e-shopu. Budeme rádi za zpětnou vazbu.“ s křížkem na zavření.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Horní pruh (všechny stránky)</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">„Odesíláme do 24 h“.</span><span>„Běžně odesíláme do 48 h“.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — text kategorie</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Zkrácený text kategorie ukazoval 3 řádky.</span><span>Ukazuje 2 řádky, zbytek po rozbalení.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Odstavec „Objednáte-li do 14:00, odesíláme ještě dnes…“.</span><span>Odstavec odstraněn.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">„Zobrazit více“ na samostatném řádku pod textem.</span><span>„Zobrazit více“ vpravo vedle textu, zarovnané ke spodní hraně textu (i po rozbalení). Blok je o řádek nižší.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — podkategorie</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Náhledové obrázky podkategorií 32 × 32 px.</span><span>Náhledové obrázky 50 × 50 px.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Názvy podkategorií 14 px.</span><span>Názvy podkategorií 16 px.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Podkategorie „Váhy, poštovní“.</span><span>„Poštovní váhy“ — ve výpisu i v megamenu.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — pomoc s výběrem</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nad filtry a produkty nic.</span><span>Nad lištou filtrů světle oranžový pruh s ikonou AI asistenta a oranžovým tlačítkem jako v hlavičce: „Nevíte, kterou skartovačku vybrat?“ a tlačítko „Poradit s výběrem“. Nadpis i text se mají měnit podle kategorie.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — SEO obsah pod produkty</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Pod výpisem produktů nic.</span><span>Blok „Jak vybrat kancelářskou techniku“: krátké rady ke skartovačkám, laminátorům, řezačkám a vazbě + odkazy na podkategorie. Text je ilustrační.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — FAQ</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Výpis bez častých otázek.</span><span>Pod SEO blokem rozbalovací „Časté otázky ke kancelářské technice“ (5 otázek, první otevřená). Otázky se mají měnit podle kategorie, texty jsou ilustrační.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">SEO blok a FAQ pod sebou.</span><span>Od šířky 1150 px vedle sebe ve dvou sloupcích, na menších pod sebou.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis kategorie — nadpis</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Počet produktů v liště s filtrem a řazením.</span><span>Počet produktů jako bílý chip s rámečkem (neklikatelný) v řádku s hlavním nadpisem, úplně vpravo.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Karta produktu (všechny stránky)</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nad názvem produktu kód produktu (např. LF-A4-80).</span><span>Nad názvem produktu výrobce jako malý klikatelný chip (např. AT), vede na výpis výrobce.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Dlaždice: dostupnost (Skladem…) pod cenami.</span><span>Dostupnost nad cenami.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Výpis: na kartě nejvýš jeden příznak (Akce, Doporučujeme).</span><span>Příznaky Logos doporučuje, Alternativa Color X, Vyrobeno v Česku, Novinka a Akce. Na kartě nejvýš 2, jeden nebo žádný.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--color-warning-100); border: 1px solid var(--color-warning-300); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Jedna podoba karty pro všechny produkty.</span><span style="font-weight: var(--font-weight-semibold);">Výpis má plovoucí prezentační přepínač P1 / P2. P1 je výchozí karta, P2 je karta pro tonery: místo krátkého popisu parametry jako bodový seznam (typ toneru, počet stran, kompatibilní tiskárny).</span></div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: var(--spacer-24);">
+    <div style="display: flex; align-items: baseline; gap: var(--spacer-12); border-bottom: 2px solid var(--color-main-600); padding-bottom: var(--spacer-8);">
+      <h2 style="margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold);">24. 9. 2026</h2>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Homepage — hero banner</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Partner pro kanceláře, školy, firmy i domácnosti.“</span><span>Nadpis „Kancelářské a školní potřeby, tonery a papírnictví na jednom místě“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Podnadpis „Tonery, kancelářské potřeby, školní vybavení, papírnictví, balicí materiál i hygiena na jednom místě.“</span><span>Podnadpis „Pro kanceláře, firmy, školy i domácnosti. Tonery a cartridge, kancelářské potřeby, papíry, školní vybavení, balicí materiál, hygiena a další sortiment.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Doprava zdarma od 1 500 Kč.</span><span>Doprava zdarma od 5 000 Kč.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Odesíláme do 24 h.</span><span>Odesíláme běžně do 48 h.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">23 000 produktů skladem.</span><span>Desítky tisíc produktů v nabídce.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Poradíme s výběrem: 541 123 456.</span><span>Poradíme s výběrem: 734 455 211 a 608 119 919, obě čísla klikatelná.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Patička (všechny stránky)</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Blok „O Tonerprint“ s textem o firmě a odkazem „Více o nás“.</span><span>Blok „Kontakt“: firma a adresa prodejny, oba telefony, e-mail, otevírací doba a odkaz „Kontakty“. Sociální sítě zůstaly.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Homepage — O Tonerprint</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Sekce nebyla, text o firmě jen v patičce.</span><span>Nová tmavá sekce „O Tonerprint“ nad patičkou s textem z patičky a tlačítkem „Více o nás“. Vpravo fotka prodejny napojená modrým přechodem.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Homepage — blok výhod</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">24 h — obvyklá doba odeslání.</span><span>48 h — obvyklá doba odeslání.</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Homepage — promo dlaždice</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis první dlaždice „Vybíráme pro kancelář“.</span><span>Nadpis „Najít náplň do tiskárny“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis první dlaždice „Produkty, které dlouhodobě doporučujeme zákazníkům.“</span><span>Popis „Vyhledejte podle modelu tiskárny nebo kódu toneru.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Tlačítko první dlaždice „Zobrazit výběr“.</span><span>Tlačítko „Najít tu správnou“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis třetí dlaždice „AI pomoc s výběrem“.</span><span>Nadpis „Logos AI nákupní asistent“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis třetí dlaždice „Zadejte model tiskárny, dohledáme kód kazety.“</span><span>Popis „Nevíte, co vybrat? Logos vám pomůže najít vhodný produkt.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Tlačítko třetí dlaždice „Vyzkoušet AI poradce“.</span><span>Tlačítko „Vyzkoušet AI asistenta“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis čtvrté dlaždice „Česká společnost od 90. let“.</span><span>Nadpis „Česká firma s více než 30 lety zkušeností“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis čtvrté dlaždice „Zkušenosti, kterým můžete důvěřovat.“</span><span>Popis „Osobní přístup, odborné poradenství a prověřený sortiment.“</span></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Homepage — situace</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Zařizujete kancelář?“</span><span>Nadpis „Vybavuji kancelář“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis „Kompletní vybavení pro moderní kancelář.“</span><span>Popis „Kancelářské potřeby, archivace, technika, tabule a vybavení pracoviště.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Připravujete školní rok?“</span><span>Nadpis „Nakupuji pro školu“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis „Vše pro školy, učitele i studenty.“</span><span>Popis „Sešity, výtvarné potřeby, batohy, psací potřeby a vybavení škol.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Balíte zásilky?“</span><span>Nadpis „Balím a expeduji“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis „Obaly, krabice, pásky a vše pro bezpečné balení.“</span><span>Popis „Krabice, obálky, pásky, fólie, etikety a další balicí materiál.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Potřebujete tisknout?“</span><span>Nadpis „Potřebuji tisknout“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis „Tonery, náplně, papíry a tiskové příslušenství.“</span><span>Popis „Tonery, cartridge, papíry, etikety a tiskové příslušenství.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Nadpis „Vybavujete sklad?“</span><span>Nadpis „Řeším provoz a hygienu“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Popis „Praktické vybavení pro sklad a provoz.“</span><span>Popis „Hygiena, úklid, odpadkové pytle a spotřební materiál.“</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Obrázek karty: regál s vybavením skladu.</span><span>Obrázek karty: regál s hygienou a úklidovými prostředky.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Karta tisku na čtvrté pozici.</span><span>Karta „Potřebuji tisknout“ na první pozici.</span></div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: var(--spacer-24);">
+    <div style="display: flex; align-items: baseline; gap: var(--spacer-12); border-bottom: 2px solid var(--color-main-600); padding-bottom: var(--spacer-8);">
+      <h2 style="margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold);">Před prvními úpravami</h2>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Hlavní menu</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); padding: var(--spacer-6) var(--spacer-12); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-color-muted); text-transform: uppercase; letter-spacing: .05em;"><span>Předtím</span><span>Teď</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Menu se zalamovalo nebo ořezávalo, struktura neodpovídala webu.</span><span>Všech 15 kategorií v jednom řádku, co se nevejde, jde do „Ostatní“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Megamenu s levým menu a náhledy nadpisů.</span><span>Bez levého menu a náhledů nadpisů; podkategorie s náhledovkami 65 × 65 px z webu.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Výrobci bez odkazu na celý seznam.</span><span>Tlačítko „Zobrazit všechny výrobce“.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Zboží s bonusem bez podkategorií.</span><span>Podkategorie Herní židle a Ostatní.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Hover položky menu jiný (zaoblený, barevný).</span><span>Hranatý šedý podklad.</span></div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Mobilní menu</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Kategorie s ikonami.</span><span>Akordeon jen s textem, jedna svislá linka, rozbalovací podkategorie.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Při zvětšení okna zůstal panel otevřený.</span><span>Nad 820 px se sám zavře.</span></div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výpis a filtry</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Počty produktů u kategorií a filtrů, počet aktivních filtrů v nadpisu Filtry.</span><span>Počty se nezobrazují.</span></div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--spacer-8);">
+      <h3 style="margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-semibold);">Výhody, hlavička, hero</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Blok výhod nahoře na všech stránkách.</span><span>Na výpisu a detailu nad patičkou, na homepage beze změny.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Horní servisní pruh i na mobilu.</span><span>Pod 819 px skrytý.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Telefon v hero banneru jako prostý text.</span><span>Klikatelný odkaz s ikonou telefonu.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">„Odborné poradenství“ s jinou ikonou.</span><span>Ikona telefonu.</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--spacer-12); background: var(--bg-view-color); border-radius: var(--radius-8); padding: var(--spacer-16);"><span style="color: var(--text-color-muted);">Našeptávač vyhledávání na úzkém displeji (430 px) přetékal.</span><span>Má strop šířky, nepřetéká.</span></div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+</body>
+</html>

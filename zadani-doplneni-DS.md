@@ -208,3 +208,13 @@ přitom `css/product.css` má pro mřížku clamp na dva řádky. Opravit kontra
   `.madeBy` (dodavatel řešení + odkaz na cookies) a rozvržení „texty vlevo, loga vpravo“.
   Zároveň pruh míchá metadata s větami na 12 px — `.claim` je věta a podle content
   fundamentals nemá být pod 13 px.
+
+
+## Doplněno 2026-09-24
+
+- **Sekce „O Tonerprint“ (`._aboutView`)** — tmavý obsahový blok nad patičkou homepage, fotka v pravé části napojená modrým přechodem; do pásma m fotka nahoře přes celou šířku. Náplast v `komponenty/home/AboutView.dc.html` (CHYBÍ V DS). Součástí je zrušení spodního paddingu `.HomeView` (48 px), aby sekce navazovala přímo na patičku.
+- **Kontakt v patičce (`.FooterView .about .contacts`)** — seznam kontaktů s ikonou (telefon, e-mail, otevírací doba). Náplast v `komponenty/global/FooterView.dc.html` (CHYBÍ V DS).
+- **Parametry na kartě toneru (`.ProductView .parameters`)** — varianta P2: řádky typ / výtěžnost / kompatibilita místo krátkého popisu. Náplast v `komponenty/product/ProductView` a `ProductViewBig` (CHYBÍ V DS).
+- **Pruh „Poradit s výběrem“ (`._aiHelpView`)** — světle oranžový blok nad výpisem produktů, oranžová jen ikona a CTA (tlačítko AI asistenta z hlavičky). Náplast v `komponenty/navigation/AiHelpView.dc.html` (CHYBÍ V DS).
+- **SEO blok pod výpisem (`._categorySeoBlock`)** — nadpis, text ve sloupcích a odkazy na podkategorie jako pilulky. Náplast v `komponenty/navigation/CategorySeoView.dc.html` (CHYBÍ V DS).
+- **Informační lišta (`._infoBar`)** — oranžový pruh nad servisním pruhem s textem a zavíracím křížkem. Náplast v `komponenty/global/InfoBarView.dc.html` (CHYBÍ V DS).

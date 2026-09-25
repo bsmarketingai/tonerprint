@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: SEO blok pod výpisem produktů — nadpis, krátký text a odkazy
+       na podkategorie. DS má pro text kategorie jen ._categoryText nad výpisem. */
+    ._categorySeoBlock {
+      display: flex; flex-direction: column; gap: var(--spacer-12);
+      padding: var(--spacer-24); background: var(--bg-view-color);
+      border-radius: var(--border-3-radius-base);
+    }
+    ._categorySeoBlock .caption { display: flex; align-items: center; gap: var(--spacer-8); margin: 0; font-size: var(--font-size-20); font-weight: var(--font-weight-extrabold); line-height: var(--line-height-tight); color: var(--text-color); }
+    ._categorySeoBlock .caption > .icon { flex: none; color: var(--color-main-500); }
+    ._categorySeoBlock .text { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacer-12) var(--spacer-32); max-width: 1100px; }
+    ._categorySeoBlock .text > p { margin: 0; color: var(--text-color-muted); text-wrap: pretty; }
+    ._categorySeoBlock .text strong { color: var(--text-color); font-weight: var(--font-weight-semibold); }
+    ._categorySeoBlock .links { list-style: none; margin: var(--spacer-4) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--spacer-8); }
+    ._categorySeoBlock .links a {
+      display: inline-flex; align-items: center; gap: var(--spacer-4);
+      padding: var(--spacer-6) var(--spacer-12); border: var(--border); border-radius: var(--radius-pill);
+      font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); color: var(--link-color);
+    }
+    ._categorySeoBlock .links a:hover { background: var(--color-main-100); border-color: var(--color-main-300); color: var(--color-main-700); text-decoration: none; }
+  </style>
+</helmet>
+
+<section class="_categorySeoBlock">
+  <h2 class="caption"><svg class="icon ico3" aria-hidden="true"><use href="#tp-help-circle"></use></svg>Jak vybrat kancelářskou techniku</h2>
+  <div class="text">
+    <p><strong>Skartovačka</strong> se vybírá podle počtu listů na jeden průchod a stupně utajení. Pro domácí pracovnu stačí 6–8 listů a proužkový řez, do kanceláře s více lidmi volte 12 listů a víc s křížovým řezem.</p>
+    <p><strong>Laminátor</strong> vybírejte podle největšího formátu, který budete laminovat, a tloušťky fólie. Na dokumenty stačí 80 mic, jídelní lístky a cedule vydrží déle ve 125 mic.</p>
+    <p><strong>Řezačka</strong> se liší délkou řezu a počtem listů. Páková zvládne silnější stoh, kotoučová řeže přesněji a bezpečněji.</p>
+    <p><strong>Vazbu</strong> zvolte podle toho, jestli dokument budete dál upravovat — kroužková jde rozebrat, termovazba vypadá reprezentativněji.</p>
+  </div>
+  <ul class="links">
+    <li><a href="vypis-kategorie.dc.html">Skartovačky</a></li>
+    <li><a href="vypis-kategorie.dc.html">Laminátory</a></li>
+    <li><a href="vypis-kategorie.dc.html">Řezačky</a></li>
+    <li><a href="vypis-kategorie.dc.html">Vazba</a></li>
+    <li><a href="vypis-kategorie.dc.html">Štítkovače</a></li>
+  </ul>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100,&quot;height&quot;:320}}">
+class Component extends DCLogic {
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+  }
+  componentDidMount() { this.ensureDsAssets(); }
+}
+</script>
+</body>
+</html>

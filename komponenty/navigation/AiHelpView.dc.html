@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    /* CHYBÍ V DS: pruh „Poradit s výběrem“ nad výpisem produktů. Tichá světle oranžová
+       plocha; výraznou oranžovou nese jen ikona a CTA — stejné tlačítko jako AI asistent
+       v hlavičce (--color-warning-500, text --color-on-warning-500). */
+    ._aiHelpView {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+      gap: var(--spacer-12) var(--spacer-20);
+      padding: var(--spacer-16) var(--spacer-20);
+      background: var(--color-warning-100); color: var(--text-color);
+      border: var(--border-1-width-base) var(--border-style) var(--color-warning-200);
+      border-radius: var(--border-3-radius-base);
+    }
+    ._aiHelpView > .image {
+      display: flex; align-items: center; justify-content: center;
+      width: var(--spacer-48); height: var(--spacer-48); border-radius: var(--radius-pill);
+      background: var(--color-warning-500); color: var(--color-on-warning-500);
+    }
+    ._aiHelpView > .image svg.icon { width: var(--spacer-28); height: var(--spacer-28); }
+    ._aiHelpView .text { display: flex; flex-direction: column; gap: var(--spacer-4); min-width: 0; }
+    ._aiHelpView .caption { margin: 0; font-size: var(--font-size-18); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); color: var(--text-color); text-wrap: balance; }
+    ._aiHelpView .shortDescription { margin: 0; font-size: var(--font-size-14); color: var(--text-color-muted); text-wrap: pretty; }
+    ._aiHelpView > .button {
+      --btn-bg-color: var(--color-warning-500); --btn-bg-color-hover: var(--color-warning-600);
+      --btn-text-color: var(--color-on-warning-500); --btn-text-color-hover: var(--color-on-warning-600);
+      --btn-border-width: 0;
+      border-radius: var(--border-3-radius-base); white-space: nowrap;
+      font-weight: var(--font-weight-bold);
+    }
+    /* do pásma m: tlačítko pod textem přes celou šířku */
+    @media (max-width: 819px) {
+      ._aiHelpView { grid-template-columns: auto minmax(0, 1fr); padding: var(--spacer-16); }
+      ._aiHelpView > .image { width: var(--spacer-40); height: var(--spacer-40); }
+      ._aiHelpView > .image svg.icon { width: var(--spacer-24); height: var(--spacer-24); }
+      ._aiHelpView .caption { font-size: var(--font-size-16); }
+      ._aiHelpView > .button { grid-column: 1 / -1; justify-content: center; }
+    }
+  </style>
+</helmet>
+
+<section class="_aiHelpView" aria-label="Logos AI nákupní asistent">
+  <span class="image"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg></span>
+  <div class="text">
+    <h2 class="caption">Nevíte, kterou skartovačku vybrat?</h2>
+    <p class="shortDescription">Řekněte Logosovi, pro kolik lidí ji potřebujete a co budete skartovat.</p>
+  </div>
+  <button type="button" class="button"><svg class="icon ico3" aria-hidden="true"><use href="#tp-ai-search"></use></svg><span class="label">Poradit s výběrem</span></button>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:140}}">
+class Component extends DCLogic {
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+  }
+  componentDidMount() { this.ensureDsAssets(); }
+}
+</script>
+</body>
+</html>

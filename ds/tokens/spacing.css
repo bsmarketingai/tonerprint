@@ -13,7 +13,7 @@
   --spacer-14: 14px;  --spacer-16: 16px;  --spacer-18: 18px;  --spacer-20: 20px;
   --spacer-22: 22px;  --spacer-24: 24px;  --spacer-26: 26px;  --spacer-28: 28px;
   --spacer-30: 30px;  --spacer-32: 32px;  --spacer-40: 40px;  --spacer-48: 48px;
-  --spacer-56: 56px;  --spacer-64: 64px;  --spacer-72: 72px;  --spacer-80: 80px;
+  --spacer-50: 50px;  --spacer-56: 56px;  --spacer-64: 64px;  --spacer-72: 72px;  --spacer-80: 80px;
   --spacer-128: 128px; --spacer-256: 256px;
   --spacer: var(--spacer-16);
 

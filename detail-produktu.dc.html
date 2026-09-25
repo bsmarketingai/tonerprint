@@ -94,6 +94,8 @@
   </style>
 </helmet>
 
+<dc-import name="komponenty/global/InfoBarView" hint-size="100%,40px"></dc-import>
+
 <dc-import name="komponenty/global/UserContentPanelView"
   usp="{{ topbarUsp }}" links="{{ topbarLinks }}" current="{{ uspCurrent }}"
   on-prev="{{ uspPrev }}" on-next="{{ uspNext }}" on-login="{{ toggleLogin }}"
@@ -161,7 +163,7 @@
         <sc-for list="{{ related }}" as="p" hint-placeholder-count="5">
           <dc-import name="komponenty/product/ProductView"
             state="{{ p.stateClass }}"
-            code="{{ p.code }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
+            code="{{ p.code }}" manufacturer="{{ p.manufacturer }}" product-name="{{ p.name }}" desc="{{ p.desc }}" image="{{ p.image }}"
             flag="{{ p.flag }}" flag-class="{{ p.flagClass }}"
             price-vat="{{ p.priceVat }}" price-no-vat="{{ p.priceNoVat }}"
             availability="{{ p.availability }}" availability-class="{{ p.availClass }}"
@@ -189,7 +191,6 @@
   <dc-import name="komponenty/home/StatsBarView" hint-size="100%,120px"></dc-import>
 </div>
 <dc-import name="komponenty/global/FooterView"
-  about-caption="TonerPrint" about-text="Jsme česká společnost s tradicí od 90. let. Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji."
   copyright="© 2026 Tonerprint.cz" claim="Tvoříme dobré pracovní prostředí"
   hint-size="100%,420px"></dc-import>
 
@@ -221,12 +222,12 @@ class Component extends DCLogic {
   price(n) { return Math.round(n).toLocaleString('cs-CZ').replace(/\u00a0/g, ' ') + ' Kč'; }
 
   catalog = [
-    { key: 'at13c', code: 'AT-13C', name: 'Skartovačka papíru AT-13C, 13 listů', priceVat: 3928, priceNoVat: 3246, unit: 'ks', image: 'assets/at13c/1.jpg' },
-    { key: 'olej', code: 'AT-OIL', name: 'Olejové papíry AT pro skartovací stroje', desc: 'Údržba řezného mechanismu — jeden papír na 30 minut provozu.', priceVat: 320, priceNoVat: 264, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Na dotaz', availClass: 'cs_zluta', unit: 'bal', flag: 'Doporučujeme', flagClass: 'flag02' },
-    { key: 'at10c', code: 'AT-10C', name: 'Skartovačka papíru AT-10C, 10 listů, křížový řez 4 × 35 mm', desc: 'Menší model pro domácí pracovnu, koš 18 l.', priceVat: 1965, priceNoVat: 1624, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 14 ks', availClass: 'cs_zelena', unit: 'ks', flag: 'Doporučujeme', flagClass: 'flag02' },
-    { key: 'slim-p4', code: 'AT-SL-P4', name: 'Skartovačka AT Slimline S (P4), 9 listů, křížový řez 4 × 15 mm', desc: 'Vyšší stupeň bezpečnosti pro osobní údaje.', priceVat: 3638, priceNoVat: 3007, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 6 ks', availClass: 'cs_zelena', unit: 'ks' },
-    { key: 'at6s', code: 'AT-6S', name: 'Skartovačka papíru AT-6S, 10 listů, proužek 6 mm', desc: 'Nejlevnější varianta pro běžné dokumenty.', priceVat: 1019, priceNoVat: 842, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 22 ks', availClass: 'cs_zelena', unit: 'ks' },
-    { key: 'slim-p5', code: 'AT-SL-P5', name: 'Skartovačka AT Slimline S (P5), 5 listů, křížový řez 2 × 15 mm', desc: 'Stupeň P-5 pro citlivé dokumenty.', priceVat: 4483, priceNoVat: 3705, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 5 ks', availClass: 'cs_zelena', unit: 'ks', flag: 'Doprava zdarma', flagClass: 'flag05' },
+    { key: 'at13c', code: 'AT-13C', manufacturer: 'AT', name: 'Skartovačka papíru AT-13C, 13 listů', priceVat: 3928, priceNoVat: 3246, unit: 'ks', image: 'assets/at13c/1.jpg' },
+    { key: 'olej', code: 'AT-OIL', manufacturer: 'AT', name: 'Olejové papíry AT pro skartovací stroje', desc: 'Údržba řezného mechanismu — jeden papír na 30 minut provozu.', priceVat: 320, priceNoVat: 264, image: 'ds/assets/produkty/laminovaci-folie-a4.jpg', avail: 'Na dotaz', availClass: 'cs_zluta', unit: 'bal', flag: 'Doporučujeme', flagClass: 'flag02' },
+    { key: 'at10c', code: 'AT-10C', manufacturer: 'AT', name: 'Skartovačka papíru AT-10C, 10 listů, křížový řez 4 × 35 mm', desc: 'Menší model pro domácí pracovnu, koš 18 l.', priceVat: 1965, priceNoVat: 1624, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 14 ks', availClass: 'cs_zelena', unit: 'ks', flag: 'Doporučujeme', flagClass: 'flag02' },
+    { key: 'slim-p4', code: 'AT-SL-P4', manufacturer: 'AT', name: 'Skartovačka AT Slimline S (P4), 9 listů, křížový řez 4 × 15 mm', desc: 'Vyšší stupeň bezpečnosti pro osobní údaje.', priceVat: 3638, priceNoVat: 3007, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 6 ks', availClass: 'cs_zelena', unit: 'ks' },
+    { key: 'at6s', code: 'AT-6S', manufacturer: 'AT', name: 'Skartovačka papíru AT-6S, 10 listů, proužek 6 mm', desc: 'Nejlevnější varianta pro běžné dokumenty.', priceVat: 1019, priceNoVat: 842, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 22 ks', availClass: 'cs_zelena', unit: 'ks' },
+    { key: 'slim-p5', code: 'AT-SL-P5', manufacturer: 'AT', name: 'Skartovačka AT Slimline S (P5), 5 listů, křížový řez 2 × 15 mm', desc: 'Stupeň P-5 pro citlivé dokumenty.', priceVat: 4483, priceNoVat: 3705, image: 'ds/assets/produkty/skartovacka-at-13c.jpg', avail: 'Skladem 5 ks', availClass: 'cs_zelena', unit: 'ks', flag: 'Doprava zdarma', flagClass: 'flag05' },
   ];
 
   startUsp() {
@@ -460,7 +461,7 @@ class Component extends DCLogic {
       },
       {
         "icon": "#tp-clock",
-        "label": "Odesíláme do 24 h"
+        "label": "Běžně odesíláme do 48 h"
       },
       {
         "icon": "#tp-coins",

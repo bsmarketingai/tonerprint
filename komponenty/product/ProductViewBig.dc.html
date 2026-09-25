@@ -105,6 +105,15 @@
     /* Číselník (vystředěná dvojice číslo + jednotka) řeší DS: ds/css/product.css. */
     /* CHYBA V DS: vlajky se násobí s fotkou — chybí z-index + isolation. */
     .ProductView .image .ActionIconsView { z-index: 1; isolation: isolate; }
+    /* CHYBÍ V DS: parametry na kartě toneru (varianta P2) — místo krátkého popisu
+       řádky model / typ / výtěžnost / kompatibilita. Kompatibilita drží jeden řádek. */
+    .ProductView .parameters { list-style: none; margin: var(--spacer-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--spacer-2); font-size: var(--font-size-13); line-height: var(--line-height-tight); color: var(--text-color-muted); min-width: 0; }
+    /* odrážka přes ::before — nativní marker by u zkráceného řádku ořízl overflow */
+    .ProductView .parameters > li { position: relative; min-width: 0; padding-left: var(--spacer-14); }
+    .ProductView .parameters > li::before { content: "•"; position: absolute; left: var(--spacer-2); top: 0; color: var(--color-main-500); }
+    .ProductView .parameters > li .label { color: var(--text-color); font-weight: var(--font-weight-bold); margin-right: var(--spacer-4); }
+    .ProductView .parameters > li .label:empty { display: none; }
+    .ProductView .parameters > .compat { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   </style>
 </helmet>
 
@@ -113,13 +122,24 @@
     <img class="mainImage" src="{{ image }}" alt="{{ name }}" loading="lazy">
   </a>
   <dc-con class="dcHeader">
-    <span class="code">{{ code }}</span>
+    <a class="manufacturer" href="{{ manufacturerHref }}">{{ manufacturer }}</a>
     <a class="name" href="{{ href }}">{{ name }}</a>
-    <sc-if value="{{ flag }}">
-      <div class="ActionIconsView v1a v1 bs-view count1"><div class="productFlag icon {{ flagClass }}"><span>{{ flag }}</span></div></div>
+    <sc-if value="{{ hasFlags }}">
+      <div class="ActionIconsView v1a v1 bs-view count2">
+        <sc-for list="{{ flags }}" as="f" hint-placeholder-count="1">
+          <div class="productFlag icon {{ f.cls }}"><span>{{ f.text }}</span></div>
+        </sc-for>
+      </div>
     </sc-if>
     <sc-if value="{{ desc }}">
       <p class="shortDescription">{{ desc }}</p>
+    </sc-if>
+    <sc-if value="{{ hasParameters }}">
+      <ul class="parameters">
+        <sc-for list="{{ parameters }}" as="r" hint-placeholder-count="4">
+          <li class="{{ r.cls }}"><strong class="label">{{ r.label }}</strong>{{ r.text }}</li>
+        </sc-for>
+      </ul>
     </sc-if>
     <div class="AvailabilityView v1a v1 bs-view {{ availabilityClass }}"><span class="label">{{ availability }}</span></div>
   </dc-con>
@@ -158,11 +178,19 @@ class Component extends DCLogic {
     return {
       href: p.href ?? 'detail-produktu.dc.html',
       code: p.code ?? '',
+      manufacturer: p.manufacturer ?? '',
+      manufacturerHref: p.manufacturerHref ?? 'vypis-kategorie.dc.html',
       name: p.productName ?? '',
       desc: p.desc ?? '',
+      parameters: p.parameters ?? [],
+      hasParameters: !!(p.parameters && p.parameters.length),
       image: p.image ?? '',
       flag: p.flag ?? '',
       flagClass: p.flagClass ?? 'flag01',
+      /* Příznaky: nejvýš 2 na kartě (DS: ActionIconsView.count2). Starší stránky
+         posílají jednu vlajku přes flag / flagClass — ta se převede na seznam. */
+      flags: (p.flags && p.flags.length ? p.flags : (p.flag ? [{ text: p.flag, cls: p.flagClass ?? 'flag01' }] : [])).slice(0, 2),
+      hasFlags: !!((p.flags && p.flags.length) || p.flag),
       oldPrice: p.oldPrice ?? '',
       priceVat: p.priceVat ?? '',
       priceNoVat: p.priceNoVat ?? '',

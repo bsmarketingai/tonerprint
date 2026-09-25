@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+    .sc-host:has(> ._aboutView) { display: contents; }
+    /* CHYBÍ V DS: sekce „O Tonerprint“ nad patičkou. DS nemá tmavý obsahový blok
+       s fotkou. Fotka prodejny stojí v pravé části, do plochy --color-main-900 se
+       napojuje modrým přechodem zleva. Do pásma m fotka zabírá celou plochu a přechod
+       je shora, aby text zůstal čitelný. */
+    ._aboutView { position: relative; overflow: hidden; background: var(--color-main-900); color: var(--text-color-on-dark); padding: var(--spacer-72) 0; }
+    ._aboutView > .image { position: absolute; top: 0; right: 0; bottom: 0; width: 58%; }
+    ._aboutView > .image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
+    ._aboutView > .image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--color-main-900) 0%, rgba(1, 27, 61, .75) 30%, rgba(1, 27, 61, 0) 70%); }
+    ._aboutView > .dcContent { position: relative; }
+    @media (max-width: 819px) {
+      ._aboutView { padding-top: 0; }
+      ._aboutView > .image { position: relative; width: 100%; height: 240px; margin-bottom: var(--spacer-24); }
+      ._aboutView > .image::after { background: linear-gradient(0deg, var(--color-main-900) 0%, rgba(1, 27, 61, 0) 60%); }
+    }
+    /* CHYBÍ V DS: .HomeView má dole padding 48 px — sekce O Tonerprint má ale
+       navazovat přímo na patičku. */
+    .HomeView:has(._aboutView) { padding-bottom: 0; }
+    ._aboutView .dcContent { display: flex; flex-direction: column; gap: var(--spacer-16); }
+    ._aboutView .caption { font-size: var(--font-size-13); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: .08em; color: var(--color-main-200); }
+    ._aboutView .title { margin: 0; max-width: 640px; font-size: clamp(var(--font-size-28), 4vw, var(--font-size-40)); line-height: var(--line-height-tight); font-weight: var(--font-weight-extrabold); color: var(--text-color-on-dark); text-wrap: balance; }
+    ._aboutView .shortDescription { margin: 0; max-width: 560px; font-size: var(--font-size-16); color: var(--color-main-100); text-wrap: pretty; }
+    ._aboutView .dcActions { display: flex; flex-wrap: wrap; gap: var(--spacer-12); margin-top: var(--spacer-8); }
+  </style>
+</helmet>
+
+<section class="_aboutView" id="o-nas">
+  <span class="image"><img data-src="ds/assets/brand/prodejna.jpg" alt="Prodejna Tonerprint" loading="lazy"></span>
+  <dc-con class="dcContent _eshopWidth">
+    <span class="caption">O Tonerprint</span>
+    <h2 class="title">Česká společnost s tradicí od 90. let</h2>
+    <p class="shortDescription">Pomáháme kancelářím, školám, firmám i domácnostem nakupovat efektivněji — kvalitní produkty, férové ceny a lidský přístup.</p>
+    <dc-con class="dcActions">
+      <a class="button big" href="#o-nas">Více o nás</a>
+    </dc-con>
+  </dc-con>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con, dc-gi').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  hydrateImages() {
+    const p = this.dsPrefix();
+    document.querySelectorAll('._aboutView img[data-src]').forEach(img => {
+      const src = p + img.getAttribute('data-src');
+      if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+    });
+  }
+  componentDidMount() { this.ensureDsAssets(); this.syncCustomElementClasses(); this.hydrateImages(); }
+  componentDidUpdate() { this.syncCustomElementClasses(); this.hydrateImages(); }
+}
+</script>
+</body>
+</html>

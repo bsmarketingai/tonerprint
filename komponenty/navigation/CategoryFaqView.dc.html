@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { background: var(--bg-color); color: var(--text-color); font: var(--font-weight-regular) var(--font-size-14) / var(--line-height-base) var(--font-family); margin: 0; }
+    a { color: var(--link-color); text-decoration: none; }
+    a:hover { color: var(--link-color-hover); text-decoration: underline; }
+  </style>
+</helmet>
+
+<div class="FaqListView v1a v1 bs-view dcon dc000">
+  <dc-con class="dcHeader"><span class="caption"><svg class="icon ico3" aria-hidden="true"><use href="#tp-message-question"></use></svg>Časté otázky ke kancelářské technice</span></dc-con>
+  <ul class="items">
+    <sc-for list="{{ items }}" as="q" hint-placeholder-count="5">
+      <li class="{{ q.cls }}">
+        <button type="button" aria-expanded="{{ q.open }}" onClick="{{ q.toggle }}">{{ q.question }}<svg class="icon ico2 bs-crv" aria-hidden="true"><use href="#tp-chevron-right"></use></svg></button>
+        <div class="answer"><div><p>{{ q.answer }}</p></div></div>
+      </li>
+    </sc-for>
+  </ul>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:420}}">
+class Component extends DCLogic {
+  /* FAQ kategorie — otázky se mají měnit podle kategorie. Texty jsou ilustrační. */
+  state = { open: 0 };
+  faq = [
+    { question: 'Jakou skartovačku vybrat do kanceláře?', answer: 'Pro 2–5 lidí volte model s 10–13 listy na průchod, košem kolem 20 l a křížovým řezem. Pro domácí pracovnu stačí menší model s 6–8 listy.' },
+    { question: 'Jaký je rozdíl mezi stupni utajení P-3, P-4 a P-5?', answer: 'Stupeň určuje velikost částic. P-3 stačí na běžné dokumenty, P-4 na osobní údaje a smlouvy (GDPR), P-5 na důvěrné a citlivé materiály.' },
+    { question: 'Jakou tloušťku laminovací fólie potřebuji?', answer: 'Na dokumenty a jmenovky stačí 80 mic. Jídelní lístky, cedule a vše, co se často bere do ruky, vydrží déle ve 125 mic.' },
+    { question: 'Hodí se páková, nebo kotoučová řezačka?', answer: 'Páková zvládne silnější stoh papíru najednou. Kotoučová řeže přesněji a bezpečněji, hodí se na fotky a menší počet listů.' },
+    { question: 'Nakupujete i pro školy a úřady na fakturu?', answer: 'Ano. Školám, úřadům a firmám umožňujeme nákup na fakturu se splatností 14 dní.' },
+  ];
+  renderVals() {
+    return {
+      items: this.faq.map((q, i) => ({
+        ...q,
+        open: this.state.open === i,
+        cls: this.state.open === i ? 'expanded' : '',
+        toggle: () => this.setState(s => ({ open: s.open === i ? -1 : i })),
+      })),
+    };
+  }
+  get standalone() { return location.pathname.includes('/komponenty/'); }
+  dsPrefix() { return this.standalone ? '../../' : ''; }
+  ensureDsAssets() {
+    if (!document.querySelector('link[href$="ds/styles.css"]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet';
+      l.href = this.dsPrefix() + 'ds/styles.css';
+      document.head.appendChild(l);
+    }
+    if (!document.querySelector('#tpSprite') && !document.querySelector('script[src$="ds/assets/icons/sprite.js"]')) {
+      const sc = document.createElement('script');
+      sc.src = this.dsPrefix() + 'ds/assets/icons/sprite.js';
+      document.head.appendChild(sc);
+    }
+  }
+  syncCustomElementClasses() {
+    document.querySelectorAll('dc-con').forEach(el => {
+      const v = el.getAttribute('classname');
+      if (v && !el.getAttribute('class')) el.setAttribute('class', v);
+    });
+  }
+  componentDidMount() { this.ensureDsAssets(); this.syncCustomElementClasses(); }
+  componentDidUpdate() { this.syncCustomElementClasses(); }
+}
+</script>
+</body>
+</html>
